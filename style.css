@@ -1,0 +1,11 @@
+body {
+  margin: 0px;
+  overflow: hidden;
+  background-color: antiquewhite;
+}
+
+canvas#canv {
+  width: 340px;
+  height: 600px;
+  background-color: aquamarine;
+}
