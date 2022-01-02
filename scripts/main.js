@@ -16,11 +16,24 @@ setInterval(() => {
   const interval = now - start;
   drawBackground();
   drawTracks(interval);
+  drawHomicks(interval);
 }, 1000 / FPS);
 
 function drawBackground() {
   ctx.fillStyle = '#78fbcf';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+/**
+ * @param {number} interval 
+ */
+function drawHomicks(interval) {
+  const PADDING = 8;
+  const offset = (Math.floor((interval % 500) / 250) * 2 - 1) * PADDING / 2;
+  ctx.fillStyle = '#8b4513';
+  for (let i = 0; i < 4; i++) {
+    ctx.fillRect(tracksX + PADDING + offset + i * TRACK_TILE_WIDTH, tracksY + PADDING, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
+  }
 }
 
 /**
