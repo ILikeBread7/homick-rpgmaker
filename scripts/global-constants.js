@@ -1,6 +1,2 @@
 const FPS = 60;
 const TRACKS_NUMBER = 4;
-const TRACK_TILE_WIDTH = 64;
-const TRACK_TILE_HEIGHT = 64;
-const TRACK_HEIGHT = 8;
-const GRAVITY = 1024;

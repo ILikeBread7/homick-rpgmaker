@@ -1,3 +1,11 @@
+const TRACK_TILE_WIDTH = 64;
+const TRACK_TILE_HEIGHT = 64;
+const TRACK_HEIGHT = 8;
+const GRAVITY = 1024;
+const JUMPING_SPEED_FACTOR = 0.8;
+const PADDING = 8;
+const TOP_Y = 100;
+
 class Game {
 
   static Homick = class {
@@ -18,7 +26,8 @@ class Game {
      * @param {boolean} jump
      */
     travel(time, jump) {
-      this._distance += time * this._speed;
+      const jumpingSpeedFactor = this.isOnGround ? 1 : JUMPING_SPEED_FACTOR;
+      this._distance += time * this._speed * jumpingSpeedFactor;
 
       if (jump && this.isOnGround) {
         this._velocity = this._speed / 8;
@@ -69,7 +78,7 @@ class Game {
    * @param {number} deltaTime 
    */
   update(deltaTime) {
-    this._homicks.forEach(homick => homick.travel(deltaTime / 1000, true));
+    this._homicks.forEach((homick, index) => homick.travel(deltaTime / 1000, index % 2 === 0));
   }
 
   /**
@@ -84,14 +93,40 @@ class Game {
    * @param {number} totalTime 
    */
   _drawHomicks(totalTime) {
-    const PADDING = 8;
-    const TOP_Y = 100;
     const offset = (Math.floor((totalTime % 500) / 250) * 2 - 1) * PADDING / 2;
-    this._homicks.forEach((homick, index) => {
-      this._drawTrack(homick.distance, index);
-      this._ctx.fillStyle = '#8b4513';
-      this._ctx.fillRect(this._tracksX + PADDING + offset + index * TRACK_TILE_WIDTH, this._tracksY + PADDING + TOP_Y - homick.height, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
-    });
+    this._homicks.forEach((homick, index) => this._drawHomick(homick, index, offset));
+  }
+
+  /**
+   * 
+   * @param {Game.Homick} homick 
+   * @param {number} index 
+   * @param {number} offset 
+   */
+  _drawHomick(homick, index, offset) {
+    this._drawTrack(homick.distance, index);
+    this._drawShadow(homick, index);
+    this._ctx.fillStyle = '#8b4513';
+    this._ctx.fillRect(this._tracksX + PADDING + offset + index * TRACK_TILE_WIDTH, this._tracksY + PADDING + TOP_Y - homick.height, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
+  }
+
+  /**
+   * 
+   * @param {Game.Homick} homick 
+   * @param {number} index 
+   */
+  _drawShadow(homick, index) {
+    this._ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    this._ctx.beginPath();
+    const maxHeightFactor = 128;
+    const heightFactor = (maxHeightFactor - Math.min(homick.height, maxHeightFactor)) / maxHeightFactor;
+    this._ctx.ellipse(
+      this._tracksX + index * TRACK_TILE_WIDTH + TRACK_TILE_WIDTH / 2,
+      this._tracksY + TOP_Y + TRACK_TILE_HEIGHT - PADDING,
+      (TRACK_TILE_WIDTH - PADDING) / 2 * heightFactor,
+      (TRACK_TILE_WIDTH - PADDING) / 4 * heightFactor,
+      0, 0, 2 * Math.PI);
+    this._ctx.fill();
   }
 
   /**
