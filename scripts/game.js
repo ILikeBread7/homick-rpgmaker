@@ -1,7 +1,6 @@
 const TRACK_TILE_WIDTH = 64;
 const TRACK_TILE_HEIGHT = 64;
 const TRACK_HEIGHT = 8;
-const GRAVITY = 1024;
 const JUMPING_SPEED_FACTOR = 0.8;
 const PADDING = 8;
 const TOP_Y = 100;
@@ -16,8 +15,10 @@ class Game {
     constructor(isPlayer) {
       this._distance = 0;
       this._height = 0;
-      this._speed = isPlayer ? 3000 : 2000;
-      this._velocity = 0;
+      this._speed = isPlayer ? 3 : 2;
+      this._jumpTime = 0;
+      this._jumpDistance = 0;
+      this._stoppedJumping = false;
     }
 
     /**
@@ -29,16 +30,27 @@ class Game {
       const jumpingSpeedFactor = this.isOnGround ? 1 : JUMPING_SPEED_FACTOR;
       this._distance += time * this._speed * jumpingSpeedFactor;
 
-      if (jump && this.isOnGround) {
-        this._velocity = this._speed / 8;
+      if (!jump && !this.isOnGround) {
+        this._stoppedJumping = true;
       }
-      if (this._velocity || !this.isOnGround) {
-        this._height += time * this._velocity;
-        this._velocity -= time * GRAVITY;
+
+      const maxJumpDistance = Math.sqrt(this._speed) * 300;
+      if (jump && !this._stoppedJumping && this._jumpDistance < maxJumpDistance) {
+        this._jumpDistance += time * this._speed;
+        this._jumpDistance = Math.min(this._jumpDistance, maxJumpDistance);
       }
+
+      const a = 0.001;
+      if (this._jumpDistance > 0) {
+        this._jumpTime += time;
+        this._height = -a * this._jumpTime * (this._jumpTime - this._jumpDistance);
+      }
+
       if (this.isOnGround) {
         this._height = 0;
-        this._velocity = 0;
+        this._jumpTime = 0;
+        this._jumpDistance = 0;
+        this._stoppedJumping = false;
       }
     }
 
@@ -78,7 +90,7 @@ class Game {
    * @param {number} deltaTime 
    */
   update(deltaTime) {
-    this._homicks.forEach((homick, index) => homick.travel(deltaTime / 1000, index % 2 === 0));
+    this._homicks.forEach((homick, index) => homick.travel(deltaTime, index % 2 === 0));
   }
 
   /**
