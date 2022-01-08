@@ -4,6 +4,7 @@ const TRACK_HEIGHT = 8;
 const JUMPING_SPEED_FACTOR = 0.8;
 const PADDING = 8;
 const TOP_Y = 100;
+const JUMP_HEIGHT_FACTOR = 0.001;
 
 class Game {
 
@@ -40,10 +41,9 @@ class Game {
         this._jumpDistance = Math.min(this._jumpDistance, maxJumpDistance);
       }
 
-      const a = 0.001;
       if (this._jumpDistance > 0) {
         this._jumpTime += time;
-        this._height = -a * this._jumpTime * (this._jumpTime - this._jumpDistance);
+        this._height = -JUMP_HEIGHT_FACTOR * this._jumpTime * (this._jumpTime - this._jumpDistance);
       }
 
       if (this.isOnGround) {
