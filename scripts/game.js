@@ -90,7 +90,7 @@ class Game {
    * @param {number} deltaTime 
    */
   update(deltaTime) {
-    this._homicks.forEach((homick, index) => homick.travel(deltaTime, index % 2 === 0));
+    this._homicks.forEach((homick, index) => homick.travel(deltaTime, index === 0 ? Events.pressed : index % 2 === 0));
   }
 
   /**
