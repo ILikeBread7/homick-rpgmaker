@@ -16,7 +16,7 @@ class Game {
     constructor(isPlayer) {
       this._distance = 0;
       this._height = 0;
-      this._speed = isPlayer ? 3 : 2;
+      this._speed = isPlayer ? 3 : 5;
       this._jumpTime = 0;
       this._jumpDistance = 0;
       this._stoppedJumping = false;
@@ -29,7 +29,7 @@ class Game {
      */
     travel(time, jump) {
       const jumpingSpeedFactor = this.isOnGround ? 1 : JUMPING_SPEED_FACTOR;
-      this._distance += time * this._speed * jumpingSpeedFactor;
+      this._distance += time * this._speed * jumpingSpeedFactor * 0.001;
 
       if (!jump && !this.isOnGround) {
         this._stoppedJumping = true;
@@ -147,8 +147,8 @@ class Game {
    */
   _drawTrack(distance, homickIndex) {
     const colors = ['#7f7f10', '#4f4f10'];
-    const offset = TRACK_TILE_HEIGHT - ((distance % 1000) / 1000 * TRACK_TILE_HEIGHT);
-    const startingColorIndex = Math.floor((distance % 2000) / 1000);
+    const offset = TRACK_TILE_HEIGHT - ((distance % 2) / 2 * TRACK_TILE_HEIGHT);
+    const startingColorIndex = Math.floor((distance % 4) / 2);
   
     const firstColor = colors[(startingColorIndex + 1) % colors.length];
     this._ctx.fillStyle = firstColor;
