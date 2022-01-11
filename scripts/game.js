@@ -7,18 +7,21 @@ const TOP_Y = 100;
 const JUMP_HEIGHT_FACTOR = 0.1;
 const JUMP_PARABOLA_FLETTENING_FACTOR = 0.0625;
 const GLOBAL_SPEED_FACTOR = 0.1;
+const GLOBAL_ACCELERATION_FACTOR = 0.001;
 
 class Game {
 
   static Homick = class {
     /**
      * 
-     * @param {boolean} isPlayer 
+     * @param {number} maxSpeed 
      */
-    constructor(isPlayer) {
+    constructor(maxSpeed) {
       this._distance = 0;
       this._height = 0;
-      this._speedOnGround = isPlayer ? 5 : 3;
+      this._acceleration = 1;
+      this._maxSpeed = maxSpeed;
+      this._speedOnGround = 1;
       this._jumpTime = 0;
       this._jumpDistance = 0;
       this._stoppedJumping = false;
@@ -31,6 +34,9 @@ class Game {
      * @param {boolean} jump
      */
     travel(time, jump) {
+      if (this.isOnGround) {
+        this._accelerate(time);
+      }
       this._distance += time * this.effectiveSpeed;
 
       if (!jump && !this.isOnGround) {
@@ -62,6 +68,11 @@ class Game {
       }
 
       this._lastJumpState = jump;
+    }
+
+    _accelerate(time) {
+      this._speedOnGround += time * this._acceleration * GLOBAL_ACCELERATION_FACTOR;
+      this._speedOnGround = Math.min(this._speedOnGround, this._maxSpeed);
     }
 
     get distance() {
@@ -101,9 +112,9 @@ class Game {
     this._tracksNumber = tracksNumber;
     this._tracksX = (canvas.width - (TRACK_TILE_WIDTH * this._tracksNumber)) / 2;
     this._tracksY = (canvas.height - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2;
-    this._homicks = [new Game.Homick(true)];
-    for (let i = 1; i < tracksNumber; i++) {
-      this._homicks.push(new Game.Homick(false));
+    this._homicks = [];
+    for (let i = 0; i < tracksNumber; i++) {
+      this._homicks.push(new Game.Homick(5 - i));
     }
   }
 
