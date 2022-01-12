@@ -22,25 +22,25 @@ class Game {
       })
     }),
     PUDDLE: Object.freeze({
-      spriteWidth: TRACK_TILE_HEIGHT - PADDING,
-      spriteHeight: TRACK_TILE_HEIGHT - PADDING,
+      spriteWidth: TRACK_TILE_HEIGHT - PADDING * 2,
+      spriteHeight: TRACK_TILE_HEIGHT - PADDING * 2,
       obstacleHeight: 0,
       draw: ((obstacle, ctx, x, y) => {
         ctx.fillStyle = '#321';
-        ctx.fillRect(x + PADDING / 2, y - PADDING / 2, obstacle.spriteWidth, obstacle.spriteHeight);
+        ctx.fillRect(x + PADDING, y + PADDING, obstacle.spriteWidth, obstacle.spriteHeight);
       })
     })
   });
 
   static Homick = class {
     /**
-     * 
+     * @param {number} acceleration 
      * @param {number} maxSpeed 
      */
-    constructor(maxSpeed) {
+    constructor(acceleration, maxSpeed) {
       this._distance = 0;
       this._height = 0;
-      this._acceleration = 1;
+      this._acceleration = acceleration;
       this._maxSpeed = maxSpeed;
       this._speedOnGround = 1;
       this._jumpTime = 0;
@@ -125,24 +125,16 @@ class Game {
    * 
    * @param {HTMLCanvasElement} canvas 
    * @param {CanvasRenderingContext2D} ctx 
-   * @param {number} tracksNumber
+   * @param {[{ acceleration: number, maxSpeed: number }]} homicks
+   * @param {[{ type: Game.Obstacle, distance: number }]} obstacles
    */
-  constructor(canvas, ctx, tracksNumber) {
+  constructor(canvas, ctx, homicks, obstacles) {
     this._canvas = canvas;
     this._ctx = ctx;
-    this._tracksNumber = tracksNumber;
-    this._tracksX = (canvas.width - (TRACK_TILE_WIDTH * this._tracksNumber)) / 2;
+    this._tracksX = (canvas.width - (TRACK_TILE_WIDTH * homicks.length)) / 2;
     this._tracksY = (canvas.height - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2;
-    this._homicks = [];
-    for (let i = 0; i < tracksNumber; i++) {
-      this._homicks.push(new Game.Homick(5 - i));
-    }
-    this._obstacles = [];
-    for (let i = 0; i < 100; i++) {
-      this._obstacles.push({ type: Game.Obstacle.HURDLE, distance: 8 * (i + 1) * TRACK_TILE_HEIGHT })
-      this._obstacles.push({ type: Game.Obstacle.PUDDLE, distance: (8 * i + 2) * TRACK_TILE_HEIGHT })
-    }
-    this._obstacles.sort((o1, o2) => o1.distance - o2.distance);
+    this._homicks = homicks.map(h => new Game.Homick(h.acceleration, h.maxSpeed))
+    this._obstacles = obstacles;
   }
 
   /**
@@ -210,7 +202,6 @@ class Game {
    */
   _drawObstacles(distance, homickIndex) {
     const nextObstacleIndex = this._obstacles.findIndex(o => o.distance >= distance - TOP_Y);
-    console.log(nextObstacleIndex);
     if (nextObstacleIndex === -1) {
       return;
     }
