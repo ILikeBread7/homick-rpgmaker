@@ -135,6 +135,7 @@ class Game {
     this._tracksY = (canvas.height - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2;
     this._homicks = homicks.map(h => new Game.Homick(h.acceleration, h.maxSpeed))
     this._obstacles = obstacles;
+    this._previousFirstDrawnObstacleIndexes = homicks.map(h => undefined);
   }
 
   /**
@@ -201,19 +202,27 @@ class Game {
    * @param {number} homickIndex 
    */
   _drawObstacles(distance, homickIndex) {
-    const nextObstacleIndex = this._obstacles.findIndex(o => o.distance >= distance - TOP_Y);
+    const previousFirstObstacleIndex = this._previousFirstDrawnObstacleIndexes[homickIndex];
+    if (previousFirstObstacleIndex === -1) {
+      return;
+    }
+    const nextObstacleIndex = Utils.findIndexStartingAt(
+      this._obstacles,
+      this._previousFirstDrawnObstacleIndexes[homickIndex],
+      o => o.distance >= distance - TOP_Y
+    )
+    this._previousFirstDrawnObstacleIndexes[homickIndex] = nextObstacleIndex;
     if (nextObstacleIndex === -1) {
       return;
     }
     for (let i = nextObstacleIndex; i < this._obstacles.length; i++) {
       const nextObstacle = this._obstacles[i];
       const relativeDistance = nextObstacle.distance - distance;
-      if (relativeDistance > TRACK_TILE_HEIGHT * 8) {
+      if (relativeDistance > TRACK_TILE_HEIGHT * TRACK_HEIGHT) {
         return;
       }
       nextObstacle.type.draw(nextObstacle.type, this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY);
     }
-
   }
 
   /**
