@@ -3,7 +3,7 @@ const TRACK_TILE_HEIGHT = 64;
 const TRACK_HEIGHT = 8;
 const JUMPING_SPEED_FACTOR = 0.75;
 const PADDING = 8;
-const TOP_Y = 100;
+const TOP_Y = TRACK_TILE_HEIGHT * 2;
 const JUMP_HEIGHT_FACTOR = 0.1;
 const JUMP_PARABOLA_FLETTENING_FACTOR = 0.0625;
 const GLOBAL_SPEED_FACTOR = 0.1;
@@ -135,7 +135,7 @@ class Game {
     this._tracksY = (canvas.height - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2;
     this._homicks = homicks.map(h => new Game.Homick(h.acceleration, h.maxSpeed))
     this._obstacles = obstacles;
-    this._previousFirstDrawnObstacleIndexes = homicks.map(h => undefined);
+    this._previousFirstDrawnObstacleIndexes = homicks.map(h => 0);
   }
 
   /**
@@ -221,7 +221,7 @@ class Game {
       if (relativeDistance > TRACK_TILE_HEIGHT * TRACK_HEIGHT) {
         return;
       }
-      nextObstacle.type.draw(nextObstacle.type, this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY);
+      nextObstacle.type.draw(nextObstacle.type, this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY + TOP_Y);
     }
   }
 

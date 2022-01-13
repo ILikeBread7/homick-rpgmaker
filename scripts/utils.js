@@ -8,7 +8,7 @@ class Utils {
    * @returns number
    */
   static findIndexStartingAt(arr, start, predicate) {
-    for (let i = start ?? 0; i < arr.length; i++) {
+    for (let i = start; i < arr.length; i++) {
       if (predicate(arr[i])) {
         return i;
       }

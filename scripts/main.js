@@ -6,7 +6,7 @@
   const obstacles = [];
   for (let i = 0; i < 100; i++) {
     obstacles.push({ type: Game.Obstacle.HURDLE, distance: 8 * (i + 1) * TRACK_TILE_HEIGHT })
-    obstacles.push({ type: Game.Obstacle.PUDDLE, distance: (8 * i + 2) * TRACK_TILE_HEIGHT })
+    obstacles.push({ type: Game.Obstacle.PUDDLE, distance: (8 * (i + 1) + 2) * TRACK_TILE_HEIGHT })
   }
   obstacles.sort((o1, o2) => o1.distance - o2.distance);
 
