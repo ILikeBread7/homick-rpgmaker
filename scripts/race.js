@@ -1,23 +1,18 @@
 const TRACK_TILE_WIDTH = 64;
 const TRACK_TILE_HEIGHT = 64;
 const TRACK_HEIGHT = 8;
-const JUMPING_SPEED_FACTOR = 0.75;
 const PADDING = 8;
 const TOP_Y = TRACK_TILE_HEIGHT * 2;
-const JUMP_HEIGHT_FACTOR = 0.1;
-const JUMP_PARABOLA_FLETTENING_FACTOR = 0.0625;
-const GLOBAL_SPEED_FACTOR = 0.1;
-const GLOBAL_ACCELERATION_FACTOR = 0.001;
 
-class Game {
+class Race {
 
   static Obstacle = Object.freeze({
     HURDLE: Object.freeze({
       spriteWidth: TRACK_TILE_WIDTH,
       spriteHeight: TRACK_TILE_HEIGHT / 2,
       obstacleHeight: 10,
-      draw: ((obstacle, ctx, x, y) => {
-        ctx.fillStyle = '#ddd';
+      draw: ((obstacle, ctx, x, y, fallen) => {
+        ctx.fillStyle = fallen ? '#999' : '#ddd';
         ctx.fillRect(x, y, obstacle.spriteWidth, obstacle.spriteHeight);
       })
     }),
@@ -32,110 +27,22 @@ class Game {
     })
   });
 
-  static Homick = class {
-    /**
-     * @param {number} acceleration 
-     * @param {number} maxSpeed 
-     */
-    constructor(acceleration, maxSpeed) {
-      this._distance = 0;
-      this._height = 0;
-      this._acceleration = acceleration;
-      this._maxSpeed = maxSpeed;
-      this._speedOnGround = 1;
-      this._jumpTime = 0;
-      this._jumpDistance = 0;
-      this._stoppedJumping = false;
-      this._lastJumpState = false;
-    }
-
-    /**
-     * 
-     * @param {number} time 
-     * @param {boolean} jump
-     */
-    travel(time, jump) {
-      if (this.isOnGround) {
-        this._accelerate(time);
-      }
-      this._distance += time * this.effectiveSpeed;
-
-      if (!jump && !this.isOnGround) {
-        this._stoppedJumping = true;
-      }
-
-      const minJumpDistance = TRACK_TILE_HEIGHT / 2;
-      const maxJumpDistance = this._speedOnGround * minJumpDistance;
-      if (jump &&
-          (!this._lastJumpState || this._jumpDistance > 0) &&
-          !this._stoppedJumping &&
-          this._jumpDistance < maxJumpDistance
-      ) {
-        this._jumpDistance += time;
-        this._jumpDistance = Math.max(this._jumpDistance, minJumpDistance);
-        this._jumpDistance = Math.min(this._jumpDistance, maxJumpDistance);
-      }
-
-      if (this._jumpDistance > 0) {
-        this._jumpTime += time * this.effectiveSpeed;
-        this._height = (-JUMP_HEIGHT_FACTOR * this._jumpTime * (this._jumpTime - this._jumpDistance)) / (this._jumpDistance * JUMP_PARABOLA_FLETTENING_FACTOR);
-      }
-
-      if (this.isOnGround) {
-        this._height = 0;
-        this._jumpTime = 0;
-        this._jumpDistance = 0;
-        this._stoppedJumping = false;
-      }
-
-      this._lastJumpState = jump;
-    }
-
-    _accelerate(time) {
-      this._speedOnGround += time * this._acceleration * GLOBAL_ACCELERATION_FACTOR;
-      this._speedOnGround = Math.min(this._speedOnGround, this._maxSpeed);
-    }
-
-    get distance() {
-      return this._distance;
-    }
-
-    get height() {
-      return this._height;
-    }
-
-    get isOnGround() {
-      return this._height <= 0;
-    }
-
-    get speed() {
-      return this._speedOnGround * (this.isOnGround ? 1 : JUMPING_SPEED_FACTOR);
-    }
-
-    get effectiveSpeed() {
-      return this.speed * GLOBAL_SPEED_FACTOR;
-    }
-
-    get effectiveSpeedOnGround() {
-      return this._speedOnGround * GLOBAL_SPEED_FACTOR;
-    }
-  }
-
   /**
    * 
    * @param {HTMLCanvasElement} canvas 
    * @param {CanvasRenderingContext2D} ctx 
    * @param {[{ acceleration: number, maxSpeed: number }]} homicks
-   * @param {[{ type: Game.Obstacle, distance: number }]} obstacles
+   * @param {[{ type: Race.Obstacle, distance: number }]} obstacles
    */
   constructor(canvas, ctx, homicks, obstacles) {
     this._canvas = canvas;
     this._ctx = ctx;
     this._tracksX = (canvas.width - (TRACK_TILE_WIDTH * homicks.length)) / 2;
     this._tracksY = (canvas.height - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2;
-    this._homicks = homicks.map(h => new Game.Homick(h.acceleration, h.maxSpeed))
+    this._homicks = homicks.map(h => new Homick(h.acceleration, h.maxSpeed))
     this._obstacles = obstacles;
     this._previousFirstDrawnObstacleIndexes = homicks.map(h => 0);
+    this._fallenHurdles = homicks.map(h => new Map());
   }
 
   /**
@@ -168,7 +75,7 @@ class Game {
 
   /**
    * 
-   * @param {Game.Homick} homick 
+   * @param {Homick} homick 
    * @param {number} index 
    * @param {number} offset 
    */
@@ -180,7 +87,7 @@ class Game {
 
   /**
    * 
-   * @param {Game.Homick} homick 
+   * @param {Homick} homick 
    * @param {number} index 
    */
   _drawShadow(homick, index) {
@@ -221,7 +128,7 @@ class Game {
       if (relativeDistance > TRACK_TILE_HEIGHT * TRACK_HEIGHT) {
         return;
       }
-      nextObstacle.type.draw(nextObstacle.type, this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY + TOP_Y);
+      nextObstacle.type.draw(nextObstacle.type, this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY + TOP_Y, this._fallenHurdles[homickIndex].get(i));
     }
   }
 

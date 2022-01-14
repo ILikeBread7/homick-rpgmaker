@@ -7,7 +7,7 @@ class Events {
   }
 
   /**
-   * @param {string[]} eventTypes
+   * @param {...string} eventTypes
    */
   static registerPressedTrue(...eventTypes) {
     eventTypes.forEach(type => {
@@ -18,7 +18,7 @@ class Events {
   }
 
   /**
-   * @param {string[]} eventTypes
+   * @param {...string} eventTypes
    */
   static registerPressedFalse(...eventTypes) {
     eventTypes.forEach(type => {
