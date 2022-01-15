@@ -2,28 +2,39 @@ const TRACK_TILE_WIDTH = 64;
 const TRACK_TILE_HEIGHT = 64;
 const TRACK_HEIGHT = 8;
 const PADDING = 8;
-const TOP_Y = TRACK_TILE_HEIGHT * 2;
+const HOMICK_SPRITE_HEIGHT = TRACK_TILE_HEIGHT - 2 * PADDING;
+const TOP_Y = TRACK_TILE_HEIGHT * 2 + HOMICK_SPRITE_HEIGHT;
 
 class Race {
+
+  static collides = function(obstacleDistance, objectDistance, objectHeight) {
+    return objectHeight <= this.obstacleHeight
+      && objectDistance >= obstacleDistance
+      && objectDistance <= obstacleDistance + this.spriteHeight;
+  };
 
   static Obstacle = Object.freeze({
     HURDLE: Object.freeze({
       spriteWidth: TRACK_TILE_WIDTH,
       spriteHeight: TRACK_TILE_HEIGHT / 2,
       obstacleHeight: 10,
-      draw: ((obstacle, ctx, x, y, fallen) => {
+      fallable: true,
+      draw: function(ctx, x, y, fallen) {
         ctx.fillStyle = fallen ? '#999' : '#ddd';
-        ctx.fillRect(x, y, obstacle.spriteWidth, obstacle.spriteHeight);
-      })
+        ctx.fillRect(x, y, this.spriteWidth, this.spriteHeight);
+      },
+      collides: this.collides,
     }),
     PUDDLE: Object.freeze({
       spriteWidth: TRACK_TILE_HEIGHT - PADDING * 2,
       spriteHeight: TRACK_TILE_HEIGHT - PADDING * 2,
       obstacleHeight: 0,
-      draw: ((obstacle, ctx, x, y) => {
+      fallable: false,
+      draw: function(ctx, x, y, fallen) {
         ctx.fillStyle = '#321';
-        ctx.fillRect(x + PADDING, y + PADDING, obstacle.spriteWidth, obstacle.spriteHeight);
-      })
+        ctx.fillRect(x + PADDING, y + PADDING, this.spriteWidth, this.spriteHeight);
+      },
+      collides: this.collides,
     })
   });
 
@@ -50,7 +61,12 @@ class Race {
    * @param {number} deltaTime 
    */
   update(deltaTime) {
-    this._homicks.forEach((homick, index) => homick.travel(deltaTime, index === 0 ? Events.pressed : (index % 2 === 0 && Math.abs(50 - homick.distance % 100) > 5)));
+    this._homicks.forEach((homick, index) => homick.travel(
+      deltaTime,
+      index === 0 ? Events.pressed : (index % 2 === 0 && Math.abs(50 - homick.distance % 100) > 5),
+      this._obstacles,
+      this._fallenHurdles[index]
+    ));
   }
 
   /**
@@ -82,7 +98,7 @@ class Race {
   _drawHomick(homick, index, offset) {
     this._drawShadow(homick, index);
     this._ctx.fillStyle = '#8b4513';
-    this._ctx.fillRect(this._tracksX + PADDING + offset + index * TRACK_TILE_WIDTH, this._tracksY + PADDING + TOP_Y - homick.height, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
+    this._ctx.fillRect(this._tracksX + PADDING + offset + index * TRACK_TILE_WIDTH, this._tracksY - HOMICK_SPRITE_HEIGHT + TOP_Y - homick.height, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
   }
 
   /**
@@ -97,7 +113,7 @@ class Race {
     const heightFactor = (maxHeightFactor - Math.min(homick.height, maxHeightFactor)) / maxHeightFactor;
     this._ctx.ellipse(
       this._tracksX + index * TRACK_TILE_WIDTH + TRACK_TILE_WIDTH / 2,
-      this._tracksY + TOP_Y + TRACK_TILE_HEIGHT - PADDING,
+      this._tracksY + TOP_Y,
       (TRACK_TILE_WIDTH - PADDING) / 2 * heightFactor,
       (TRACK_TILE_WIDTH - PADDING) / 4 * heightFactor,
       0, 0, 2 * Math.PI);
@@ -128,7 +144,7 @@ class Race {
       if (relativeDistance > TRACK_TILE_HEIGHT * TRACK_HEIGHT) {
         return;
       }
-      nextObstacle.type.draw(nextObstacle.type, this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY + TOP_Y, this._fallenHurdles[homickIndex][i]);
+      nextObstacle.type.draw(this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY + TOP_Y, this._fallenHurdles[homickIndex][i]);
     }
   }
 

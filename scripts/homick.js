@@ -3,6 +3,8 @@ const GLOBAL_ACCELERATION_FACTOR = 0.001;
 const JUMP_HEIGHT_FACTOR = 0.1;
 const JUMP_PARABOLA_FLETTENING_FACTOR = 0.0625;
 const JUMPING_SPEED_FACTOR = 0.75;
+const TIME_STEP = 10;
+const OBSTACLE_HIT_TIMEOUT = 500;
 
 class Homick {
 
@@ -20,48 +22,83 @@ class Homick {
     this._jumpDistance = 0;
     this._stoppedJumping = false;
     this._lastJumpState = false;
+    this._currentObstacleIndex = 0;
+    this._obstacleHitTimeout = 0;
   }
 
   /**
-   * 
+   * @description Moves the Homick forward and updates the fallen hurdles
    * @param {number} time 
    * @param {boolean} jump
+   * @param {[{ type: Race.Obstacle, distance: number }]} obstacles
+   * @param {boolean[]} fallenHurdles
    */
-  travel(time, jump) {
-    if (this.isOnGround) {
-      this._accelerate(time);
+  travel(time, jump, obstacles, fallenHurdles) {
+    if (time <= this._obstacleHitTimeout) {
+      this._obstacleHitTimeout -= time;
+      return;
     }
-    this._distance += time * this.effectiveSpeed;
+    time -= this._obstacleHitTimeout;
+    this._obstacleHitTimeout = 0;
 
-    if (!jump && !this.isOnGround) {
-      this._stoppedJumping = true;
-    }
+    for (; time > 0; time -= TIME_STEP) {
+      const t = Math.min(TIME_STEP, time);
+      if (this.isOnGround) {
+        this._accelerate(t);
+      }
+      this._distance += t * this.effectiveSpeed;
 
-    const minJumpDistance = TRACK_TILE_HEIGHT / 2;
-    const maxJumpDistance = this._speedOnGround * minJumpDistance;
-    if (jump &&
-        (!this._lastJumpState || this._jumpDistance > 0) &&
-        !this._stoppedJumping &&
-        this._jumpDistance < maxJumpDistance
-    ) {
-      this._jumpDistance += time;
-      this._jumpDistance = Math.max(this._jumpDistance, minJumpDistance);
-      this._jumpDistance = Math.min(this._jumpDistance, maxJumpDistance);
-    }
+      this._currentObstacleIndex = Utils.findIndexStartingAt(obstacles, this._currentObstacleIndex, o => o.distance > this._distance || o.type.collides(o.distance, this._distance, this._height));
+      if (this._currentObstacleIndex !== -1) {
+        const currentObstacle = obstacles[this._currentObstacleIndex];
+        if (!fallenHurdles[this._currentObstacleIndex] &&
+          currentObstacle.type.collides(currentObstacle.distance, this._distance, this._height)
+        ) {
+          if (currentObstacle.type.fallable) {
+            fallenHurdles[this._currentObstacleIndex] = true;
+            this._obstacleHitTimeout = OBSTACLE_HIT_TIMEOUT;
+            this._speedOnGround = 0;
+            this._setAsLanded();
+          } else {
+            this._speedOnGround = 1;
+          }
+        }
+      }
 
-    if (this._jumpDistance > 0) {
-      this._jumpTime += time * this.effectiveSpeed;
-      this._height = (-JUMP_HEIGHT_FACTOR * this._jumpTime * (this._jumpTime - this._jumpDistance)) / (this._jumpDistance * JUMP_PARABOLA_FLETTENING_FACTOR);
-    }
-
-    if (this.isOnGround) {
-      this._height = 0;
-      this._jumpTime = 0;
-      this._jumpDistance = 0;
-      this._stoppedJumping = false;
+      if (!jump && !this.isOnGround) {
+        this._stoppedJumping = true;
+      }
+  
+      const minJumpDistance = TRACK_TILE_HEIGHT / 2;
+      const maxJumpDistance = this._speedOnGround * minJumpDistance;
+      if (jump &&
+          (!this._lastJumpState || this._jumpDistance > 0) &&
+          !this._stoppedJumping &&
+          this._jumpDistance < maxJumpDistance
+      ) {
+        this._jumpDistance += t;
+        this._jumpDistance = Math.max(this._jumpDistance, minJumpDistance);
+        this._jumpDistance = Math.min(this._jumpDistance, maxJumpDistance);
+      }
+  
+      if (this._jumpDistance > 0) {
+        this._jumpTime += t * this.effectiveSpeed;
+        this._height = (-JUMP_HEIGHT_FACTOR * this._jumpTime * (this._jumpTime - this._jumpDistance)) / (this._jumpDistance * JUMP_PARABOLA_FLETTENING_FACTOR);
+      }
+  
+      if (this.isOnGround) {
+        this._setAsLanded();
+      }
     }
 
     this._lastJumpState = jump;
+  }
+
+  _setAsLanded() {
+    this._height = 0;
+    this._jumpTime = 0;
+    this._jumpDistance = 0;
+    this._stoppedJumping = false;
   }
 
   _accelerate(time) {
