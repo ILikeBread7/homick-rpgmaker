@@ -42,7 +42,7 @@ class Race {
     this._homicks = homicks.map(h => new Homick(h.acceleration, h.maxSpeed))
     this._obstacles = obstacles;
     this._previousFirstDrawnObstacleIndexes = homicks.map(h => 0);
-    this._fallenHurdles = homicks.map(h => new Map());
+    this._fallenHurdles = homicks.map(h => []);
   }
 
   /**
@@ -128,7 +128,7 @@ class Race {
       if (relativeDistance > TRACK_TILE_HEIGHT * TRACK_HEIGHT) {
         return;
       }
-      nextObstacle.type.draw(nextObstacle.type, this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY + TOP_Y, this._fallenHurdles[homickIndex].get(i));
+      nextObstacle.type.draw(nextObstacle.type, this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY + TOP_Y, this._fallenHurdles[homickIndex][i]);
     }
   }
 
