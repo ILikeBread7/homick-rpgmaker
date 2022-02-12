@@ -94,6 +94,19 @@ class Homick {
     this._lastJumpState = jump;
   }
 
+  /**
+   * 
+   * @param {number} distanceToFinish 
+   */
+  isFinished(distanceToFinish) {
+    return this._distance >= distanceToFinish;
+  }
+
+  finish() {
+    this._speedOnGround = 0;
+    this._setAsLanded();
+  }
+
   _setAsLanded() {
     this._height = 0;
     this._jumpTime = 0;

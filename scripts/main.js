@@ -4,7 +4,7 @@
   const start = new Date().getTime();
   
   const obstacles = [];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 30; i++) {
     obstacles.push({ type: Race.Obstacle.HURDLE, distance: 8 * (i + 1) * TRACK_TILE_HEIGHT - HOMICK_SPRITE_HEIGHT })
     obstacles.push({ type: Race.Obstacle.PUDDLE, distance: (8 * (i + 1) + 2) * TRACK_TILE_HEIGHT - HOMICK_SPRITE_HEIGHT })
   }
@@ -13,11 +13,11 @@
   const homicks = [
     { acceleration: 1, maxSpeed: 5 },
     { acceleration: 2, maxSpeed: 4 },
-    { acceleration: 1.5, maxSpeed: 3.5 },
+    { acceleration: 3, maxSpeed: 6 },
     { acceleration: 1, maxSpeed: 3 }
   ]
   
-  const race = new Race(canvas, ctx, homicks, obstacles);
+  const race = new Race(canvas, ctx, homicks, obstacles, 8 * 35 * TRACK_TILE_HEIGHT);
   
   let lastTotalInterval = 0;
   setInterval(() => {

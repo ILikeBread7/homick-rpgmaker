@@ -4,6 +4,7 @@ const TRACK_HEIGHT = 8;
 const PADDING = 8;
 const HOMICK_SPRITE_HEIGHT = TRACK_TILE_HEIGHT - 2 * PADDING;
 const TOP_Y = TRACK_TILE_HEIGHT * 2 + HOMICK_SPRITE_HEIGHT;
+const MAX_DISTANCE_OFFSET = TRACK_TILE_HEIGHT * 3;
 
 class Race {
 
@@ -44,8 +45,9 @@ class Race {
    * @param {CanvasRenderingContext2D} ctx 
    * @param {[{ acceleration: number, maxSpeed: number }]} homicks
    * @param {[{ type: Race.Obstacle, distance: number }]} obstacles
+   * @param {number} totalDistance
    */
-  constructor(canvas, ctx, homicks, obstacles) {
+  constructor(canvas, ctx, homicks, obstacles, totalDistance) {
     this._canvas = canvas;
     this._ctx = ctx;
     this._tracksX = (canvas.width - (TRACK_TILE_WIDTH * homicks.length)) / 2;
@@ -54,6 +56,7 @@ class Race {
     this._obstacles = obstacles;
     this._previousFirstDrawnObstacleIndexes = homicks.map(h => 0);
     this._fallenHurdles = homicks.map(h => []);
+    this._totalDistance = totalDistance;
   }
 
   /**
@@ -61,12 +64,22 @@ class Race {
    * @param {number} deltaTime 
    */
   update(deltaTime) {
-    this._homicks.forEach((homick, index) => homick.travel(
-      deltaTime,
-      index === 0 ? Events.pressed : (index % 2 === 0 && Math.abs(50 - homick.distance % 100) > 5),
-      this._obstacles,
-      this._fallenHurdles[index]
-    ));
+    this._homicks.forEach((homick, index) => {
+      if (homick.isFinished(this._totalDistance)) {
+        if (homick.speed > 0) {
+          const position = this._homicks.filter(h => h.isFinished(this._totalDistance)).length;
+          console.log(`Homick #${index + 1} finished at position ${position}!`);
+        }
+        homick.finish();
+      } else {
+        homick.travel(
+          deltaTime,
+          index === 0 ? Events.pressed : (index % 2 === 0 && Math.abs(50 - homick.distance % 100) > 5),
+          this._obstacles,
+          this._fallenHurdles[index]
+        );
+      }
+    });
   }
 
   /**
@@ -96,24 +109,26 @@ class Race {
    * @param {number} offset 
    */
   _drawHomick(homick, index, offset) {
-    this._drawShadow(homick, index);
+    const distanceOffset = this._findDistanceOffset(homick.distance);
+    this._drawShadow(homick, index, distanceOffset);
     this._ctx.fillStyle = '#8b4513';
-    this._ctx.fillRect(this._tracksX + PADDING + offset + index * TRACK_TILE_WIDTH, this._tracksY - HOMICK_SPRITE_HEIGHT + TOP_Y - homick.height, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
+    this._ctx.fillRect(this._tracksX + PADDING + offset + index * TRACK_TILE_WIDTH, this._tracksY - HOMICK_SPRITE_HEIGHT + TOP_Y - homick.height + distanceOffset, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
   }
 
   /**
    * 
    * @param {Homick} homick 
    * @param {number} index 
+   * @param {number} distanceOffset
    */
-  _drawShadow(homick, index) {
+  _drawShadow(homick, index, distanceOffset) {
     this._ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
     this._ctx.beginPath();
     const maxHeightFactor = 128;
     const heightFactor = (maxHeightFactor - Math.min(homick.height, maxHeightFactor)) / maxHeightFactor;
     this._ctx.ellipse(
       this._tracksX + index * TRACK_TILE_WIDTH + TRACK_TILE_WIDTH / 2,
-      this._tracksY + TOP_Y,
+      this._tracksY + TOP_Y + distanceOffset,
       (TRACK_TILE_WIDTH - PADDING) / 2 * heightFactor,
       (TRACK_TILE_WIDTH - PADDING) / 4 * heightFactor,
       0, 0, 2 * Math.PI);
@@ -129,10 +144,11 @@ class Race {
     if (previousFirstObstacleIndex === -1) {
       return;
     }
+    const distanceOffset = this._findDistanceOffset(distance);
     const nextObstacleIndex = Utils.findIndexStartingAt(
       this._obstacles,
       this._previousFirstDrawnObstacleIndexes[homickIndex],
-      o => o.distance >= distance - TOP_Y
+      o => o.distance >= distance - TOP_Y - distanceOffset
     )
     this._previousFirstDrawnObstacleIndexes[homickIndex] = nextObstacleIndex;
     if (nextObstacleIndex === -1) {
@@ -140,7 +156,7 @@ class Race {
     }
     for (let i = nextObstacleIndex; i < this._obstacles.length; i++) {
       const nextObstacle = this._obstacles[i];
-      const relativeDistance = nextObstacle.distance - distance;
+      const relativeDistance = nextObstacle.distance - distance + distanceOffset;
       if (relativeDistance > TRACK_TILE_HEIGHT * TRACK_HEIGHT) {
         return;
       }
@@ -153,9 +169,10 @@ class Race {
    * @param {number} homickIndex 
    */
   _drawTrack(distance, homickIndex) {
+    const effectiveDistance = distance - this._findDistanceOffset(distance);
     const colors = ['#7f7f10', '#4f4f10'];
-    const offset = TRACK_TILE_HEIGHT - (distance % TRACK_TILE_HEIGHT);
-    const startingColorIndex = Math.floor((distance % (TRACK_TILE_HEIGHT * 2)) / TRACK_TILE_HEIGHT);
+    const offset = TRACK_TILE_HEIGHT - (effectiveDistance % TRACK_TILE_HEIGHT);
+    const startingColorIndex = Math.floor((effectiveDistance % (TRACK_TILE_HEIGHT * 2)) / TRACK_TILE_HEIGHT);
   
     const firstColor = colors[(startingColorIndex + 1) % colors.length];
     this._ctx.fillStyle = firstColor;
@@ -173,6 +190,14 @@ class Race {
   _drawBackground() {
     this._ctx.fillStyle = '#78fbcf';
     this._ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  /**
+   * 
+   * @param {number} distance 
+   */
+  _findDistanceOffset(distance) {
+    return distance * MAX_DISTANCE_OFFSET / this._totalDistance;
   }
 
 }
