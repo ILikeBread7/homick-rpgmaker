@@ -20,22 +20,36 @@ class Race {
       spriteHeight: TRACK_TILE_HEIGHT / 2,
       obstacleHeight: 10,
       fallable: true,
+      boost: false,
       draw: function(ctx, x, y, fallen) {
         ctx.fillStyle = fallen ? '#999' : '#ddd';
         ctx.fillRect(x, y, this.spriteWidth, this.spriteHeight);
       },
-      collides: this.collides,
+      collides: this.collides
     }),
     PUDDLE: Object.freeze({
       spriteWidth: TRACK_TILE_HEIGHT - PADDING * 2,
       spriteHeight: TRACK_TILE_HEIGHT - PADDING * 2,
       obstacleHeight: 0,
       fallable: false,
+      boost: false,
       draw: function(ctx, x, y, fallen) {
         ctx.fillStyle = '#321';
         ctx.fillRect(x + PADDING, y + PADDING, this.spriteWidth, this.spriteHeight);
       },
-      collides: this.collides,
+      collides: this.collides
+    }),
+    BOOST: Object.freeze({
+      spriteWidth: TRACK_TILE_HEIGHT - PADDING * 2,
+      spriteHeight: TRACK_TILE_HEIGHT - PADDING * 2,
+      obstacleHeight: 0,
+      fallable: true,
+      boost: true,
+      draw: function(ctx, x, y, fallen) {
+        ctx.fillStyle = fallen ? '#22e' : '#119';
+        ctx.fillRect(x + PADDING, y + PADDING, this.spriteWidth, this.spriteHeight);
+      },
+      collides: this.collides
     })
   });
 

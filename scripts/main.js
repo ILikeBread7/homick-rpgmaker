@@ -7,6 +7,7 @@
   for (let i = 0; i < 30; i++) {
     obstacles.push({ type: Race.Obstacle.HURDLE, distance: 8 * (i + 1) * TRACK_TILE_HEIGHT - HOMICK_SPRITE_HEIGHT })
     obstacles.push({ type: Race.Obstacle.PUDDLE, distance: (8 * (i + 1) + 2) * TRACK_TILE_HEIGHT - HOMICK_SPRITE_HEIGHT })
+    obstacles.push({ type: Race.Obstacle.BOOST, distance: (8 * (i + 1) + 6) * TRACK_TILE_HEIGHT - HOMICK_SPRITE_HEIGHT })
   }
   obstacles.sort((o1, o2) => o1.distance - o2.distance);
 
