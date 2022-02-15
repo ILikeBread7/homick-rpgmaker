@@ -3,7 +3,6 @@ const GLOBAL_ACCELERATION_FACTOR = 0.001;
 const JUMP_HEIGHT_FACTOR = 0.1;
 const JUMP_PARABOLA_FLETTENING_FACTOR = 0.0625;
 const JUMPING_SPEED_FACTOR = 0.75;
-const TIME_STEP = 10;
 const OBSTACLE_HIT_TIMEOUT = 500;
 const BOOST_TIME = 500;
 const BOOST_SPEED_FACTOR = 1.5;
@@ -45,14 +44,9 @@ class Homick {
 
     time -= this._obstacleHitTimeout;
     this._obstacleHitTimeout = 0;
-
-    for (; time > 0; time -= TIME_STEP) {
-      const t = Math.min(TIME_STEP, time);
-      this._boostTimeout = Math.max(this._boostTimeout - t, 0);
-      const justLanded = this._handleJumping(t, jump);
-      this._handleMoving(t, obstacles, fallenHurdles, justLanded);
-    }
-
+    this._boostTimeout = Math.max(this._boostTimeout - time, 0);
+    const justLanded = this._handleJumping(time, jump);
+    this._handleMoving(time, obstacles, fallenHurdles, justLanded);
     this._lastJumpState = jump;
   }
 

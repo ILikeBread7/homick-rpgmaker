@@ -5,6 +5,7 @@ const PADDING = 8;
 const HOMICK_SPRITE_HEIGHT = TRACK_TILE_HEIGHT - 2 * PADDING;
 const TOP_Y = TRACK_TILE_HEIGHT * 2 + HOMICK_SPRITE_HEIGHT;
 const MAX_DISTANCE_OFFSET = TRACK_TILE_HEIGHT * 3;
+const TIME_STEP = 10;
 
 class Race {
 
@@ -78,22 +79,25 @@ class Race {
    * @param {number} deltaTime 
    */
   update(deltaTime) {
-    this._homicks.forEach((homick, index) => {
-      if (homick.isFinished(this._totalDistance)) {
-        if (homick.speed > 0) {
-          const position = this._homicks.filter(h => h.isFinished(this._totalDistance)).length;
-          console.log(`Homick #${index + 1} finished at position ${position}!`);
+    for (let remainingTime = deltaTime; remainingTime > 0; remainingTime -= TIME_STEP) {
+      const oneStepTime = Math.min(TIME_STEP, remainingTime);
+      this._homicks.forEach((homick, index) => {
+        if (homick.isFinished(this._totalDistance)) {
+          if (homick.speed > 0) {
+            const position = this._homicks.filter(h => h.isFinished(this._totalDistance)).length;
+            console.log(`Homick #${index + 1} finished at position ${position}!`);
+          }
+          homick.finish();
+        } else {
+          homick.travel(
+            oneStepTime,
+            index === 0 ? Events.pressed : (index % 2 === 0 && Math.abs(50 - homick.distance % 100) > 5),
+            this._obstacles,
+            this._fallenHurdles[index]
+          );
         }
-        homick.finish();
-      } else {
-        homick.travel(
-          deltaTime,
-          index === 0 ? Events.pressed : (index % 2 === 0 && Math.abs(50 - homick.distance % 100) > 5),
-          this._obstacles,
-          this._fallenHurdles[index]
-        );
-      }
-    });
+      });
+    }
   }
 
   /**
