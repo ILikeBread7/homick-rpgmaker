@@ -105,6 +105,7 @@ class Race {
    */
   draw(totalTime) {
     this._drawBackground();
+    this._drawFinishLine();
     this._drawHomicksAndTracks(totalTime);
   }
 
@@ -208,6 +209,24 @@ class Race {
   _drawBackground() {
     this._ctx.fillStyle = '#78fbcf';
     this._ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  _drawFinishLine() {
+    const finishSquareSize = 16;
+    const finishSquareRows = 3;
+    const finishSquareColumns = 3;
+    for (let part = 0; part < 2; part++) {
+      for (let row = 0; row < finishSquareRows; row++) {
+        for (let column = 0; column < finishSquareColumns; column++) {
+          this._ctx.fillStyle = (row + column) % 2 === 0 ? '#000' : '#fff';
+          this._ctx.fillRect(
+            this._tracksX - (1 - part) * (finishSquareSize * finishSquareColumns) + part * TRACK_TILE_WIDTH * this._homicks.length + column * finishSquareSize,
+            this._tracksY + TOP_Y + MAX_DISTANCE_OFFSET + row * finishSquareSize,
+            finishSquareSize, finishSquareSize
+          );
+        }
+      }
+    }
   }
 
   /**
