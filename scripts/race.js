@@ -87,7 +87,6 @@ class Race {
         if (homick.isFinished(this._totalDistance)) {
           if (homick.speed > 0) {
             const position = this._homicks.filter(h => h.isFinished(this._totalDistance)).length;
-            console.log(`Homick #${index + 1} finished at position ${position}!`);
             this._finishedPositions[index] = position;
           }
           homick.finish();
@@ -119,9 +118,10 @@ class Race {
   _drawHomicksAndTracks(totalTime) {
     const offset = (Math.floor((totalTime % 500) / 250) * 2 - 1) * PADDING / 2;
     this._homicks.forEach((homick, index) => {
+      this._drawName(index === 0 ? 'You' : 'CPU', index, index === 0);
       this._drawTrack(homick.distance, index);
       this._drawObstacles(homick.distance, index);
-      this._drawHomick(homick, index, offset)
+      this._drawHomick(homick, index, offset);
     });
   }
 
@@ -210,6 +210,24 @@ class Race {
     this._ctx.fillRect(this._tracksX + TRACK_TILE_WIDTH * homickIndex, this._tracksY + offset + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT, TRACK_TILE_WIDTH, TRACK_TILE_HEIGHT - offset);
   }
 
+  /**
+   * 
+   * @param {string} name 
+   * @param {number} index 
+   * @param {boolean} isPlayer
+   */
+  _drawName(name, index, isPlayer) {
+    const marginLeft = 8;
+    const marginTop = 10;
+    this._ctx.fillStyle = isPlayer ? '#33e' : '#e33';
+    this._ctx.font = '24px Arial';
+    this._ctx.fillText(
+      name,
+      this._tracksX + marginLeft + TRACK_TILE_WIDTH * index,
+      this._tracksY - marginTop
+    );
+  }
+
   _drawBackground() {
     this._ctx.fillStyle = '#78fbcf';
     this._ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -234,12 +252,12 @@ class Race {
   }
 
   _drawFinishPositions() {
-    const marginLeft = 16;
+    const marginLeft = 14;
     const marginTop = TRACK_TILE_HEIGHT * 2.5;
-    this._ctx.fillStyle = '#e33';
     this._ctx.font = '24px Arial';
     this._homicks.forEach((homick, index) => {
       const position = this._finishedPositions[index];
+      this._ctx.fillStyle = position === 1 ? '#3e3' : '#e33';
       if (position) {
         this._ctx.fillText(
           FINISH_POSITIONS[position - 1],

@@ -18,7 +18,7 @@
     { acceleration: 1, maxSpeed: 3 }
   ]
   
-  const race = new Race(canvas, ctx, homicks, obstacles, 8 * 35 * TRACK_TILE_HEIGHT);
+  const race = new Race(canvas, ctx, homicks, obstacles, 8 * 5 * TRACK_TILE_HEIGHT);
   
   let lastTotalInterval = 0;
   setInterval(() => {
