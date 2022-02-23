@@ -5,7 +5,8 @@ const JUMP_PARABOLA_FLETTENING_FACTOR = 0.0625;
 const JUMPING_SPEED_FACTOR = 0.75;
 const OBSTACLE_HIT_TIMEOUT = 500;
 const BOOST_TIME = 500;
-const BOOST_SPEED_FACTOR = 1.5;
+const BOOST_DECELERATION_TIME = 250;
+const BOOST_SPEED_FACTOR = 0.5;
 const BOOST_ACCELERATION_FACTOR = 1.2;
 
 class Homick {
@@ -121,7 +122,7 @@ class Homick {
       ) {
         if (currentObstacle.type.fallable) {
           if (currentObstacle.type.boost) {
-            this._boostTimeout = BOOST_TIME;
+            this._boostTimeout = BOOST_TIME + BOOST_DECELERATION_TIME;
           } else {
             this._obstacleHitTimeout = OBSTACLE_HIT_TIMEOUT;
             this._speedOnGround = 0;
@@ -165,7 +166,7 @@ class Homick {
   }
 
   get speed() {
-    return this._speedOnGround * (this.isOnGround ? 1 : JUMPING_SPEED_FACTOR) * (this._boosting ? BOOST_SPEED_FACTOR : 1);
+    return this._speedOnGround * (this.isOnGround ? 1 : JUMPING_SPEED_FACTOR) * (BOOST_SPEED_FACTOR * Math.min(this._boostTimeout / BOOST_DECELERATION_TIME, 1) + 1);
   }
 
   get effectiveSpeed() {
@@ -177,6 +178,8 @@ class Homick {
   }
 
   get _boosting() {
-    return this._boostTimeout > 0;
+    return this._boostTimeout - BOOST_DECELERATION_TIME > 0;
   }
+
+
 }
