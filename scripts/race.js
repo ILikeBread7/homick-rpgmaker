@@ -47,9 +47,22 @@ class Race {
       obstacleHeight: 0,
       fallable: true,
       boost: true,
-      draw: function(ctx, x, y, fallen) {
-        ctx.fillStyle = fallen ? '#22e' : '#119';
+      draw: function(ctx, x, y, fallen, totalTime) {
+        ctx.fillStyle = fallen ? '#811' : '#e11';
         ctx.fillRect(x + PADDING, y + PADDING, this.spriteWidth, this.spriteHeight);
+        ctx.strokeStyle = '#ee1';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        for (let i = 0; i < 3; i++) {
+          const offset = i * this.spriteWidth / 3.5 + (totalTime % 500 < 250 ? 1 : -1) * 4;
+          const heightFactor = 0.7;
+          ctx.moveTo(x + PADDING * 2, y + PADDING * 2 + offset);
+          ctx.lineTo(x + PADDING + this.spriteWidth / 2, y + (PADDING + this.spriteHeight / 2) * heightFactor + offset);
+          ctx.lineTo(x + this.spriteWidth, y + PADDING * 2 + offset);
+        }
+        ctx.stroke();
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1;
       },
       collides: this.collides
     })
@@ -120,7 +133,7 @@ class Race {
     this._homicks.forEach((homick, index) => {
       this._drawName(index === 0 ? 'You' : 'CPU', index, index === 0);
       this._drawTrack(homick.distance, index);
-      this._drawObstacles(homick.distance, index);
+      this._drawObstacles(homick.distance, index, totalTime);
       this._drawHomick(homick, index, offset);
     });
   }
@@ -162,7 +175,7 @@ class Race {
    * @param {number} distance
    * @param {number} homickIndex 
    */
-  _drawObstacles(distance, homickIndex) {
+  _drawObstacles(distance, homickIndex, totalTime) {
     const previousFirstObstacleIndex = this._previousFirstDrawnObstacleIndexes[homickIndex];
     if (previousFirstObstacleIndex === -1) {
       return;
@@ -183,7 +196,7 @@ class Race {
       if (relativeDistance > TRACK_TILE_HEIGHT * TRACK_HEIGHT) {
         return;
       }
-      nextObstacle.type.draw(this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY + TOP_Y, this._fallenHurdles[homickIndex][i]);
+      nextObstacle.type.draw(this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY + TOP_Y, this._fallenHurdles[homickIndex][i], totalTime);
     }
   }
 
