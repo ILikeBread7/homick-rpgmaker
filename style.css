@@ -8,3 +8,23 @@ canvas#canv {
   width: 360px;
   height: 600px;
 }
+
+div#level_select {
+  width: 360px;
+  height: 600px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+div#level_select_inner {
+  width: 33%;
+  height: 50%;
+  margin: auto;
+  margin-top: 200px;
+}
+
+button.track_button {
+  width: 8em;
+  height: 3em;
+}
