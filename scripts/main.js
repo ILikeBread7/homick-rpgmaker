@@ -5,6 +5,7 @@
   /**
    * 
    * @param {number} level 
+   * @returns { { race: Race, interval: number } }
    */
   const startLevel = (level) => {
     console.log(`Level ${level}`);
@@ -42,11 +43,11 @@
       { acceleration: 1, maxSpeed: 3 }
     ]
     
-    const race = new Race(canvas, ctx, homicks, obstacles, (8 + level) * 15 * TRACK_TILE_HEIGHT);
+    const race = new Race(canvas, ctx, homicks, obstacles, level === 0 ? (10 * TRACK_TILE_HEIGHT) : ((8 + level) * 15 * TRACK_TILE_HEIGHT));
     
     let lastTotalInterval = 0;
     const start = new Date().getTime();
-    setInterval(() => {
+    const interval = setInterval(() => {
       const now = new Date().getTime();
       const totalTime = now - start;
       const deltaTime = totalTime - lastTotalInterval;
@@ -54,9 +55,22 @@
       race.draw(totalTime);
       lastTotalInterval = totalTime;
     }, 1000 / FPS);
+
+    return { race, interval };
   }
 
-  document.getElementById('track_1_button').addEventListener('click', () => startLevel(1));
-  document.getElementById('track_2_button').addEventListener('click', () => startLevel(2));
-  document.getElementById('track_3_button').addEventListener('click', () => startLevel(3));
+  /**
+   * @type { { race: Race, interval: number } }
+   */
+  let raceData = {};
+  document.getElementById('track_0_button').addEventListener('click', () => raceData = startLevel(0));
+  document.getElementById('track_1_button').addEventListener('click', () => raceData = startLevel(1));
+  document.getElementById('track_2_button').addEventListener('click', () => raceData = startLevel(2));
+  document.getElementById('track_3_button').addEventListener('click', () => raceData = startLevel(3));
+  canvas.addEventListener('click', () => {
+    if (raceData.race && raceData.race.isFinished) {
+      clearInterval(raceData.interval);
+      document.getElementById('level_select').style.display = 'block';
+    }
+  })
 })();

@@ -123,6 +123,9 @@ class Race {
     this._drawFinishLine();
     this._drawHomicksAndTracks(totalTime);
     this._drawFinishPositions();
+    if (this.isFinished) {
+      this._drawRaceFinished();
+    }
   }
 
   /**
@@ -281,12 +284,24 @@ class Race {
     });
   }
 
+  _drawRaceFinished() {
+    const marginLeft = 48;
+    const marginTop = TRACK_TILE_HEIGHT * 8;
+    this._ctx.font = '24px Arial';
+    this._ctx.fillStyle = '#e33';
+    this._ctx.fillText('Click to go back to menu', marginLeft, marginTop);
+  }
+
   /**
    * 
    * @param {number} distance 
    */
   _findDistanceOffset(distance) {
     return distance * MAX_DISTANCE_OFFSET / this._totalDistance;
+  }
+
+  get isFinished() {
+    return this._homicks[0].isFinished(this._totalDistance);
   }
 
 }
