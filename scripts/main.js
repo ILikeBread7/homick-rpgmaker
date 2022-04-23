@@ -9,7 +9,7 @@
    */
   const startLevel = (level) => {
     console.log(`Level ${level}`);
-    document.getElementById('level_select').style.display = 'none';
+    document.getElementById('ui_div').style.display = 'none';
     
     const obstacles = [];
 
@@ -70,7 +70,7 @@
   canvas.addEventListener('click', () => {
     if (raceData.race && raceData.race.isFinished) {
       clearInterval(raceData.interval);
-      document.getElementById('level_select').style.display = 'block';
+      document.getElementById('ui_div').style.display = 'block';
     }
   })
 })();

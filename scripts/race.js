@@ -79,8 +79,8 @@ class Race {
   constructor(canvas, ctx, homicks, obstacles, totalDistance) {
     this._canvas = canvas;
     this._ctx = ctx;
-    this._tracksX = (canvas.width - (TRACK_TILE_WIDTH * homicks.length)) / 2;
-    this._tracksY = (canvas.height - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2;
+    this._tracksX = (BASE_WIDTH - (TRACK_TILE_WIDTH * homicks.length)) / 2;
+    this._tracksY = (BASE_HEIGHT - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2;
     this._homicks = homicks.map(h => new Homick(h.acceleration, h.maxSpeed))
     this._obstacles = obstacles;
     this._previousFirstDrawnObstacleIndexes = homicks.map(h => 0);
@@ -246,7 +246,7 @@ class Race {
 
   _drawBackground() {
     this._ctx.fillStyle = '#78fbcf';
-    this._ctx.fillRect(0, 0, canvas.width, canvas.height);
+    this._ctx.fillRect(0, 0, BASE_HEIGHT, BASE_HEIGHT);
   }
 
   _drawFinishLine() {
