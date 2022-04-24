@@ -133,6 +133,7 @@ class Race {
    */
   _drawHomicksAndTracks(totalTime) {
     const offset = (Math.floor((totalTime % 500) / 250) * 2 - 1) * PADDING / 2;
+    this._drawTracksBackground(this._homicks.length);
     this._homicks.forEach((homick, index) => {
       this._drawName(index === 0 ? 'You' : 'CPU', index, index === 0);
       this._drawTrack(homick.distance, index);
@@ -201,6 +202,14 @@ class Race {
       }
       nextObstacle.type.draw(this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY + TOP_Y, this._fallenHurdles[homickIndex][i], totalTime);
     }
+  }
+
+  /**
+   * @param {number} tracksNumber
+   */
+  _drawTracksBackground(tracksNumber) {
+    this._ctx.fillStyle = '#7f7f10';
+    this._ctx.fillRect(this._tracksX, this._tracksY, TRACK_TILE_WIDTH * tracksNumber, TRACK_TILE_HEIGHT * TRACK_HEIGHT)
   }
 
   /**
