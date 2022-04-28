@@ -28,6 +28,7 @@ class Homick {
     this._currentObstacleIndex = 0;
     this._obstacleHitTimeout = 0;
     this._boostTimeout = 0;
+    this._previousJumpHeight = 0;
   }
 
   /**
@@ -77,6 +78,9 @@ class Homick {
 
     const minJumpDistance = TRACK_TILE_HEIGHT / 2;
     const maxJumpDistance = this._speedOnGround * minJumpDistance;
+
+    this._handleDoubleJump(jump);
+
     if (jump &&
         (!this._lastJumpState || this._jumpDistance > 0) &&
         !this._stoppedJumping &&
@@ -89,7 +93,7 @@ class Homick {
 
     if (this._jumpDistance > 0) {
       this._jumpTime += time * this.effectiveSpeed;
-      this._height = (-JUMP_HEIGHT_FACTOR * this._jumpTime * (this._jumpTime - this._jumpDistance)) / (this._jumpDistance * JUMP_PARABOLA_FLETTENING_FACTOR);
+      this._height = this._previousJumpHeight + (-JUMP_HEIGHT_FACTOR * this._jumpTime * (this._jumpTime - this._jumpDistance)) / (this._jumpDistance * JUMP_PARABOLA_FLETTENING_FACTOR);
       if (this.isOnGround) {
         this._setAsLanded();
         return true;
@@ -97,6 +101,19 @@ class Homick {
     }
 
     return false;
+  }
+
+  /**
+   * 
+   * @param {boolean} jump 
+   */
+  _handleDoubleJump(jump) {
+    if (jump && this._stoppedJumping && this._previousJumpHeight === 0 && !this._lastJumpState) {
+      this._previousJumpHeight = Math.max(this._height, 0);
+      this._jumpDistance = 0;
+      this._jumpTime = 0;
+      this._stoppedJumping = false;
+    }
   }
 
   /**
@@ -139,6 +156,7 @@ class Homick {
 
   _setAsLanded() {
     this._height = 0;
+    this._previousJumpHeight = 0;
     this._jumpTime = 0;
     this._jumpDistance = 0;
     this._stoppedJumping = false;
