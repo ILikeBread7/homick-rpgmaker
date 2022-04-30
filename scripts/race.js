@@ -72,7 +72,7 @@ class Race {
    * 
    * @param {HTMLCanvasElement} canvas 
    * @param {CanvasRenderingContext2D} ctx 
-   * @param {[{ acceleration: number, maxSpeed: number }]} homicks
+   * @param {[{ acceleration: number, maxSpeed: number, player: (homick: Homick, obstacles: {[{ type: Race.Obstacle, distance: number }]}) => { jump(): boolean } }]} homicks
    * @param {[{ type: Race.Obstacle, distance: number }]} obstacles
    * @param {number} totalDistance
    */
@@ -81,7 +81,8 @@ class Race {
     this._ctx = ctx;
     this._tracksX = (BASE_WIDTH - (TRACK_TILE_WIDTH * homicks.length)) / 2;
     this._tracksY = (BASE_HEIGHT - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2;
-    this._homicks = homicks.map(h => new Homick(h.acceleration, h.maxSpeed))
+    this._homicks = homicks.map(h => new Homick(h.acceleration, h.maxSpeed));
+    this._players = homicks.map((homick, index) => new homick.player(this._homicks[index], obstacles));
     this._obstacles = obstacles;
     this._previousFirstDrawnObstacleIndexes = homicks.map(h => 0);
     this._fallenHurdles = homicks.map(h => []);
@@ -106,7 +107,7 @@ class Race {
         } else {
           homick.travel(
             oneStepTime,
-            index === 0 ? Events.pressed : (index % 2 === 0 && Math.abs(50 - homick.distance % 100) > 5),
+            this._players[index] ? this._players[index].jump() : (index === 0 ? Events.pressed : (index % 2 === 0 && Math.abs(50 - homick.distance % 100) > 5)),
             this._obstacles,
             this._fallenHurdles[index]
           );

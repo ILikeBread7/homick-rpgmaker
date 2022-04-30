@@ -37,10 +37,10 @@
     obstacles.sort((o1, o2) => o1.distance - o2.distance);
 
     const homicks = [
-      { acceleration: 1, maxSpeed: 5 },
-      { acceleration: 2, maxSpeed: 4 },
-      { acceleration: 3, maxSpeed: 6 },
-      { acceleration: 1, maxSpeed: 3 }
+      { acceleration: 1, maxSpeed: 5, player: HumanPlayer },
+      { acceleration: 1, maxSpeed: 5, player: SimpleAi },
+      { acceleration: 1, maxSpeed: 5, player: SimpleAi },
+      { acceleration: 1, maxSpeed: 5, player: SimpleAi }
     ]
     
     const race = new Race(canvas, ctx, homicks, obstacles, level === 0 ? (10 * TRACK_TILE_HEIGHT) : ((8 + level) * 15 * TRACK_TILE_HEIGHT));

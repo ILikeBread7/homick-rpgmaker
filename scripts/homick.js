@@ -195,6 +195,10 @@ class Homick {
     return this._speedOnGround * GLOBAL_SPEED_FACTOR;
   }
 
+  get currentObstacleIndex() {
+    return this._currentObstacleIndex;
+  }
+
   get _boosting() {
     return this._boostTimeout - BOOST_DECELERATION_TIME > 0;
   }
