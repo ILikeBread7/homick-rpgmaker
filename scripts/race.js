@@ -82,7 +82,7 @@ class Race {
     this._tracksX = (BASE_WIDTH - (TRACK_TILE_WIDTH * homicks.length)) / 2;
     this._tracksY = (BASE_HEIGHT - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2;
     this._homicks = homicks.map(h => new Homick(h.acceleration, h.maxSpeed));
-    this._players = homicks.map((homick, index) => new homick.player(this._homicks[index], obstacles));
+    this._players = homicks.map((homick, index) => homick.player(this._homicks[index], obstacles));
     this._obstacles = obstacles;
     this._previousFirstDrawnObstacleIndexes = homicks.map(h => 0);
     this._fallenHurdles = homicks.map(h => []);
@@ -100,7 +100,7 @@ class Race {
       this._homicks.forEach((homick, index) => {
         if (homick.isFinished(this._totalDistance)) {
           if (homick.speed > 0) {
-            const position = this._homicks.filter(h => h.isFinished(this._totalDistance)).length;
+            const position = this._finishedPositions.filter(x => !!x).length + 1;
             this._finishedPositions[index] = position;
           }
           homick.finish();
