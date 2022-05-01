@@ -19,7 +19,7 @@ class Race {
   static Obstacle = Object.freeze({
     HURDLE: Object.freeze({
       spriteWidth: TRACK_TILE_WIDTH,
-      spriteHeight: TRACK_TILE_HEIGHT / 2,
+      spriteHeight: TRACK_TILE_HEIGHT / 4,
       obstacleHeight: 10,
       fallable: true,
       boost: false,
@@ -31,7 +31,7 @@ class Race {
     }),
     PUDDLE: Object.freeze({
       spriteWidth: TRACK_TILE_HEIGHT - PADDING * 2,
-      spriteHeight: TRACK_TILE_HEIGHT - PADDING * 2,
+      spriteHeight: TRACK_TILE_HEIGHT / 2,
       obstacleHeight: 0,
       fallable: false,
       boost: false,
