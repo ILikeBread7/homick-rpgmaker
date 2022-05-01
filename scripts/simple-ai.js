@@ -23,6 +23,10 @@ class SimpleAi {
       return false;
     }
 
+    if (this._homick.currentObstacleIndex < 0) {
+      return false;
+    }
+
     const currentObstacle = this._obstacles[this._currentObstacleIndex];
 
     if (currentObstacle.type.boost) {
