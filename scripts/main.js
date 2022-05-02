@@ -16,20 +16,20 @@
     switch (level) {
       case 1:
         for (let i = 0; i < 30; i++) {
-          obstacles.push({ type: Race.Obstacle.HURDLE, distance: 6 * (i + 1) * TRACK_TILE_HEIGHT - HOMICK_SPRITE_HEIGHT })
+          obstacles.push({ type: Race.Obstacle.HURDLE, distance: 6 * (i + 1) * TRACK_TILE_HEIGHT })
         }
       break;
       case 2:
         for (let i = 0; i < 30; i++) {
-          obstacles.push({ type: Race.Obstacle.HURDLE, distance: 7 * (i + 1) * TRACK_TILE_HEIGHT - HOMICK_SPRITE_HEIGHT })
-          obstacles.push({ type: Race.Obstacle.PUDDLE, distance: (7 * (i + 1) + 2) * TRACK_TILE_HEIGHT - HOMICK_SPRITE_HEIGHT })
+          obstacles.push({ type: Race.Obstacle.HURDLE, distance: 7 * (i + 1) * TRACK_TILE_HEIGHT })
+          obstacles.push({ type: Race.Obstacle.PUDDLE, distance: (7 * (i + 1) + 2) * TRACK_TILE_HEIGHT })
         }
       break;
       case 3:
         for (let i = 0; i < 30; i++) {
-          obstacles.push({ type: Race.Obstacle.HURDLE, distance: 8 * (i + 1) * TRACK_TILE_HEIGHT - HOMICK_SPRITE_HEIGHT })
-          obstacles.push({ type: Race.Obstacle.PUDDLE, distance: (8 * (i + 1) + 2) * TRACK_TILE_HEIGHT - HOMICK_SPRITE_HEIGHT })
-          obstacles.push({ type: Race.Obstacle.BOOST, distance: (8 * (i + 1) + 6) * TRACK_TILE_HEIGHT - HOMICK_SPRITE_HEIGHT })
+          obstacles.push({ type: Race.Obstacle.HURDLE, distance: 8 * (i + 1) * TRACK_TILE_HEIGHT })
+          obstacles.push({ type: Race.Obstacle.PUDDLE, distance: (8 * (i + 1) + 2) * TRACK_TILE_HEIGHT })
+          obstacles.push({ type: Race.Obstacle.BOOST, distance: (8 * (i + 1) + 3) * TRACK_TILE_HEIGHT })
         }
       break;
     }
@@ -38,9 +38,9 @@
 
     const homicks = [
       { acceleration: 0.75, maxSpeed: 3.5, player: () => new HumanPlayer() },
-      { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 4) },
-      { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 4) },
-      { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 10, 3) }
+      { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 20, 10) },
+      { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 10, 8) },
+      { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 10) }
     ]
     
     const race = new Race(canvas, ctx, homicks, obstacles, level === 0 ? (10 * TRACK_TILE_HEIGHT) : ((8 + level) * 15 * TRACK_TILE_HEIGHT));
