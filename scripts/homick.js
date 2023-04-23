@@ -37,8 +37,9 @@ class Homick {
    * @param {boolean} jump
    * @param {[{ type: Race.Obstacle, distance: number }]} obstacles
    * @param {boolean[]} fallenHurdles
+   * @param {number} position 
    */
-  travel(time, jump, obstacles, fallenHurdles) {
+  travel(time, jump, obstacles, fallenHurdles, position) {
     if (time <= this._obstacleHitTimeout) {
       this._obstacleHitTimeout -= time;
       return;
@@ -48,7 +49,7 @@ class Homick {
     this._obstacleHitTimeout = 0;
     this._boostTimeout = Math.max(this._boostTimeout - time, 0);
     const justLanded = this._handleJumping(time, jump);
-    this._handleMoving(time, obstacles, fallenHurdles, justLanded);
+    this._handleMoving(time, obstacles, fallenHurdles, justLanded, position);
     this._lastJumpState = jump;
   }
 
@@ -122,10 +123,11 @@ class Homick {
    * @param {[{ type: Race.Obstacle, distance: number }]} obstacles
    * @param {boolean[]} fallenHurdles
    * @param {boolean} justLanded
+   * @param {number} position 
    */
-  _handleMoving(time, obstacles, fallenHurdles, justLanded) {
+  _handleMoving(time, obstacles, fallenHurdles, justLanded, position) {
     if (this.isOnGround) {
-      this._accelerate(time);
+      this._accelerate(time, position);
     }
     this._distance += time * this.effectiveSpeed;
 
@@ -165,10 +167,27 @@ class Homick {
   /**
    * 
    * @param {number} time 
+   * @param {number} position 
    */
-  _accelerate(time) {
-    this._speedOnGround += time * this._acceleration * GLOBAL_ACCELERATION_FACTOR * (this._boosting ? BOOST_ACCELERATION_FACTOR : 1);
-    this._speedOnGround = Math.min(this._speedOnGround, this._maxSpeed);
+  _accelerate(time, position) {
+    this._speedOnGround += time * this._effectiveAcceleration(position) * GLOBAL_ACCELERATION_FACTOR * (this._boosting ? BOOST_ACCELERATION_FACTOR : 1);
+    this._speedOnGround = Math.min(this._speedOnGround, this._effectiveMaxSpeed(position));
+  }
+
+  /**
+   * 
+   * @param {number} position 
+   */
+   _effectiveMaxSpeed(position) {
+    return this._maxSpeed * (1 + 0.1 * (position - 1));
+  }
+
+  /**
+   * 
+   * @param {number} position 
+   */
+     _effectiveAcceleration(position) {
+      return this._acceleration * (1 + 0.1 * (position - 1));
   }
 
   get distance() {
@@ -202,6 +221,5 @@ class Homick {
   get _boosting() {
     return this._boostTimeout - BOOST_DECELERATION_TIME > 0;
   }
-
 
 }

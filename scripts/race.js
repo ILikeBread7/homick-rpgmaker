@@ -110,7 +110,8 @@ class Race {
             oneStepTime,
             this._players[index] ? this._players[index].jump() : (index === 0 ? Events.pressed : (index % 2 === 0 && Math.abs(50 - homick.distance % 100) > 5)),
             this._obstacles,
-            this._fallenHurdles[index]
+            this._fallenHurdles[index],
+            this._homicks.filter(h => h.distance > homick.distance).length + 1
           );
         }
       });
