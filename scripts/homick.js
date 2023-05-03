@@ -29,6 +29,7 @@ class Homick {
     this._obstacleHitTimeout = 0;
     this._boostTimeout = 0;
     this._previousJumpHeight = 0;
+    this._hit = false;
   }
 
   /**
@@ -58,13 +59,21 @@ class Homick {
    * @param {number} distanceToFinish 
    */
   isFinished(distanceToFinish) {
-    return this._distance >= distanceToFinish;
+    return (distanceToFinish === 0 && this._hit) || (distanceToFinish && this._distance >= distanceToFinish);
   }
 
   finish() {
     this._speedOnGround = 0;
     this._setAsLanded();
   }
+
+  /**
+   * 
+   * @param {number} speed speed to be added
+   */
+     increaseMaxSpeed(speed) {
+      this._maxSpeed += speed;
+    }
 
   /**
    * 
@@ -143,6 +152,7 @@ class Homick {
           if (currentObstacle.type.boost) {
             this._boostTimeout = BOOST_TIME + BOOST_DECELERATION_TIME;
           } else {
+            this._hit = true;
             this._obstacleHitTimeout = OBSTACLE_HIT_TIMEOUT;
             this._speedOnGround = 0;
             this._boostTimeout = 0;

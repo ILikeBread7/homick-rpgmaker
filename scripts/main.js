@@ -4,7 +4,7 @@
 
   /**
    * 
-   * @param {number} level 
+   * @param {number} level -1 for endless mode
    * @returns { { race: Race, interval: number } }
    */
   const startLevel = (level) => {
@@ -12,6 +12,22 @@
     document.getElementById('ui_div').style.display = 'none';
     
     const obstacles = [];
+
+    const OBSTACLES_BATCH = 8;
+    const MIN_OBSTACLE_DISTANCE = TRACK_TILE_HEIGHT * 3;
+    const MAX_OBSTACLE_DISTANCE = TRACK_TILE_HEIGHT * 8;
+
+    let earliestObstacleToDelete = 0;
+
+    const addNewObstacles = () => {
+      let obstacleDistance = obstacles[obstacles.length - 1].distance;
+      for (let i = 0; i < OBSTACLES_BATCH; i++) {
+        delete obstacles[earliestObstacleToDelete + i];
+        obstacleDistance += MIN_OBSTACLE_DISTANCE + Math.floor(Math.random() * (MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE));
+        obstacles.push({ type: Race.Obstacle.HURDLE, distance: obstacleDistance });
+      }
+      earliestObstacleToDelete += OBSTACLES_BATCH;
+    };
 
     switch (level) {
       case 1:
@@ -32,18 +48,27 @@
           obstacles.push({ type: Race.Obstacle.BOOST, distance: (8 * (i + 1) + 3) * TRACK_TILE_HEIGHT })
         }
       break;
+      case -1:
+        let obstacleDistance = MIN_OBSTACLE_DISTANCE;
+        for (let i = 0; i < OBSTACLES_BATCH * 2; i++) {
+          obstacleDistance += MIN_OBSTACLE_DISTANCE + Math.floor(Math.random() * (MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE));
+          obstacles.push({ type: Race.Obstacle.HURDLE, distance: obstacleDistance });
+        }
+      break;
     }
 
     obstacles.sort((o1, o2) => o1.distance - o2.distance);
 
-    const homicks = [
-      { acceleration: 0.75, maxSpeed: 3.5, player: () => new HumanPlayer() },
-      { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 20, 10) },
-      { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 10, 8) },
-      { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 10) }
-    ]
+    const homicks = level === -1
+      ? [ { acceleration: 0.75, maxSpeed: 2, player: () => new HumanPlayer() } ]
+      : [
+        { acceleration: 0.75, maxSpeed: 3.5, player: () => new HumanPlayer() },
+        { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 20, 10) },
+        { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 10, 8) },
+        { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 10) }
+      ];
     
-    const race = new Race(canvas, ctx, homicks, obstacles, level === 0 ? (10 * TRACK_TILE_HEIGHT) : ((8 + level) * 15 * TRACK_TILE_HEIGHT));
+    const race = new Race(canvas, ctx, homicks, obstacles, level === -1 ? 0 : (level === 0 ? (10 * TRACK_TILE_HEIGHT) : ((8 + level) * 15 * TRACK_TILE_HEIGHT)));
     
     let lastTotalInterval = 0;
     const start = new Date().getTime();
@@ -51,6 +76,10 @@
       const now = new Date().getTime();
       const totalTime = now - start;
       const deltaTime = totalTime - lastTotalInterval;
+      if (level === -1 && obstacles.length - race.currentObstacleIndex <= OBSTACLES_BATCH / 2) {
+        addNewObstacles();
+        race.increaseMaxSpeed(0.25);
+      }
       race.update(deltaTime);
       race.draw(totalTime);
       lastTotalInterval = totalTime;
@@ -67,6 +96,7 @@
   document.getElementById('track_1_button').addEventListener('click', () => raceData = startLevel(1));
   document.getElementById('track_2_button').addEventListener('click', () => raceData = startLevel(2));
   document.getElementById('track_3_button').addEventListener('click', () => raceData = startLevel(3));
+  document.getElementById('endless_button').addEventListener('click', () => raceData = startLevel(-1));
   canvas.addEventListener('click', () => {
     if (raceData.race && raceData.race.isFinished) {
       clearInterval(raceData.interval);

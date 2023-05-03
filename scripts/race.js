@@ -75,7 +75,7 @@ class Race {
    * @param {CanvasRenderingContext2D} ctx 
    * @param {[{ acceleration: number, maxSpeed: number, player: (homick: Homick, obstacles: {[{ type: Race.Obstacle, distance: number }]}) => { jump(): boolean } }]} homicks
    * @param {[{ type: Race.Obstacle, distance: number }]} obstacles
-   * @param {number} totalDistance
+   * @param {number} totalDistance 0 for endless mode
    */
   constructor(canvas, ctx, homicks, obstacles, totalDistance) {
     this._canvas = canvas;
@@ -123,12 +123,28 @@ class Race {
    */
   draw(totalTime) {
     this._drawBackground();
-    this._drawFinishLine();
+    if (this._totalDistance) {
+      this._drawFinishLine();
+    } else {
+      this._drawEndlessScore(Math.floor(this._homicks[0].distance));
+    }
     this._drawHomicksAndTracks(totalTime);
     this._drawFinishPositions();
     if (this.isFinished) {
       this._drawRaceFinished();
     }
+  }
+
+  /**
+   * 
+   * @param {number} speed speed to be added
+   */
+  increaseMaxSpeed(speed) {
+    this._homicks[0].increaseMaxSpeed(speed);
+  }
+
+  get currentObstacleIndex() {
+    return this._homicks[0].currentObstacleIndex;
   }
 
   /**
@@ -308,8 +324,21 @@ class Race {
    * 
    * @param {number} distance 
    */
+  _drawEndlessScore(distance) {
+    const marginLeft = 220;
+    const marginTop = TRACK_TILE_HEIGHT * 4;
+    this._ctx.font = '16px Arial';
+    this._ctx.fillStyle = '#33e';
+    this._ctx.fillText(`Score: ${this.currentObstacleIndex}`, marginLeft, marginTop);
+    this._ctx.fillText(`Distance: ${distance}`, marginLeft, marginTop + 20);
+  }
+
+  /**
+   * 
+   * @param {number} distance 
+   */
   _findDistanceOffset(distance) {
-    return distance * MAX_DISTANCE_OFFSET / this._totalDistance;
+    return this._totalDistance && (distance * MAX_DISTANCE_OFFSET / this._totalDistance);
   }
 
   get isFinished() {
