@@ -4,7 +4,7 @@
 
   /**
    * 
-   * @param {number} level -1 for endless mode
+   * @param {number} level -1 for endless mode, use startEndlessMode function instead
    * @returns { { race: Race, interval: number } }
    */
   const startLevel = (level) => {
@@ -25,6 +25,11 @@
         delete obstacles[earliestObstacleToDelete + i];
         obstacleDistance += MIN_OBSTACLE_DISTANCE + Math.floor(Math.random() * (MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE));
         obstacles.push({ type: Race.Obstacle.HURDLE, distance: obstacleDistance });
+        if (i + 2 <= OBSTACLES_BATCH && Math.random() < 0.2) {
+          obstacleDistance += Math.floor(Race.Obstacle.HURDLE.hitboxLength * (4 + 2 * Math.random()));
+          obstacles.push({ type: Race.Obstacle.HURDLE, distance: obstacleDistance });
+          i++;
+        }
       }
       earliestObstacleToDelete += OBSTACLES_BATCH;
     };
@@ -78,7 +83,10 @@
       const deltaTime = totalTime - lastTotalInterval;
       if (level === -1 && obstacles.length - race.currentObstacleIndex <= OBSTACLES_BATCH / 2) {
         addNewObstacles();
-        race.increaseMaxSpeed(0.25);
+        if (race.maxSpeed < 5) {
+          race.increaseMaxSpeed(0.25);
+        }
+        console.log(race.maxSpeed);
       }
       race.update(deltaTime);
       race.draw(totalTime);
@@ -88,6 +96,8 @@
     return { race, interval };
   }
 
+  const startEndlessMode = () => startLevel(-1);
+
   /**
    * @type { { race: Race, interval: number } }
    */
@@ -96,7 +106,7 @@
   document.getElementById('track_1_button').addEventListener('click', () => raceData = startLevel(1));
   document.getElementById('track_2_button').addEventListener('click', () => raceData = startLevel(2));
   document.getElementById('track_3_button').addEventListener('click', () => raceData = startLevel(3));
-  document.getElementById('endless_button').addEventListener('click', () => raceData = startLevel(-1));
+  document.getElementById('endless_button').addEventListener('click', () => raceData = startEndlessMode());
   canvas.addEventListener('click', () => {
     if (raceData.race && raceData.race.isFinished) {
       clearInterval(raceData.interval);

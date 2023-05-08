@@ -143,6 +143,10 @@ class Race {
     this._homicks[0].increaseMaxSpeed(speed);
   }
 
+  get maxSpeed() {
+    return this._homicks[0].maxSpeed;
+  }
+
   get currentObstacleIndex() {
     return this._homicks[0].currentObstacleIndex;
   }

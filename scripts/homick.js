@@ -228,6 +228,10 @@ class Homick {
     return this._currentObstacleIndex;
   }
 
+  get maxSpeed() {
+    return this._maxSpeed;
+  }
+
   get _boosting() {
     return this._boostTimeout - BOOST_DECELERATION_TIME > 0;
   }
