@@ -75,21 +75,41 @@
     
     const race = new Race(canvas, ctx, homicks, obstacles, level === -1 ? 0 : (level === 0 ? (10 * TRACK_TILE_HEIGHT) : ((8 + level) * 15 * TRACK_TILE_HEIGHT)));
     
+    const countdownTime = 1000;
+    const countdownLeft = 160;
+    const countdownTop = TRACK_TILE_HEIGHT * 5;
+    ctx.font = '24px Arial';
+    ctx.fillStyle = '#f00';
+
     let lastTotalInterval = 0;
     const start = new Date().getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const totalTime = now - start;
       const deltaTime = totalTime - lastTotalInterval;
-      if (level === -1 && obstacles.length - race.currentObstacleIndex <= OBSTACLES_BATCH / 2) {
-        addNewObstacles();
-        if (race.maxSpeed < 5) {
-          race.increaseMaxSpeed(0.25);
+      if (totalTime < countdownTime * 3) {
+        race.draw(totalTime);
+        if (totalTime < countdownTime) {
+          ctx.fillText('3', countdownLeft, countdownTop);
+        } else if (totalTime < countdownTime * 2) {
+          ctx.fillText('2', countdownLeft, countdownTop);
+        } else {
+          ctx.fillText('1', countdownLeft, countdownTop);
         }
-        console.log(race.maxSpeed);
+      } else {
+        if (level === -1 && obstacles.length - race.currentObstacleIndex <= OBSTACLES_BATCH / 2) {
+          addNewObstacles();
+          if (race.maxSpeed < 5) {
+            race.increaseMaxSpeed(0.25);
+          }
+        }
+        race.update(deltaTime);
+        race.draw(totalTime);
+        if (totalTime < countdownTime * 4) {
+          ctx.fillStyle = '#0f0';
+          ctx.fillText('GO!', countdownLeft, countdownTop);
+        }
       }
-      race.update(deltaTime);
-      race.draw(totalTime);
       lastTotalInterval = totalTime;
     }, 1000 / FPS);
 
