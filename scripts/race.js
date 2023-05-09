@@ -8,6 +8,7 @@ const MAX_DISTANCE_OFFSET = TRACK_TILE_HEIGHT * 3;
 const TIME_STEP = 10;
 const FINISH_POSITIONS = ['1st', '2nd', '3rd', '4th'];
 const HITBOX_LEEWAY = 8;
+const FINISH_LINE_HEIGHT = 16 * 3;
 
 class Race {
 
@@ -124,7 +125,7 @@ class Race {
   draw(totalTime) {
     this._drawBackground();
     if (this._totalDistance) {
-      this._drawFinishLine();
+      this._drawFinishLineOnSide();
     } else {
       this._drawEndlessScore(Math.floor(this._homicks[0].distance));
     }
@@ -240,7 +241,8 @@ class Race {
    * @param {number} homickIndex 
    */
   _drawTrack(distance, homickIndex) {
-    const effectiveDistance = distance - this._findDistanceOffset(distance);
+    const distanceOffset = this._findDistanceOffset(distance);
+    const effectiveDistance = distance - distanceOffset;
     const colors = ['#7f7f10', '#4f4f10'];
     const offset = TRACK_TILE_HEIGHT - (effectiveDistance % TRACK_TILE_HEIGHT);
     const startingColorIndex = Math.floor((effectiveDistance % (TRACK_TILE_HEIGHT * 2)) / TRACK_TILE_HEIGHT);
@@ -256,6 +258,25 @@ class Race {
     const lastColor = colors[(startingColorIndex + 1) % colors.length];
     this._ctx.fillStyle = lastColor;
     this._ctx.fillRect(this._tracksX + TRACK_TILE_WIDTH * homickIndex, this._tracksY + offset + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT, TRACK_TILE_WIDTH, TRACK_TILE_HEIGHT - offset);
+    if (this._totalDistance) { // if not endless mode
+      this._drawFinishLineOnTrack(distance, homickIndex, distanceOffset);
+    }
+  }
+
+  /**
+   * 
+   * @param {number} distance 
+   * @param {number} homickIndex 
+   * @param {number} distanceOffset 
+   * @returns 
+   */
+  _drawFinishLineOnTrack(distance, homickIndex, distanceOffset) {
+    const relativeDistance = this._totalDistance - distance + distanceOffset;
+    if (relativeDistance > TRACK_TILE_HEIGHT * TRACK_HEIGHT) {
+      return;
+    }
+    this._ctx.fillStyle = '#000';
+    this._ctx.fillRect(this._tracksX + TRACK_TILE_WIDTH * homickIndex, relativeDistance + this._tracksY + TOP_Y, TRACK_TILE_WIDTH, FINISH_LINE_HEIGHT);
   }
 
   /**
@@ -281,10 +302,10 @@ class Race {
     this._ctx.fillRect(0, 0, BASE_HEIGHT, BASE_HEIGHT);
   }
 
-  _drawFinishLine() {
-    const finishSquareSize = 16;
+  _drawFinishLineOnSide() {
     const finishSquareRows = 3;
     const finishSquareColumns = 3;
+    const finishSquareSize = FINISH_LINE_HEIGHT / finishSquareRows;
     for (let part = 0; part < 2; part++) {
       for (let row = 0; row < finishSquareRows; row++) {
         for (let column = 0; column < finishSquareColumns; column++) {
