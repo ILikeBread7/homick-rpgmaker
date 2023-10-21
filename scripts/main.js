@@ -24,10 +24,10 @@
       for (let i = 0; i < OBSTACLES_BATCH; i++) {
         delete obstacles[earliestObstacleToDelete + i];
         obstacleDistance += MIN_OBSTACLE_DISTANCE + Math.floor(Math.random() * (MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE));
-        obstacles.push({ type: Race.Obstacle.HURDLE, distance: obstacleDistance });
+        obstacles.push({ type: Obstacles.Obstacle.HURDLE, distance: obstacleDistance });
         if (i + 2 <= OBSTACLES_BATCH && Math.random() < 0.2) {
-          obstacleDistance += Math.floor(Race.Obstacle.HURDLE.hitboxLength * (4 + 2 * Math.random()));
-          obstacles.push({ type: Race.Obstacle.HURDLE, distance: obstacleDistance });
+          obstacleDistance += Math.floor(Obstacles.Obstacle.HURDLE.hitboxLength * (4 + 2 * Math.random()));
+          obstacles.push({ type: Obstacles.Obstacle.HURDLE, distance: obstacleDistance });
           i++;
         }
       }
@@ -37,27 +37,27 @@
     switch (level) {
       case 1:
         for (let i = 0; i < 30; i++) {
-          obstacles.push({ type: Race.Obstacle.HURDLE, distance: 6 * (i + 1) * TRACK_TILE_HEIGHT })
+          obstacles.push({ type: Obstacles.Obstacle.HURDLE, distance: 6 * (i + 1) * TRACK_TILE_HEIGHT })
         }
       break;
       case 2:
         for (let i = 0; i < 30; i++) {
-          obstacles.push({ type: Race.Obstacle.HURDLE, distance: 7 * (i + 1) * TRACK_TILE_HEIGHT })
-          obstacles.push({ type: Race.Obstacle.PUDDLE, distance: (7 * (i + 1) + 2) * TRACK_TILE_HEIGHT })
+          obstacles.push({ type: Obstacles.Obstacle.HURDLE, distance: 7 * (i + 1) * TRACK_TILE_HEIGHT })
+          obstacles.push({ type: Obstacles.Obstacle.PUDDLE, distance: (7 * (i + 1) + 2) * TRACK_TILE_HEIGHT })
         }
       break;
       case 3:
         for (let i = 0; i < 30; i++) {
-          obstacles.push({ type: Race.Obstacle.HURDLE, distance: 8 * (i + 1) * TRACK_TILE_HEIGHT })
-          obstacles.push({ type: Race.Obstacle.PUDDLE, distance: (8 * (i + 1) + 2) * TRACK_TILE_HEIGHT })
-          obstacles.push({ type: Race.Obstacle.BOOST, distance: (8 * (i + 1) + 3) * TRACK_TILE_HEIGHT })
+          obstacles.push({ type: Obstacles.Obstacle.HURDLE, distance: 8 * (i + 1) * TRACK_TILE_HEIGHT })
+          obstacles.push({ type: Obstacles.Obstacle.PUDDLE, distance: (8 * (i + 1) + 2) * TRACK_TILE_HEIGHT })
+          obstacles.push({ type: Obstacles.Obstacle.BOOST, distance: (8 * (i + 1) + 3) * TRACK_TILE_HEIGHT })
         }
       break;
       case -1:
         let obstacleDistance = MIN_OBSTACLE_DISTANCE;
         for (let i = 0; i < OBSTACLES_BATCH * 2; i++) {
           obstacleDistance += MIN_OBSTACLE_DISTANCE + Math.floor(Math.random() * (MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE));
-          obstacles.push({ type: Race.Obstacle.HURDLE, distance: obstacleDistance });
+          obstacles.push({ type: Obstacles.Obstacle.HURDLE, distance: obstacleDistance });
         }
       break;
     }

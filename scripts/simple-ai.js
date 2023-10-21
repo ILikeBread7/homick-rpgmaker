@@ -3,7 +3,7 @@ class SimpleAi {
   /**
    * 
    * @param {Homick} homick 
-   * @param { { distance: number, type: Race.Obstacle} } obstacles 
+   * @param { { distance: number, type: Obstacles.Obstacle} } obstacles 
    * @param {number} preJumpDistance
    * @param {number} varianceRange
    */

@@ -36,7 +36,7 @@ class Homick {
    * @description Moves the Homick forward and updates the fallen hurdles
    * @param {number} time 
    * @param {boolean} jump
-   * @param {[{ type: Race.Obstacle, distance: number }]} obstacles
+   * @param {[{ type: Obstacles.Obstacle, distance: number }]} obstacles
    * @param {boolean[]} fallenHurdles
    * @param {number} position 
    */
@@ -129,7 +129,7 @@ class Homick {
   /**
    * 
    * @param {number} time 
-   * @param {[{ type: Race.Obstacle, distance: number }]} obstacles
+   * @param {[{ type: Obstacles.Obstacle, distance: number }]} obstacles
    * @param {boolean[]} fallenHurdles
    * @param {boolean} justLanded
    * @param {number} position 
