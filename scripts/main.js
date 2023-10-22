@@ -11,11 +11,12 @@
     console.log(`Level ${level}`);
     document.getElementById('ui_div').style.display = 'none';
     
+    const totalDistance = (8 + level) * 15 * TRACK_TILE_HEIGHT;
     const obstacles = [];
 
     const OBSTACLES_BATCH = 8;
-    const MIN_OBSTACLE_DISTANCE = TRACK_TILE_HEIGHT * 3;
-    const MAX_OBSTACLE_DISTANCE = TRACK_TILE_HEIGHT * 8;
+    const MIN_OBSTACLE_DISTANCE_ENDLESS = TRACK_TILE_HEIGHT * 3;
+    const MAX_OBSTACLE_DISTANCE_ENDLESS = TRACK_TILE_HEIGHT * 8;
 
     let earliestObstacleToDelete = 0;
 
@@ -23,7 +24,7 @@
       let obstacleDistance = obstacles[obstacles.length - 1].distance;
       for (let i = 0; i < OBSTACLES_BATCH; i++) {
         delete obstacles[earliestObstacleToDelete + i];
-        obstacleDistance += MIN_OBSTACLE_DISTANCE + Math.floor(Math.random() * (MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE));
+        obstacleDistance += MIN_OBSTACLE_DISTANCE_ENDLESS + Math.floor(Math.random() * (MAX_OBSTACLE_DISTANCE_ENDLESS - MIN_OBSTACLE_DISTANCE_ENDLESS));
         obstacles.push({ type: Obstacles.Obstacle.HURDLE, distance: obstacleDistance });
         if (i + 2 <= OBSTACLES_BATCH && Math.random() < 0.2) {
           obstacleDistance += Math.floor(Obstacles.Obstacle.HURDLE.hitboxLength * (4 + 2 * Math.random()));
@@ -54,11 +55,14 @@
         }
       break;
       case -1:
-        let obstacleDistance = MIN_OBSTACLE_DISTANCE;
+        let obstacleDistance = MIN_OBSTACLE_DISTANCE_ENDLESS;
         for (let i = 0; i < OBSTACLES_BATCH * 2; i++) {
-          obstacleDistance += MIN_OBSTACLE_DISTANCE + Math.floor(Math.random() * (MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE));
+          obstacleDistance += MIN_OBSTACLE_DISTANCE_ENDLESS + Math.floor(Math.random() * (MAX_OBSTACLE_DISTANCE_ENDLESS - MIN_OBSTACLE_DISTANCE_ENDLESS));
           obstacles.push({ type: Obstacles.Obstacle.HURDLE, distance: obstacleDistance });
         }
+      break;
+      default:
+        obstacles.push(...Obstacles.createObstaclesForLevel(level, totalDistance));
       break;
     }
 
@@ -73,7 +77,7 @@
         { acceleration: 0.75, maxSpeed: 3.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 10) }
       ];
     
-    const race = new Race(canvas, ctx, homicks, obstacles, level === -1 ? 0 : (level === 0 ? (10 * TRACK_TILE_HEIGHT) : ((8 + level) * 15 * TRACK_TILE_HEIGHT)));
+    const race = new Race(canvas, ctx, homicks, obstacles, level === -1 ? 0 : (level === 0 ? (10 * TRACK_TILE_HEIGHT) : totalDistance));
     
     const countdownTime = 1000;
     const countdownLeft = 160;
@@ -126,6 +130,9 @@
   document.getElementById('track_1_button').addEventListener('click', () => raceData = startLevel(1));
   document.getElementById('track_2_button').addEventListener('click', () => raceData = startLevel(2));
   document.getElementById('track_3_button').addEventListener('click', () => raceData = startLevel(3));
+  document.getElementById('track_5_button').addEventListener('click', () => raceData = startLevel(5));
+  document.getElementById('track_6_button').addEventListener('click', () => raceData = startLevel(6));
+  document.getElementById('track_11_button').addEventListener('click', () => raceData = startLevel(11));
   document.getElementById('endless_button').addEventListener('click', () => raceData = startEndlessMode());
   canvas.addEventListener('click', () => {
     if (raceData.race && raceData.race.isFinished) {
