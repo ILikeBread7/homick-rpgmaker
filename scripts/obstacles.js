@@ -104,7 +104,6 @@ class Obstacles {
       );
     }
 
-    console.log(obstacles);
     return obstacles;
   }
 
