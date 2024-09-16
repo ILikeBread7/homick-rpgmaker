@@ -74,34 +74,63 @@ class Obstacles {
    * @param {number} totalDistance 
    */
   static createObstaclesForLevel(level, totalDistance) {
-    const hurdlePool = [
-      Array(7).fill(this._createSingleHurdle),
-      Array(1).fill(this._createDoubleHurdle)
+    let obstacleSpec = [
+      { value: 7, func: this._createSingleHurdle },
+      { value: 1, func: this._createDoubleHurdle }
     ];
 
-    const puddlePool = [
-      Array(2).fill(this._createSinglePuddle),
-      Array(1).fill(this._createHurdlePuddle)
-    ];
+    if (level > PUDDLE_LEVEL) {
+      obstacleSpec.push(
+        { value: 2, func: this._createSinglePuddle },
+        { value: 1, func: this._createHurdlePuddle }
+      );
+    }
 
-    const boostPool = [
-      Array(1).fill(this._createSingleBoost),
-      Array(1).fill(this._createHurdleBoost)
-    ];
+    if (level > BOOST_LEVEL) {
+      obstacleSpec.push(
+        { value: 1, func: this._createSingleBoost },
+        { value: 1, func: this._createHurdleBoost }
+      );
+    }
 
-    const obstaclePool = [
-      hurdlePool,
-      level > PUDDLE_LEVEL ? puddlePool : [],
-      level > BOOST_LEVEL ? boostPool : []
-    ].flat(2);
+    return this._createObstacles(totalDistance, obstacleSpec);
+  }
+
+  /**
+   * 
+   * @param {number} totalDistance 
+   * @param {[ {value: number, func: (number) => [{ type: Obstacles.Obstacle, distance: number }]} ]} obstacleSpec 
+   */
+  static _createObstacles(totalDistance, obstacleSpec) {
+    let total = 0;
+    for (const obstacle in obstacleSpec) {
+      total += obstacleSpec[obstacle].value;
+    }
+
+    const normalizedSpec = {};
+    let subTotal = 0;
+    for (const key in obstacleSpec) {
+      const obstacle = obstacleSpec[key];
+      const newSubTotal = obstacle.value / total + subTotal;
+      normalizedSpec[key] = { value: newSubTotal, func: obstacle.func };
+      subTotal = newSubTotal;
+    }
 
     const obstacles = [];
     let distance = MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE;
     while (distance < totalDistance - MAX_OBSTACLE_DISTANCE) {
       distance += MIN_OBSTACLE_DISTANCE + Math.floor(Math.random() * (MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE));
-      obstacles.push(
-        ...obstaclePool[Math.floor(Math.random() * obstaclePool.length)](distance)
-      );
+
+      const randomObstacle = Math.random();
+      for (const key in normalizedSpec) {
+        const obstacleFreq = normalizedSpec[key];
+        if (randomObstacle < obstacleFreq.value) {
+          obstacles.push(
+            ...obstacleFreq.func(distance)
+          );
+          break;
+        }
+      }
     }
 
     return obstacles;
