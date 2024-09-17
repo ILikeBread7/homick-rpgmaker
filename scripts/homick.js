@@ -71,9 +71,9 @@ class Homick {
    * 
    * @param {number} speed speed to be added
    */
-     increaseMaxSpeed(speed) {
-      this._maxSpeed += speed;
-    }
+  increaseMaxSpeed(speed) {
+    this._maxSpeed += speed;
+  }
 
   /**
    * 
