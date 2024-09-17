@@ -23,6 +23,7 @@ class Obstacles {
       obstacleHeight: 10,
       fallable: true,
       boost: false,
+      hurdle: true,
       draw: function(ctx, x, y, fallen) {
         ctx.fillStyle = fallen ? '#999' : '#ddd';
         ctx.fillRect(x, y - HITBOX_LEEWAY, this.spriteWidth, this.hitboxLength + 2 * HITBOX_LEEWAY);
@@ -35,6 +36,7 @@ class Obstacles {
       obstacleHeight: 0,
       fallable: false,
       boost: false,
+      hurdle: false,
       draw: function(ctx, x, y, fallen) {
         ctx.fillStyle = '#321';
         ctx.fillRect(x + PADDING, y - HITBOX_LEEWAY, this.spriteWidth, this.hitboxLength + 2 * HITBOX_LEEWAY);
@@ -47,6 +49,7 @@ class Obstacles {
       obstacleHeight: 0,
       fallable: true,
       boost: true,
+      hurdle: false,
       draw: function(ctx, x, y, fallen, totalTime) {
         ctx.fillStyle = fallen ? '#811' : '#e11';
         ctx.fillRect(x + PADDING, y, this.spriteWidth, this.hitboxLength);

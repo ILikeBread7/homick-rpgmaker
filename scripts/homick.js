@@ -8,6 +8,7 @@ const BOOST_TIME = 500;
 const BOOST_DECELERATION_TIME = 250;
 const BOOST_SPEED_FACTOR = 0.5;
 const BOOST_ACCELERATION_FACTOR = 5;
+const HURDLE_BOOST_DISTANCE = 16;
 
 class Homick {
 
@@ -30,6 +31,8 @@ class Homick {
     this._boostTimeout = 0;
     this._previousJumpHeight = 0;
     this._hit = false;
+    this._jumping = false;
+    this._doubleJumping = false;
   }
 
   /**
@@ -99,6 +102,9 @@ class Homick {
       this._jumpDistance += time;
       this._jumpDistance = Math.max(this._jumpDistance, minJumpDistance);
       this._jumpDistance = Math.min(this._jumpDistance, maxJumpDistance);
+      this._jumping = true;
+    } else {
+      this._jumping = false;
     }
 
     if (this._jumpDistance > 0) {
@@ -123,6 +129,7 @@ class Homick {
       this._jumpDistance = 0;
       this._jumpTime = 0;
       this._stoppedJumping = false;
+      this._doubleJumping = true;
     }
   }
 
@@ -143,6 +150,16 @@ class Homick {
     this._currentObstacleIndex = Utils.findIndexStartingAt(obstacles, this._currentObstacleIndex, o => o.distance > this._distance || o.type.collides(o.distance, this._distance, 0));
     if (this._currentObstacleIndex !== -1) {
       const currentObstacle = obstacles[this._currentObstacleIndex];
+      
+      if (
+        currentObstacle.type.hurdle &&
+        this._jumped &&
+        !this._doubleJumping &&
+        (currentObstacle.distance - this._distance < HURDLE_BOOST_DISTANCE)
+      ) {
+        this._addBoost();
+      }
+      
       if (
         !fallenHurdles[this._currentObstacleIndex] &&
         (justLanded || !currentObstacle.type.boost) &&
@@ -150,7 +167,7 @@ class Homick {
       ) {
         if (currentObstacle.type.fallable) {
           if (currentObstacle.type.boost) {
-            this._boostTimeout = BOOST_TIME + BOOST_DECELERATION_TIME;
+            this._addBoost();
           } else {
             this._hit = true;
             this._obstacleHitTimeout = OBSTACLE_HIT_TIMEOUT;
@@ -166,12 +183,17 @@ class Homick {
     }
   }
 
+  _addBoost() {
+    this._boostTimeout = BOOST_TIME + BOOST_DECELERATION_TIME;
+  }
+
   _setAsLanded() {
     this._height = 0;
     this._previousJumpHeight = 0;
     this._jumpTime = 0;
     this._jumpDistance = 0;
     this._stoppedJumping = false;
+    this._doubleJumping = false;
   }
 
   /**
@@ -230,6 +252,10 @@ class Homick {
 
   get maxSpeed() {
     return this._maxSpeed;
+  }
+
+  get _jumped() {
+    return this._jumping && !this._lastJumpState;
   }
 
   get _boosting() {
