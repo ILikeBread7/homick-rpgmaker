@@ -74,7 +74,7 @@ class Obstacles {
    * @param {number} totalDistance 
    */
   static createObstaclesForLevel(level, totalDistance) {
-    let obstacleSpec = [
+    const obstacleSpec = [
       { value: 7, func: this._createSingleHurdle },
       { value: 1, func: this._createDoubleHurdle }
     ];
