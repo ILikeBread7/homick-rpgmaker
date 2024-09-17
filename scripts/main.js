@@ -74,7 +74,7 @@
         { acceleration: 0.5, maxSpeed: 3.5, player: () => new HumanPlayer() },
         { acceleration: 2, maxSpeed: 3.25, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 20, 10) },
         { acceleration: 2, maxSpeed: 3.25, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 10, 8) },
-        { acceleration: 2, maxSpeed: 3.25, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 10) }
+        { acceleration: 2, maxSpeed: 3.25, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 10, 6, 3) }
       ];
     
     const race = new Race(canvas, ctx, homicks, obstacles, level === -1 ? 0 : (level === 0 ? (10 * TRACK_TILE_HEIGHT) : totalDistance));
