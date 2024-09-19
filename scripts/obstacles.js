@@ -5,6 +5,7 @@ const HITBOX_LEEWAY = 8;
 const MIN_OBSTACLE_DISTANCE = TRACK_TILE_HEIGHT * 3;
 const MAX_OBSTACLE_DISTANCE = TRACK_TILE_HEIGHT * 8;
 const DOUBLE_OBSTACLE_DISTANCE = TRACK_TILE_HEIGHT;
+const ENDLESS_OBSTACLES_BATCH = 8;
 const PUDDLE_LEVEL = 5;
 const BOOST_LEVEL = 10;
 
@@ -106,12 +107,24 @@ class Obstacles {
     return this._createObstacles(totalDistance, obstacleSpec);
   }
 
+  static createObstaclesForEndless(startDistance) {
+    const totalDistance = startDistance + MAX_OBSTACLE_DISTANCE * ENDLESS_OBSTACLES_BATCH;
+    
+    const obstacleSpec = [
+      { value: 5, func: this._createSingleHurdle },
+      { value: 1, func: this._createDoubleHurdle }
+    ];
+    
+    return this._createObstacles(totalDistance, obstacleSpec, startDistance);
+  }
+
   /**
    * 
    * @param {number} totalDistance 
    * @param {[ {value: number, func: (number) => [{ type: Obstacles.Obstacle, distance: number }]} ]} obstacleSpec 
+   * @param {number} [startDistance]
    */
-  static _createObstacles(totalDistance, obstacleSpec) {
+  static _createObstacles(totalDistance, obstacleSpec, startDistance = 0) {
     let total = 0;
     for (const obstacle in obstacleSpec) {
       total += obstacleSpec[obstacle].value;
@@ -127,7 +140,7 @@ class Obstacles {
     }
 
     const obstacles = [];
-    let distance = MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE;
+    let distance = startDistance + MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE;
     while (distance < totalDistance - MAX_OBSTACLE_DISTANCE) {
       distance += MIN_OBSTACLE_DISTANCE + Math.floor(Math.random() * (MAX_OBSTACLE_DISTANCE - MIN_OBSTACLE_DISTANCE));
 
