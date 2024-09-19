@@ -32,7 +32,6 @@ class Homick {
     this._previousJumpHeight = 0;
     this._hit = false;
     this._jumping = false;
-    this._doubleJumping = false;
   }
 
   /**
@@ -124,12 +123,11 @@ class Homick {
    * @param {boolean} jump 
    */
   _handleDoubleJump(jump) {
-    if (jump && this._stoppedJumping && this._previousJumpHeight === 0 && !this._lastJumpState) {
+    if (jump && this._stoppedJumping && !this._isDoubleJumping && !this._lastJumpState) {
       this._previousJumpHeight = Math.max(this._height, 0);
       this._jumpDistance = 0;
       this._jumpTime = 0;
       this._stoppedJumping = false;
-      this._doubleJumping = true;
     }
   }
 
@@ -154,7 +152,7 @@ class Homick {
       if (
         currentObstacle.type.hurdle &&
         this._jumped &&
-        !this._doubleJumping &&
+        !this._isDoubleJumping &&
         (currentObstacle.distance - this._distance < HURDLE_BOOST_DISTANCE)
       ) {
         this._addBoost();
@@ -193,7 +191,6 @@ class Homick {
     this._jumpTime = 0;
     this._jumpDistance = 0;
     this._stoppedJumping = false;
-    this._doubleJumping = false;
   }
 
   /**
@@ -256,6 +253,10 @@ class Homick {
 
   get _jumped() {
     return this._jumping && !this._lastJumpState;
+  }
+
+  get _isDoubleJumping() {
+    return this._previousJumpHeight > 0;
   }
 
   get _boosting() {
