@@ -1,0 +1,8 @@
+save/**
+audio/**
+fonts/**
+img/**
+movies/**
+icon/**
+js/**
+!js/plugins.js
