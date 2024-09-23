@@ -145,7 +145,7 @@ class Homick {
     }
     this._distance += time * this.effectiveSpeed;
 
-    this._currentObstacleIndex = Utils.findIndexStartingAt(obstacles, this._currentObstacleIndex, o => o.distance > this._distance || o.type.collides(o.distance, this._distance, 0));
+    this._currentObstacleIndex = HomickUtils.findIndexStartingAt(obstacles, this._currentObstacleIndex, o => o.distance > this._distance || o.type.collides(o.distance, this._distance, 0));
     if (this._currentObstacleIndex !== -1) {
       const currentObstacle = obstacles[this._currentObstacleIndex];
       

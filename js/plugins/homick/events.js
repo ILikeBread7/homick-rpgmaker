@@ -1,6 +1,6 @@
 class Events {
 
-  static _pressed = false;
+  // static _pressed = false;
 
   static get pressed() {
     return this._pressed;
@@ -89,6 +89,8 @@ class Events {
     return { width: BASE_WIDTH * factor,  height: viewportHeight, factor };
   }
 };
+
+Events._pressed = false;
 
 Events.registerPressedTrue('mousedown', 'keydown');
 Events.registerPressedFalse('mouseup', 'keyup');

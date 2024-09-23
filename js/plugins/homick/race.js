@@ -147,7 +147,7 @@ class Race {
       return;
     }
     const distanceOffset = this._findDistanceOffset(distance);
-    const nextObstacleIndex = Utils.findIndexStartingAt(
+    const nextObstacleIndex = HomickUtils.findIndexStartingAt(
       this._obstacles,
       this._previousFirstDrawnObstacleIndexes[homickIndex],
       o => o.distance >= distance - TOP_Y - distanceOffset

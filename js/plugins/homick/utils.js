@@ -1,4 +1,4 @@
-class Utils {
+class HomickUtils {
 
   /**
    * 
