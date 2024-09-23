@@ -92,5 +92,3 @@ class Events {
 
 Events.registerPressedTrue('mousedown', 'keydown');
 Events.registerPressedFalse('mouseup', 'keyup');
-Events.registerResize('resize');
-Events._resize();
