@@ -2,7 +2,8 @@
 save
 audio
 fonts
-img
+img/*
+!img/pictures
 movies
 icon
 js/libs
