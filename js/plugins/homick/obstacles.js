@@ -181,7 +181,7 @@ Obstacles.Obstacle = Object.freeze({
       ctx.fillStyle = fallen ? '#999' : '#ddd';
       ctx.fillRect(x, y - HITBOX_LEEWAY, this.spriteWidth, this.hitboxLength + 2 * HITBOX_LEEWAY);
     },
-    collides: this.collides
+    collides: Obstacles.collides
   }),
   PUDDLE: Object.freeze({
     spriteWidth: TRACK_TILE_HEIGHT - PADDING * 2,
@@ -194,7 +194,7 @@ Obstacles.Obstacle = Object.freeze({
       ctx.fillStyle = '#321';
       ctx.fillRect(x + PADDING, y - HITBOX_LEEWAY, this.spriteWidth, this.hitboxLength + 2 * HITBOX_LEEWAY);
     },
-    collides: this.collides
+    collides: Obstacles.collides
   }),
   BOOST: Object.freeze({
     spriteWidth: TRACK_TILE_HEIGHT - PADDING * 2,
@@ -220,6 +220,6 @@ Obstacles.Obstacle = Object.freeze({
       ctx.strokeStyle = '#000';
       ctx.lineWidth = 1;
     },
-    collides: this.collides
+    collides: Obstacles.collides
   })
 });

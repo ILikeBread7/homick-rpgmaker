@@ -6,19 +6,21 @@ const TIME_STEP = 10;
 const FINISH_POSITIONS = ['1st', '2nd', '3rd', '4th'];
 const FINISH_LINE_HEIGHT = 16 * 3;
 
+const COUNTDOWN_TIME = 1000;
+const COUNTDOWN_LEFT = 160;
+const COUNTDOWN_TOP = TRACK_TILE_HEIGHT * 5;
+
 class Race {
 
   /**
-   * 
-   * @param {HTMLCanvasElement} canvas 
-   * @param {CanvasRenderingContext2D} ctx 
+   * @param {Bitmap} contents 
    * @param {[{ acceleration: number, maxSpeed: number, player: (homick: Homick, obstacles: {[{ type: Obstacles.Obstacle, distance: number }]}) => { jump(): boolean } }]} homicks
    * @param {[{ type: Obstacles.Obstacle, distance: number }]} obstacles
    * @param {number} totalDistance 0 for endless mode
    */
-  constructor(canvas, ctx, homicks, obstacles, totalDistance) {
-    this._canvas = canvas;
-    this._ctx = ctx;
+  constructor(contents, homicks, obstacles, totalDistance) {
+    this._contents = contents;
+    this._ctx = contents._context;
     this._tracksX = (BASE_WIDTH - (TRACK_TILE_WIDTH * homicks.length)) / 2;
     this._tracksY = (BASE_HEIGHT - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2;
     this._homicks = homicks.map(h => new Homick(h.acceleration, h.maxSpeed));
@@ -28,13 +30,27 @@ class Race {
     this._fallenHurdles = homicks.map(h => []);
     this._totalDistance = totalDistance;
     this._finishedPositions = [];
+    this._obstacleToDelete = 0;
+    if (this._isEndless === 0) {
+      this._addNewEndlessObstacles();
+    }
   }
 
   /**
    * 
    * @param {number} deltaTime 
+   * @param {number} totalTime 
    */
-  update(deltaTime) {
+  update(deltaTime, totalTime) {
+    if (totalTime < COUNTDOWN_TIME * 3) {
+      return;
+    }
+    if (this._isEndless && this._obstacles.length - this.currentObstacleIndex <= ENDLESS_OBSTACLES_BATCH / 2) {
+      this._addNewEndlessObstacles();
+      if (this.maxSpeed < 5) {
+        this.increaseMaxSpeed(0.25);
+      }
+    }
     for (let remainingTime = deltaTime; remainingTime > 0; remainingTime -= TIME_STEP) {
       const oneStepTime = Math.min(TIME_STEP, remainingTime);
       this._homicks.forEach((homick, index) => {
@@ -62,12 +78,15 @@ class Race {
    */
   draw(totalTime) {
     this._drawBackground();
-    if (this._totalDistance) {
-      this._drawFinishLineOnSide();
-    } else {
+    if (this._isEndless) {
       this._drawEndlessScore(Math.floor(this._homicks[0].distance));
+    } else {
+      this._drawFinishLineOnSide();
     }
     this._drawHomicksAndTracks(totalTime);
+    if (totalTime < COUNTDOWN_TIME * 3) {
+      this._drawCountdown(totalTime);
+    }
     this._drawFinishPositions();
     if (this.isFinished) {
       this._drawRaceFinished();
@@ -82,12 +101,36 @@ class Race {
     this._homicks[0].increaseMaxSpeed(speed);
   }
 
+  _addNewEndlessObstacles() {
+    const obstacleDistance = this._obstacles.length ? this._obstacles[this._obstacles.length - 1].distance : 0;
+    for (; this._obstacleToDelete < this._obstacles.length - ENDLESS_OBSTACLES_BATCH; this._obstacleToDelete++) {
+      delete this._obstacles[this._obstacleToDelete];
+    }
+
+    this._obstacles.push(...Obstacles.createObstaclesForEndless(obstacleDistance));
+  };
+
   get maxSpeed() {
     return this._homicks[0].maxSpeed;
   }
 
   get currentObstacleIndex() {
     return this._homicks[0].currentObstacleIndex;
+  }
+
+  /**
+   * @param {number} totalTime 
+   */
+  _drawCountdown(totalTime) {
+    this._ctx.font = '24px Arial';
+    this._ctx.fillStyle = '#f00';
+    if (totalTime < COUNTDOWN_TIME) {
+      this._ctx.fillText('3', COUNTDOWN_LEFT, COUNTDOWN_TOP);
+    } else if (totalTime < COUNTDOWN_TIME * 2) {
+      this._ctx.fillText('2', COUNTDOWN_LEFT, COUNTDOWN_TOP);
+    } else {
+      this._ctx.fillText('1', COUNTDOWN_LEFT, COUNTDOWN_TOP);
+    }
   }
 
   /**
@@ -196,7 +239,7 @@ class Race {
     const lastColor = colors[(startingColorIndex + 1) % colors.length];
     this._ctx.fillStyle = lastColor;
     this._ctx.fillRect(this._tracksX + TRACK_TILE_WIDTH * homickIndex, this._tracksY + offset + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT, TRACK_TILE_WIDTH, TRACK_TILE_HEIGHT - offset);
-    if (this._totalDistance) { // if not endless mode
+    if (!this._isEndless) {
       this._drawFinishLineOnTrack(distance, homickIndex, distanceOffset);
     }
   }
@@ -306,6 +349,10 @@ class Race {
 
   get isFinished() {
     return this._homicks[0].isFinished(this._totalDistance);
+  }
+
+  get _isEndless() {
+    return this._totalDistance === 0;
   }
 
 }

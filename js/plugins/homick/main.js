@@ -1,11 +1,11 @@
 class HomickRacer {
 
   /**
-   * @param {CanvasRenderingContext2D} ctx
+   * @param {Bitmap} contents
    * @param {number} level -1 for endless mode, use startEndlessMode function instead
-   * @returns { { race: Race, interval: number } }
+   * @returns {race: Race}
    */
-  static startLevel(ctx, level) {
+  static startLevel(contents, level) {
     console.log(`Level ${level}`);
     
     const totalDistance = (8 + level) * 15 * TRACK_TILE_HEIGHT;
@@ -59,55 +59,16 @@ class HomickRacer {
         { acceleration: 2, maxSpeed: 2.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 10, 6, 3) }
       ];
     
-    const race = new Race(canvas, ctx, homicks, obstacles, level === -1 ? 0 : (level === 0 ? (10 * TRACK_TILE_HEIGHT) : totalDistance));
-    
-    const countdownTime = 1000;
-    const countdownLeft = 160;
-    const countdownTop = TRACK_TILE_HEIGHT * 5;
-    ctx.font = '24px Arial';
-    ctx.fillStyle = '#f00';
-
-    let lastTotalInterval = 0;
-    const start = new Date().getTime();
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const totalTime = now - start;
-      const deltaTime = totalTime - lastTotalInterval;
-      if (totalTime < countdownTime * 3) {
-        race.draw(totalTime);
-        if (totalTime < countdownTime) {
-          ctx.fillText('3', countdownLeft, countdownTop);
-        } else if (totalTime < countdownTime * 2) {
-          ctx.fillText('2', countdownLeft, countdownTop);
-        } else {
-          ctx.fillText('1', countdownLeft, countdownTop);
-        }
-      } else {
-        if (level === -1 && obstacles.length - race.currentObstacleIndex <= ENDLESS_OBSTACLES_BATCH / 2) {
-          addNewEndlessObstacles();
-          if (race.maxSpeed < 5) {
-            race.increaseMaxSpeed(0.25);
-          }
-        }
-        race.update(deltaTime);
-        race.draw(totalTime);
-        if (totalTime < countdownTime * 4) {
-          ctx.fillStyle = '#0f0';
-          ctx.fillText('GO!', countdownLeft, countdownTop);
-        }
-      }
-      lastTotalInterval = totalTime;
-    }, 1000 / FPS);
-
-    return { race, interval };
+    const race = new Race(contents, homicks, obstacles, level === -1 ? 0 : (level === 0 ? (10 * TRACK_TILE_HEIGHT) : totalDistance));
+    return race;
   }
 
   /**
-   * @param {CanvasRenderingContext2D} ctx
-   * @returns { { race: Race, interval: number } }
+   * @param {Bitmap} contents
+   * @returns {race: Race}
    */
-  static startEndlessMode(ctx) {
-    return this.startLevel(ctx, -1);
+  static startEndlessMode(contents) {
+    return this.startLevel(contents, -1);
   }
 }
 

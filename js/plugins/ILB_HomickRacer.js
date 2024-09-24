@@ -27,6 +27,11 @@ const ILB_HR = {};
         'main.js'
     ].forEach(loadScript);
 
+    let race;
+    let totalTime;
+    let deltaTime;
+    let previousTime;
+
     function Window_HomickRacer() {
         this.initialize.apply(this, arguments);
     }
@@ -39,10 +44,15 @@ const ILB_HR = {};
         // this._bgSprite = new Sprite();
         // this._bgSprite.initialize(ImageManager.loadBitmapFromPath(bgImagePath));
         // this.addChildToBack(this._bgSprite);
+
+        race = HomickRacer.startLevel(this.contents, 11);
+        totalTime = 0;
+        previousTime = Date.now();
     };
 
     Window_HomickRacer.prototype.refresh = function() {
         this.contents.clear();
+        race.draw(totalTime);
     };
 
     Window_HomickRacer.prototype.standardPadding = function() {
@@ -78,8 +88,18 @@ const ILB_HR = {};
 
     Scene_HomickRacer.prototype.update = function() {
         Scene_Base.prototype.update.call(this);
-        // this.updateGame();
-        // this._window.refresh();
+
+        const now = Date.now();
+        deltaTime = now - previousTime;
+        totalTime += deltaTime;
+
+        race.update(deltaTime, totalTime);
+        this._window.refresh();
+        previousTime = now;
+
+        if (race.isFinished && Input.isTriggered('ok')) {
+            SceneManager.pop();
+        }
     };
 
     Scene_HomickRacer.prototype.terminate = function() {
