@@ -1,4 +1,4 @@
-const TRACK_HEIGHT = 8;
+const TRACK_HEIGHT = 9;
 const HOMICK_SPRITE_HEIGHT = TRACK_TILE_HEIGHT - 2 * PADDING;
 const TOP_Y = Math.floor(HOMICK_SPRITE_HEIGHT * 1.5);
 const MAX_DISTANCE_OFFSET = Math.floor(TRACK_TILE_HEIGHT * 5);
@@ -241,7 +241,7 @@ class Race {
       this._ctx.fillStyle = color;
       this._ctx.fillRect(this._tracksX + TRACK_TILE_WIDTH * homickIndex, this._tracksY + offset + i * TRACK_TILE_HEIGHT, TRACK_TILE_WIDTH, TRACK_TILE_HEIGHT);
     }
-    const lastColor = colors[(startingColorIndex + 1) % colors.length];
+    const lastColor = colors[(startingColorIndex + TRACK_HEIGHT - 1) % colors.length];
     this._ctx.fillStyle = lastColor;
     this._ctx.fillRect(this._tracksX + TRACK_TILE_WIDTH * homickIndex, this._tracksY + offset + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT, TRACK_TILE_WIDTH, TRACK_TILE_HEIGHT - offset);
     if (!this._isEndless) {
@@ -285,7 +285,7 @@ class Race {
 
   _drawBackground() {
     this._ctx.fillStyle = '#78fbcf';
-    this._ctx.fillRect(0, 0, BASE_HEIGHT, BASE_HEIGHT);
+    this._ctx.fillRect(0, 0, BASE_WIDTH, BASE_HEIGHT);
   }
 
   _drawFinishLineOnSide() {
