@@ -11,3 +11,4 @@ js/*.js
 !js/plugins.js
 js/plugins/*.js
 !js/plugins/ILB_*
+js/plugins/ILB_RemoveUnusedOptions.js
