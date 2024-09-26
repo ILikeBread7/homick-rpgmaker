@@ -65,7 +65,7 @@ class Race {
         } else {
           homick.travel(
             oneStepTime,
-            this._players[index] ? this._players[index].jump() : (index === 0 ? Events.pressed : (index % 2 === 0 && Math.abs(50 - homick.distance % 100) > 5)),
+            this._players[index].jump(),
             this._obstacles,
             this._fallenHurdles[index],
             this._homicks.filter(h => h.distance > homick.distance).length + 1
@@ -353,8 +353,10 @@ class Race {
   }
 
   get isFinished() {
-    for (let i = 0; i < this._numberOfHumanPlayers; i++) {
-      if (!this._homicks[i].isFinished(this._totalDistance)) {
+    for (let i = 0; i < this._homicks.length; i++) {
+      const homick = this._homicks[i];
+      const player = this._players[i];
+      if (player.isHuman && !homick.isFinished(this._totalDistance)) {
         return false;
       }
     }

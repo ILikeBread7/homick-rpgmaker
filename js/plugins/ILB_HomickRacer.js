@@ -18,7 +18,6 @@ var ILB_HR = ILB_HR || {};
     [
         'global-constants.js',
         'utils.js',
-        'events.js',
         'human-player.js',
         'simple-ai.js',
         'homick.js',
@@ -51,7 +50,7 @@ var ILB_HR = ILB_HR || {};
         // this._bgSprite.initialize(ImageManager.loadBitmapFromPath(bgImagePath));
         // this.addChildToBack(this._bgSprite);
 
-        race = HomickRacer.startLevel(this.contents, 11);
+        race = HomickRacer.startLevel(this.contents, 1);
         totalTime = 0;
         previousTime = Date.now();
     };
@@ -103,7 +102,7 @@ var ILB_HR = ILB_HR || {};
         this._window.refresh();
         previousTime = now;
 
-        if (race.isFinished && (Input.isTriggered('ok') || Input.isTriggered('cancel') || Input.isTriggered('player1'))) {
+        if (race.isFinished && (Input.isTriggered('ok') || Input.isTriggered('cancel') || Input.isTriggered('player1') || Input.isTriggered('player2') || Input.isTriggered('player3') || Input.isTriggered('player4'))) {
             this.popScene();
         }
     };

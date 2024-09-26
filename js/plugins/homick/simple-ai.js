@@ -53,4 +53,8 @@ class SimpleAi {
     return false;
   }
 
+  get isHuman() {
+    return false;
+  }
+
 }
