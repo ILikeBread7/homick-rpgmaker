@@ -4,6 +4,5 @@ var $plugins =
 [
 {"name":"Community_Basic","status":true,"description":"Plugin used to set basic parameters.","parameters":{"cacheLimit":"20","screenWidth":"360","screenHeight":"640","changeWindowWidthTo":"","changeWindowHeightTo":"","renderingMode":"auto","alwaysDash":"off"}},
 {"name":"MadeWithMv","status":false,"description":"Show a Splash Screen \"Made with MV\" and/or a Custom Splash Screen before going to main screen.","parameters":{"Show Made With MV":"true","Made with MV Image":"MadeWithMv","Show Custom Splash":"false","Custom Image":"","Fade Out Time":"120","Fade In Time":"120","Wait Time":"160"}},
-{"name":"ILB_OptionsMatchWidth","status":true,"description":"Matches the width of the options window to the width of the screen","parameters":{"padding":"10"}},
-{"name":"ILB_HomickRacer","status":true,"description":"Plugin for the Homick Racer game","parameters":{}}
+{"name":"ILB_OptionsMatchWidth","status":true,"description":"Matches the width of the options window to the width of the screen","parameters":{"Padding":"10"}}
 ];
