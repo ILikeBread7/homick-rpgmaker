@@ -25,9 +25,9 @@
 
 (function() {
 
-    var leftClickZones = [];
-    var rightClickZones = [];
-    var currentPointers = new Map();
+    let leftClickZones = [];
+    let rightClickZones = [];
+    const currentPointers = new Map();
 
     Input.simulatePress = function(key) {
         this._currentState[key] = true;
@@ -45,10 +45,10 @@
             return;
         }
 
-        var x = Graphics.pageToCanvasX(e.pageX);
-        var y = Graphics.pageToCanvasY(e.pageY);
+        const x = Graphics.pageToCanvasX(e.pageX);
+        const y = Graphics.pageToCanvasY(e.pageY);
 
-        var keysToPress;
+        let keysToPress;
         switch (e.button) {
             // Left mouse button
             case 0:
@@ -63,7 +63,7 @@
 
         if (keysToPress) {
             const pointerTouches = currentPointers.get(e.pointerId) || [];
-            for (var i = 0; i < keysToPress.length; i++) {
+            for (let i = 0; i < keysToPress.length; i++) {
                 const key = keysToPress[i];
                 Input.simulatePress(key);
                 pointerTouches.push(key);
@@ -75,7 +75,7 @@
     document.addEventListener('pointerup', function(e) {
         const pointerTouches = currentPointers.get(e.pointerId);
         if (pointerTouches) {
-            for (var i = 0; i < pointerTouches.length; i++) {
+            for (let i = 0; i < pointerTouches.length; i++) {
                 const key = pointerTouches[i];
                 Input.simulateUnpress(key);
             }
@@ -84,9 +84,9 @@
     });
 
     function findKeysToPress(x, y, zones) {
-        var keys = [];
-        for (var i = 0; i < zones.length; i++) {
-            var zone = zones[i];
+        const keys = [];
+        for (let i = 0; i < zones.length; i++) {
+            const zone = zones[i];
             if (zone.length === 1 || zoneCollides(x, y, zone)) {
                 keys.push(zone[0]);
             }
@@ -95,14 +95,14 @@
     }
 
     function zoneCollides(x, y, zone) {
-        var zoneX = zone[1];
-        var zoneY = zone[2];
-        var zoneW = zone[3];
-        var zoneH = zone[4];
+        const zoneX = zone[1];
+        const zoneY = zone[2];
+        const zoneW = zone[3];
+        const zoneH = zone[4];
         return x >= zoneX && x < zoneX + zoneW && y >= zoneY && y < zoneY + zoneH;
     }
 
-    var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
+    const _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
     Game_Interpreter.prototype.pluginCommand = function(command, args) {
         _Game_Interpreter_pluginCommand.call(this, command, args);
         if (command === 'ILB_ClickToButtonPress') {
@@ -122,8 +122,8 @@
     }
 
     function mapToZone(args) {
-        var zone = args.slice(1);
-        for (var i = 1; i < zone.length; i++) {
+        const zone = args.slice(1);
+        for (let i = 1; i < zone.length; i++) {
             zone[i] = Number(zone[i]);
         }
         return zone;
