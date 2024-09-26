@@ -17,8 +17,9 @@ class Race {
    * @param {[{ acceleration: number, maxSpeed: number, player: (homick: Homick, obstacles: {[{ type: Obstacles.Obstacle, distance: number }]}) => { jump(): boolean } }]} homicks
    * @param {[{ type: Obstacles.Obstacle, distance: number }]} obstacles
    * @param {number} totalDistance 0 for endless mode
+   * @param {number} [numberOfHumanPlayers = 1]
    */
-  constructor(contents, homicks, obstacles, totalDistance) {
+  constructor(contents, homicks, obstacles, totalDistance, numberOfHumanPlayers = 1) {
     this._contents = contents;
     this._ctx = contents._context;
     this._tracksX = (BASE_WIDTH - (TRACK_TILE_WIDTH * homicks.length)) / 2;
@@ -30,6 +31,7 @@ class Race {
     this._fallenHurdles = homicks.map(h => []);
     this._totalDistance = totalDistance;
     this._finishedPositions = [];
+    this._numberOfHumanPlayers = numberOfHumanPlayers;
     this._obstacleToDelete = 0;
     if (this._isEndless === 0) {
       this._addNewEndlessObstacles();
@@ -351,7 +353,12 @@ class Race {
   }
 
   get isFinished() {
-    return this._homicks[0].isFinished(this._totalDistance);
+    for (let i = 0; i < this._numberOfHumanPlayers; i++) {
+      if (!this._homicks[i].isFinished(this._totalDistance)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   get _isEndless() {

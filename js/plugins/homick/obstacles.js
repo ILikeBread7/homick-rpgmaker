@@ -67,7 +67,7 @@ class Obstacles {
    * 
    * @param {number} totalDistance 
    * @param {[ {value: number, func: (number) => [{ type: Obstacles.Obstacle, distance: number }]} ]} obstacleSpec 
-   * @param {number} [startDistance]
+   * @param {number} [startDistance = 0]
    */
   static _createObstacles(totalDistance, obstacleSpec, startDistance = 0) {
     let total = 0;

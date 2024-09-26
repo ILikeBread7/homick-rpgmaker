@@ -27,6 +27,12 @@ var ILB_HR = ILB_HR || {};
         'main.js'
     ].forEach(loadScript);
 
+    // Key mappings for multiplayer
+    Input.keyMapper[81] = 'player1'; // Q
+    Input.keyMapper[80] = 'player2'; // P
+    Input.keyMapper[67] = 'player3'; // C
+    Input.keyMapper[77] = 'player4'; // M
+
     let race;
     let totalTime;
     let deltaTime;
