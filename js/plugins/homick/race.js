@@ -84,7 +84,7 @@ class Race {
       this._drawFinishLineOnSide();
     }
     this._drawHomicksAndTracks(totalTime);
-    if (totalTime < COUNTDOWN_TIME * 3) {
+    if (totalTime < COUNTDOWN_TIME * 4) {
       this._drawCountdown(totalTime);
     }
     this._drawFinishPositions();
@@ -128,8 +128,11 @@ class Race {
       this._ctx.fillText('3', COUNTDOWN_LEFT, COUNTDOWN_TOP);
     } else if (totalTime < COUNTDOWN_TIME * 2) {
       this._ctx.fillText('2', COUNTDOWN_LEFT, COUNTDOWN_TOP);
-    } else {
+    } else if (totalTime < COUNTDOWN_TIME * 3){
       this._ctx.fillText('1', COUNTDOWN_LEFT, COUNTDOWN_TOP);
+    } else {
+      this._ctx.fillStyle = '#0f0';
+      this._ctx.fillText('GO!', COUNTDOWN_LEFT, COUNTDOWN_TOP);
     }
   }
 

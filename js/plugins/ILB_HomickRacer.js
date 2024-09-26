@@ -9,7 +9,7 @@
  * @help This plugin does not provide plugin commands.
  */
 
-const ILB_HR = {};
+var ILB_HR = ILB_HR || {};
 
 (function() {
     const parameters = PluginManager.parameters('ILB_HomickRacer');
@@ -97,8 +97,8 @@ const ILB_HR = {};
         this._window.refresh();
         previousTime = now;
 
-        if (race.isFinished && Input.isTriggered('ok')) {
-            SceneManager.pop();
+        if (race.isFinished && (Input.isTriggered('ok') || Input.isTriggered('cancel') || Input.isTriggered('player1'))) {
+            this.popScene();
         }
     };
 
