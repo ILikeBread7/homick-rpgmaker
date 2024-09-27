@@ -71,27 +71,3 @@ class HomickRacer {
     return this.startLevel(contents, -1);
   }
 }
-
-(() => {
-  // const canvas = document.getElementById('canvas');
-  // const ctx = canvas.getContext('2d', { alpha: false });
-
-  /**
-   * @type { { race: Race, interval: number } }
-   */
-  // let raceData = {};
-  // document.getElementById('track_0_button').addEventListener('click', () => raceData = startLevel(0));
-  // document.getElementById('track_1_button').addEventListener('click', () => raceData = startLevel(1));
-  // document.getElementById('track_2_button').addEventListener('click', () => raceData = startLevel(2));
-  // document.getElementById('track_3_button').addEventListener('click', () => raceData = startLevel(3));
-  // document.getElementById('track_5_button').addEventListener('click', () => raceData = startLevel(5));
-  // document.getElementById('track_6_button').addEventListener('click', () => raceData = startLevel(6));
-  // document.getElementById('track_11_button').addEventListener('click', () => raceData = startLevel(11));
-  // document.getElementById('endless_button').addEventListener('click', () => raceData = startEndlessMode());
-  // canvas.addEventListener('click', () => {
-  //   if (raceData.race && raceData.race.isFinished) {
-  //     clearInterval(raceData.interval);
-  //     document.getElementById('ui_div').style.display = 'block';
-  //   }
-  // })
-})();
