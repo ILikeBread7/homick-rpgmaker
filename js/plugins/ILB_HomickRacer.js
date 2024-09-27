@@ -32,6 +32,7 @@ var ILB_HR = ILB_HR || {};
     Input.keyMapper[67] = 'player3'; // C
     Input.keyMapper[77] = 'player4'; // M
 
+    let startFunction;
     let race;
     let totalTime;
     let deltaTime;
@@ -50,7 +51,7 @@ var ILB_HR = ILB_HR || {};
         // this._bgSprite.initialize(ImageManager.loadBitmapFromPath(bgImagePath));
         // this.addChildToBack(this._bgSprite);
 
-        race = HomickRacer.startLevel(this.contents, 1);
+        race = startFunction(this.contents);
         totalTime = 0;
         previousTime = Date.now();
     };
@@ -74,7 +75,6 @@ var ILB_HR = ILB_HR || {};
     Scene_HomickRacer.prototype.initialize = function() {
         Scene_Base.prototype.initialize.call(this);
         this._interpreter = null;
-        // document.addEventListener('pointerdown', pointerEventListener);
     };
 
     Scene_HomickRacer.prototype.create = function() {
@@ -102,14 +102,12 @@ var ILB_HR = ILB_HR || {};
         this._window.refresh();
         previousTime = now;
 
-        if (race.isFinished && (Input.isTriggered('ok') || Input.isTriggered('cancel') || Input.isTriggered('player1') || Input.isTriggered('player2') || Input.isTriggered('player3') || Input.isTriggered('player4'))) {
+        if (
+            Input.isTriggered('cancel') || // to be changed later when we have a cancel common event
+            (race.isFinished && (Input.isTriggered('ok') || Input.isTriggered('cancel') || Input.isTriggered('player1') || Input.isTriggered('player2') || Input.isTriggered('player3') || Input.isTriggered('player4')))
+        ) {
             this.popScene();
         }
-    };
-
-    Scene_HomickRacer.prototype.terminate = function() {
-        Scene_Base.prototype.terminate.call(this);
-        // document.removeEventListener('pointerdown', pointerEventListener);
     };
 
     Scene_HomickRacer.prototype.playCommonEvent = function(commonEventId) {
@@ -131,5 +129,22 @@ var ILB_HR = ILB_HR || {};
         console.error(e);
     }
 
-    ILB_HR.Scene_HomickRacer = Scene_HomickRacer;
+    ILB_HR.startLevel = function(level) {
+        startFunction = contents => HomickRacer.startLevel(contents, level);
+        SceneManager.push(Scene_HomickRacer);
+    };
+
+    ILB_HR.startEndlessMode = function() {
+        startFunction = contents => HomickRacer.startEndlessMode(contents);
+        SceneManager.push(Scene_HomickRacer);
+    };
+
+    ILB_HR.startMultiplayer = function(level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
+        startFunction = contents => HomickRacer.startMultiplayer(contents, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty);
+        SceneManager.push(Scene_HomickRacer);
+    }
+
+    ILB_HR.CPU_EASY = 0;
+    ILB_HR.CPU_NORMAL = 1;
+    ILB_HR.CPU_HARD = 2;
 })();

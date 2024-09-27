@@ -8,7 +8,7 @@ class HomickRacer {
   static startLevel(contents, level) {
     console.log(`Level ${level}`);
     
-    const totalDistance = (8 + level) * 15 * TRACK_TILE_HEIGHT;
+    const totalDistance = this.getTotalDistanceForLevel(level);
     const obstacles = [];
 
     let obstacleToDelete = 0;
@@ -69,5 +69,46 @@ class HomickRacer {
    */
   static startEndlessMode(contents) {
     return this.startLevel(contents, -1);
+  }
+
+  /**
+   * 
+   * @param {Bitmap} contents 
+   * @param {number} level 
+   * @param {number} numberOfHumanPlayers 
+   * @param {number} numberOfCpuPlayers 
+   * @param {0|1|2} cpuDifficulty 
+   * @returns {Race}
+   */
+  static startMultiplayer(contents, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
+    const homicks = [];
+    
+    for (let i = 1; i <= numberOfHumanPlayers; i++) {
+      homicks.push({ acceleration: 0.5, maxSpeed: 3, player: () => new HumanPlayer(i) });
+    }
+
+    for (let i = 1; i <= numberOfCpuPlayers; i++) {
+      const acceleration = 1.5 + cpuDifficulty * 0.5;
+      const maxSpeed = 2 + cpuDifficulty * 0.5;
+      const preJumpDistance = 12 - cpuDifficulty * 2;
+      const varianceRange = 12 - cpuDifficulty;
+      const boostPreJumpDistance = cpuDifficulty && (3 * (3 - cpuDifficulty));
+      const boostVarianceRange = cpuDifficulty && (2 * (3 - cpuDifficulty));
+      homicks.push({ acceleration, maxSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, preJumpDistance, varianceRange, boostPreJumpDistance, boostVarianceRange) });
+    }
+
+    const totalDistance = this.getTotalDistanceForLevel(level);
+    const obstacles = Obstacles.createObstaclesForLevel(level, totalDistance);
+    const race = new Race(contents, homicks, obstacles, totalDistance);
+    return race;
+  }
+
+  /**
+   * 
+   * @param {number} level 
+   * @returns {number}
+   */
+  static getTotalDistanceForLevel(level) {
+    return (8 + level) * 15 * TRACK_TILE_HEIGHT;
   }
 }
