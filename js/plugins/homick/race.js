@@ -4,6 +4,8 @@ const TOP_Y = Math.floor(HOMICK_SPRITE_HEIGHT * 1.5);
 const MAX_DISTANCE_OFFSET = Math.floor(TRACK_TILE_HEIGHT * 5);
 const TIME_STEP = 10;
 const FINISH_POSITIONS = ['1st', '2nd', '3rd', '4th'];
+const PLAYER_NAME_COLORS = ['#33e', '#3e3', '#e3e', '#ee3'];
+const CPU_NAME_COLOR = '#e33';
 const FINISH_LINE_HEIGHT = 16 * 3;
 
 const COUNTDOWN_TIME = 1000;
@@ -36,6 +38,7 @@ class Race {
     if (this._isEndless === 0) {
       this._addNewEndlessObstacles();
     }
+    this._playerNames = this._players.map((player, index) => player.isHuman ? `P${index + 1}` : 'CPU');
   }
 
   /**
@@ -145,7 +148,7 @@ class Race {
     const offset = (Math.floor((totalTime % 500) / 250) * 2 - 1) * PADDING / 2;
     this._drawTracksBackground(this._homicks.length);
     this._homicks.forEach((homick, index) => {
-      this._drawName(index === 0 ? 'You' : 'CPU', index, index === 0);
+      this._drawName(this._playerNames[index], index, this._players[index].isHuman);
       this._drawTrack(homick.distance, index);
       this._drawObstacles(homick.distance, index, totalTime);
       this._drawHomick(homick, index, offset);
@@ -274,7 +277,7 @@ class Race {
   _drawName(name, index, isPlayer) {
     const marginLeft = 8;
     const marginTop = 10;
-    this._ctx.fillStyle = isPlayer ? '#33e' : '#e33';
+    this._ctx.fillStyle = isPlayer ? PLAYER_NAME_COLORS[index] : CPU_NAME_COLOR;
     this._ctx.font = '24px Arial';
     this._ctx.fillText(
       name,
