@@ -87,14 +87,17 @@ class HomickRacer {
       homicks.push({ acceleration: 0.5, maxSpeed: 3, player: () => new HumanPlayer(i) });
     }
 
-    for (let i = 1; i <= numberOfCpuPlayers; i++) {
+    if (numberOfCpuPlayers) {
       const acceleration = 1.5 + cpuDifficulty * 0.5;
       const maxSpeed = 2 + cpuDifficulty * 0.5;
       const preJumpDistance = 12 - cpuDifficulty * 2;
       const varianceRange = 12 - cpuDifficulty;
       const boostPreJumpDistance = cpuDifficulty && (3 * (3 - cpuDifficulty));
       const boostVarianceRange = cpuDifficulty && (2 * (3 - cpuDifficulty));
-      homicks.push({ acceleration, maxSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, preJumpDistance, varianceRange, boostPreJumpDistance, boostVarianceRange) });
+      const homick = { acceleration, maxSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, preJumpDistance, varianceRange, boostPreJumpDistance, boostVarianceRange) };
+      for (let i = 0; i < numberOfCpuPlayers; i++) {
+        homicks.push(homick);
+      }
     }
 
     const totalDistance = this.getTotalDistanceForLevel(level);
