@@ -59,7 +59,7 @@ class HomickRacer {
         { acceleration: 2, maxSpeed: 2.5, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 10, 6, 3) }
       ];
     
-    const race = new Race(contents, homicks, obstacles, level === -1 ? 0 : (level === 0 ? (10 * TRACK_TILE_HEIGHT) : totalDistance));
+    const race = new Race(contents, homicks, obstacles, level === -1 ? 0 : (level === 1 ? (10 * TRACK_TILE_HEIGHT) : totalDistance));
     return race;
   }
 

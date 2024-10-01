@@ -12,6 +12,10 @@ const COUNTDOWN_TIME = 1000;
 const COUNTDOWN_LEFT = 160;
 const COUNTDOWN_TOP = TRACK_TILE_HEIGHT * 5;
 
+const TRACK_TILES_COLS = 10;
+const TRACK_TILE_INDEX = 0;
+const FINISH_TILE_INDEX = 1;
+
 class Race {
 
   /**
@@ -39,6 +43,7 @@ class Race {
       this._addNewEndlessObstacles();
     }
     this._playerNames = this._players.map((player, index) => player.isHuman ? `P${index + 1}` : 'CPU');
+    this._tiles = ImageManager.loadPicture('tiles');
   }
 
   /**
@@ -221,7 +226,7 @@ class Race {
    * @param {number} tracksNumber
    */
   _drawTracksBackground(tracksNumber) {
-    this._ctx.fillStyle = '#7f7f10';
+    this._ctx.fillStyle = '#000';
     this._ctx.fillRect(this._tracksX, this._tracksY, TRACK_TILE_WIDTH * tracksNumber, TRACK_TILE_HEIGHT * TRACK_HEIGHT)
   }
 
@@ -232,24 +237,53 @@ class Race {
   _drawTrack(distance, homickIndex) {
     const distanceOffset = this._findDistanceOffset(distance);
     const effectiveDistance = distance - distanceOffset;
-    const colors = ['#7f7f10', '#4f4f10'];
     const offset = TRACK_TILE_HEIGHT - (effectiveDistance % TRACK_TILE_HEIGHT);
-    const startingColorIndex = Math.floor((effectiveDistance % (TRACK_TILE_HEIGHT * 2)) / TRACK_TILE_HEIGHT);
-  
-    const firstColor = colors[(startingColorIndex + 1) % colors.length];
-    this._ctx.fillStyle = firstColor;
-    this._ctx.fillRect(this._tracksX + TRACK_TILE_WIDTH * homickIndex, this._tracksY, TRACK_TILE_WIDTH, offset);
+    
+    const x = this._tracksX + TRACK_TILE_WIDTH * homickIndex;
+    this._drawTile(
+      TRACK_TILE_INDEX,
+      x,
+      this._tracksY,
+      TRACK_TILE_HEIGHT - offset
+    )
     for (let i = 0; i < TRACK_HEIGHT - 1; i++) {
-      const color = colors[(startingColorIndex + i) % colors.length];
-      this._ctx.fillStyle = color;
-      this._ctx.fillRect(this._tracksX + TRACK_TILE_WIDTH * homickIndex, this._tracksY + offset + i * TRACK_TILE_HEIGHT, TRACK_TILE_WIDTH, TRACK_TILE_HEIGHT);
+      this._drawTile(
+        TRACK_TILE_INDEX,
+        x,
+        this._tracksY + offset + i * TRACK_TILE_HEIGHT
+      );
     }
-    const lastColor = colors[(startingColorIndex + TRACK_HEIGHT - 1) % colors.length];
-    this._ctx.fillStyle = lastColor;
-    this._ctx.fillRect(this._tracksX + TRACK_TILE_WIDTH * homickIndex, this._tracksY + offset + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT, TRACK_TILE_WIDTH, TRACK_TILE_HEIGHT - offset);
+    this._drawTile(
+      TRACK_TILE_INDEX,
+      x,
+      this._tracksY + offset + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT,
+      0,
+      offset
+    )
+
     if (!this._isEndless) {
       this._drawFinishLineOnTrack(distance, homickIndex, distanceOffset);
     }
+  }
+
+  /**
+   * 
+   * @param {number} tileIndex 
+   * @param {number} x 
+   * @param {number} y 
+   * @param {number} [offsetStart=0] 
+   * @param {number} [offsetEnd=0] 
+   */
+  _drawTile(tileIndex, x, y, offsetStart = 0, offsetEnd = 0) {
+    this._contents.blt(
+      this._tiles,
+      Math.floor((tileIndex % TRACK_TILES_COLS) * TRACK_TILE_WIDTH),
+      Math.floor(Math.floor(tileIndex / TRACK_TILES_COLS) * TRACK_TILE_HEIGHT + offsetStart),
+      Math.floor(TRACK_TILE_WIDTH),
+      Math.floor(TRACK_TILE_HEIGHT - offsetStart - offsetEnd),
+      Math.floor(x),
+      Math.floor(y)
+    );
   }
 
   /**
@@ -264,8 +298,16 @@ class Race {
     if (relativeDistance > TRACK_TILE_HEIGHT * TRACK_HEIGHT) {
       return;
     }
-    this._ctx.fillStyle = '#000';
-    this._ctx.fillRect(this._tracksX + TRACK_TILE_WIDTH * homickIndex, relativeDistance + this._tracksY + TOP_Y, TRACK_TILE_WIDTH, FINISH_LINE_HEIGHT);
+
+    const trackBottom = this._tracksY + TRACK_TILE_HEIGHT * TRACK_HEIGHT;
+    const finishLineY = relativeDistance + this._tracksY + TOP_Y;
+    this._drawTile(
+      FINISH_TILE_INDEX,
+      this._tracksX + TRACK_TILE_WIDTH * homickIndex,
+      finishLineY,
+      0,
+      Math.max(0, finishLineY + TRACK_TILE_HEIGHT - trackBottom)
+    );
   }
 
   /**
@@ -292,21 +334,32 @@ class Race {
   }
 
   _drawFinishLineOnSide() {
-    const finishSquareRows = 3;
-    const finishSquareColumns = 3;
-    const finishSquareSize = FINISH_LINE_HEIGHT / finishSquareRows;
-    for (let part = 0; part < 2; part++) {
-      for (let row = 0; row < finishSquareRows; row++) {
-        for (let column = 0; column < finishSquareColumns; column++) {
-          this._ctx.fillStyle = (row + column) % 2 === 0 ? '#000' : '#fff';
-          this._ctx.fillRect(
-            this._tracksX - (1 - part) * (finishSquareSize * finishSquareColumns) + part * TRACK_TILE_WIDTH * this._homicks.length + column * finishSquareSize,
-            this._tracksY + TOP_Y + MAX_DISTANCE_OFFSET + row * finishSquareSize,
-            finishSquareSize, finishSquareSize
-          );
-        }
-      }
-    }
+    // const finishSquareRows = 3;
+    // const finishSquareColumns = 3;
+    // const finishSquareSize = FINISH_LINE_HEIGHT / finishSquareRows;
+    // for (let part = 0; part < 2; part++) {
+    //   for (let row = 0; row < finishSquareRows; row++) {
+    //     for (let column = 0; column < finishSquareColumns; column++) {
+    //       this._ctx.fillStyle = (row + column) % 2 === 0 ? '#000' : '#fff';
+    //       this._ctx.fillRect(
+    //         this._tracksX - (1 - part) * (finishSquareSize * finishSquareColumns) + part * TRACK_TILE_WIDTH * this._homicks.length + column * finishSquareSize,
+    //         this._tracksY + TOP_Y + MAX_DISTANCE_OFFSET + row * finishSquareSize,
+    //         finishSquareSize, finishSquareSize
+    //       );
+    //     }
+    //   }
+    // }
+    this._drawTile(
+      FINISH_TILE_INDEX,
+      this._tracksX - TRACK_TILE_WIDTH,
+      this._tracksY + TOP_Y + MAX_DISTANCE_OFFSET,
+    );
+
+    this._drawTile(
+      FINISH_TILE_INDEX,
+      this._tracksX + TRACK_TILE_WIDTH * this._homicks.length,
+      this._tracksY + TOP_Y + MAX_DISTANCE_OFFSET,
+    );
   }
 
   _drawFinishPositions() {
