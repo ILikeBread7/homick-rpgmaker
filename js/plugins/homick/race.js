@@ -14,7 +14,12 @@ const COUNTDOWN_TOP = TRACK_TILE_HEIGHT * 5;
 
 const TRACK_TILES_COLS = 10;
 const TRACK_TILE_INDEX = 0;
-const FINISH_TILE_INDEX = 1;
+const TRACK_TILE_MIDDLE_INDEX = 1;
+const TRACK_TILE_PENULTIMATE_INDEX = 2;
+const TRACK_TILE_LAST_INDEX = 3;
+const FINISH_TILE_INDEX = 4;
+const TOP_PIT_TILE_INDEX = 5;
+const BOTTOM_PIT_TILE_INDEX = 6;
 
 class Race {
 
@@ -156,6 +161,7 @@ class Race {
       this._drawName(this._playerNames[index], index, this._players[index].isHuman);
       this._drawTrack(homick.distance, index);
       this._drawObstacles(homick.distance, index, totalTime);
+      this._drawTrackPits(index);
       this._drawHomick(homick, index, offset);
     });
   }
@@ -240,30 +246,59 @@ class Race {
     const offset = TRACK_TILE_HEIGHT - (effectiveDistance % TRACK_TILE_HEIGHT);
     
     const x = this._tracksX + TRACK_TILE_WIDTH * homickIndex;
+    let tileIndex = this._calculateTileIndex(effectiveDistance - TRACK_TILE_HEIGHT + offset);
     this._drawTile(
-      TRACK_TILE_INDEX,
+      tileIndex,
       x,
       this._tracksY,
       TRACK_TILE_HEIGHT - offset
     )
     for (let i = 0; i < TRACK_HEIGHT - 1; i++) {
+      tileIndex = this._calculateTileIndex(effectiveDistance + i * TRACK_TILE_HEIGHT + offset);
       this._drawTile(
-        TRACK_TILE_INDEX,
+        tileIndex,
         x,
         this._tracksY + offset + i * TRACK_TILE_HEIGHT
       );
     }
+
+    tileIndex = this._calculateTileIndex(effectiveDistance + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT + offset);
     this._drawTile(
-      TRACK_TILE_INDEX,
+      tileIndex,
       x,
       this._tracksY + offset + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT,
       0,
       offset
-    )
+    );
 
     if (!this._isEndless) {
       this._drawFinishLineOnTrack(distance, homickIndex, distanceOffset);
     }
+  }
+
+  /**
+   * 
+   * @param {number} distance 
+   * @returns {0|1|2} Track tile index for the distance
+   */
+  _calculateTileIndex(distance) {
+    if (this._isEndless) {
+      return TRACK_TILE_INDEX;
+    }
+    if (distance > this._totalDistance * 0.9) {
+      return TRACK_TILE_LAST_INDEX;
+    }
+    return Math.max(Math.min(Math.floor((distance / this._totalDistance) * 3), TRACK_TILE_PENULTIMATE_INDEX), TRACK_TILE_INDEX);
+  }
+
+  /**
+   * 
+   * @param {number} homickIndex 
+   */
+  _drawTrackPits(homickIndex) {
+    const x = this._tracksX + TRACK_TILE_WIDTH * homickIndex;
+    this._drawTile(TOP_PIT_TILE_INDEX, x, this._tracksY);
+    this._drawTile(BOTTOM_PIT_TILE_INDEX, x, this._tracksY + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT);
   }
 
   /**
