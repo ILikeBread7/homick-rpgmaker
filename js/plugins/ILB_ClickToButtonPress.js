@@ -62,12 +62,12 @@
         }
 
         if (keysToPress) {
-            const pointerTouches = currentPointers.get(e.pointerId) || [];
             for (let i = 0; i < keysToPress.length; i++) {
                 const key = keysToPress[i];
                 Input.simulatePress(key);
-                pointerTouches.push(key);
             }
+            const pointerTouches = currentPointers.get(e.pointerId) || [];
+            pointerTouches.push(...keysToPress);
             currentPointers.set(e.pointerId, pointerTouches);
         }
     });

@@ -7,5 +7,7 @@ var $plugins =
 {"name":"ILB_OptionsMatchWidth","status":true,"description":"Matches the width of the options window to the width of the screen","parameters":{"Padding":"10"}},
 {"name":"ILB_HomickRacer","status":true,"description":"Plugin for the Homick Racer game","parameters":{}},
 {"name":"ILB_RemoveUnusedOptions","status":true,"description":"Removes unused options from the options menu","parameters":{"Enable Always dash":"false","Enable Command remember":"false","Enable Bgm volume":"true","Enable Bgs volume":"false","Enable Me volume":"false","Enable Se volume":"true"}},
-{"name":"ILB_ClickToButtonPress","status":true,"description":"Makes clicking at a certain part of the screen work like a button press","parameters":{}}
+{"name":"ILB_ClickToButtonPress","status":true,"description":"Makes clicking at a certain part of the screen work like a button press","parameters":{}},
+{"name":"QPlus","status":true,"description":"<QPlus> (Should go above all Q Plugins)\nSome small changes to MV for easier plugin development.","parameters":{"Quick Test":"false","Default Enabled Switches":"[]","Ignore Mouse when inactive":"false"}},
+{"name":"QTouch","status":true,"description":"<QTouch>\nBetter mouse handling for MV","parameters":{"Mouse Decay":"60","Default Cursor":"","Pointer Cursor":""}}
 ];
