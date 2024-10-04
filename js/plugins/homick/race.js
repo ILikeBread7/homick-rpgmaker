@@ -7,19 +7,12 @@ const FINISH_POSITIONS = ['1st', '2nd', '3rd', '4th'];
 const PLAYER_NAME_COLORS = ['#33e', '#3e3', '#e3e', '#ee3'];
 const CPU_NAME_COLOR = '#e33';
 const FINISH_LINE_HEIGHT = 16 * 3;
+const TRACKS_Y = Math.floor((BASE_HEIGHT - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2);
+const TRACKS_HEIGHT = TRACK_HEIGHT * TRACK_TILE_HEIGHT;
 
 const COUNTDOWN_TIME = 1000;
 const COUNTDOWN_LEFT = 160;
 const COUNTDOWN_TOP = TRACK_TILE_HEIGHT * 5;
-
-const TRACK_TILES_COLS = 10;
-const TRACK_TILE_INDEX = 0;
-const TRACK_TILE_MIDDLE_INDEX = 1;
-const TRACK_TILE_PENULTIMATE_INDEX = 2;
-const TRACK_TILE_LAST_INDEX = 3;
-const FINISH_TILE_INDEX = 4;
-const TOP_PIT_TILE_INDEX = 5;
-const BOTTOM_PIT_TILE_INDEX = 6;
 
 class Race {
 
@@ -34,7 +27,6 @@ class Race {
     this._contents = contents;
     this._ctx = contents._context;
     this._tracksX = (BASE_WIDTH - (TRACK_TILE_WIDTH * homicks.length)) / 2;
-    this._tracksY = (BASE_HEIGHT - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2;
     this._homicks = homicks.map(h => new Homick(h.acceleration, h.maxSpeed));
     this._players = homicks.map((homick, index) => homick.player(this._homicks[index], obstacles));
     this._obstacles = obstacles;
@@ -49,6 +41,10 @@ class Race {
     }
     this._playerNames = this._players.map((player, index) => player.isHuman ? `P${index + 1}` : 'CPU');
     this._tiles = ImageManager.loadPicture('tiles');
+
+    // Only to be passed to Obstacle.draw function
+    // not to be used directly
+    this._drawTileFunction = (tileIndex, x, y, offsetStart, offsetEnd) => this._drawTile(tileIndex, x, y, offsetStart, offsetEnd);
   }
 
   /**
@@ -176,7 +172,7 @@ class Race {
     const distanceOffset = this._findDistanceOffset(homick.distance);
     this._drawShadow(homick, index, distanceOffset);
     this._ctx.fillStyle = '#8b4513';
-    this._ctx.fillRect(this._tracksX + PADDING + offset + index * TRACK_TILE_WIDTH, this._tracksY - HOMICK_SPRITE_HEIGHT + TOP_Y - homick.height + distanceOffset, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
+    this._ctx.fillRect(this._tracksX + PADDING + offset + index * TRACK_TILE_WIDTH, TRACKS_Y - HOMICK_SPRITE_HEIGHT + TOP_Y - homick.height + distanceOffset, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
   }
 
   /**
@@ -192,7 +188,7 @@ class Race {
     const heightFactor = (maxHeightFactor - Math.min(homick.height, maxHeightFactor)) / maxHeightFactor;
     this._ctx.ellipse(
       this._tracksX + index * TRACK_TILE_WIDTH + TRACK_TILE_WIDTH / 2,
-      this._tracksY + TOP_Y + distanceOffset,
+      TRACKS_Y + TOP_Y + distanceOffset,
       (TRACK_TILE_WIDTH - PADDING) / 2 * heightFactor,
       (TRACK_TILE_WIDTH - PADDING) / 4 * heightFactor,
       0, 0, 2 * Math.PI);
@@ -212,7 +208,7 @@ class Race {
     const nextObstacleIndex = HomickUtils.findIndexStartingAt(
       this._obstacles,
       this._previousFirstDrawnObstacleIndexes[homickIndex],
-      o => o.distance >= distance - TOP_Y - distanceOffset
+      o => o.distance >= distance - TOP_Y - distanceOffset - TRACK_TILE_HEIGHT
     )
     this._previousFirstDrawnObstacleIndexes[homickIndex] = nextObstacleIndex;
     if (nextObstacleIndex === -1) {
@@ -224,7 +220,7 @@ class Race {
       if (relativeDistance > TRACK_TILE_HEIGHT * TRACK_HEIGHT) {
         return;
       }
-      nextObstacle.type.draw(this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + this._tracksY + TOP_Y, this._fallenHurdles[homickIndex][i], totalTime);
+      nextObstacle.type.draw(this._drawTileFunction, this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + TRACKS_Y + TOP_Y, TRACKS_Y, TRACKS_HEIGHT, this._fallenHurdles[homickIndex][i], totalTime);
     }
   }
 
@@ -233,7 +229,7 @@ class Race {
    */
   _drawTracksBackground(tracksNumber) {
     this._ctx.fillStyle = '#000';
-    this._ctx.fillRect(this._tracksX, this._tracksY, TRACK_TILE_WIDTH * tracksNumber, TRACK_TILE_HEIGHT * TRACK_HEIGHT)
+    this._ctx.fillRect(this._tracksX, TRACKS_Y, TRACK_TILE_WIDTH * tracksNumber, TRACK_TILE_HEIGHT * TRACK_HEIGHT)
   }
 
   /**
@@ -250,7 +246,7 @@ class Race {
     this._drawTile(
       tileIndex,
       x,
-      this._tracksY,
+      TRACKS_Y,
       TRACK_TILE_HEIGHT - offset
     )
     for (let i = 0; i < TRACK_HEIGHT - 1; i++) {
@@ -258,7 +254,7 @@ class Race {
       this._drawTile(
         tileIndex,
         x,
-        this._tracksY + offset + i * TRACK_TILE_HEIGHT
+        TRACKS_Y + offset + i * TRACK_TILE_HEIGHT
       );
     }
 
@@ -266,7 +262,7 @@ class Race {
     this._drawTile(
       tileIndex,
       x,
-      this._tracksY + offset + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT,
+      TRACKS_Y + offset + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT,
       0,
       offset
     );
@@ -279,7 +275,7 @@ class Race {
   /**
    * 
    * @param {number} distance 
-   * @returns {0|1|2} Track tile index for the distance
+   * @returns {0|1|2|3} Track tile index for the distance
    */
   _calculateTileIndex(distance) {
     if (this._isEndless) {
@@ -297,8 +293,8 @@ class Race {
    */
   _drawTrackPits(homickIndex) {
     const x = this._tracksX + TRACK_TILE_WIDTH * homickIndex;
-    this._drawTile(TOP_PIT_TILE_INDEX, x, this._tracksY);
-    this._drawTile(BOTTOM_PIT_TILE_INDEX, x, this._tracksY + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT);
+    this._drawTile(TOP_PIT_TILE_INDEX, x, TRACKS_Y);
+    this._drawTile(BOTTOM_PIT_TILE_INDEX, x, TRACKS_Y + (TRACK_HEIGHT - 1) * TRACK_TILE_HEIGHT);
   }
 
   /**
@@ -334,8 +330,8 @@ class Race {
       return;
     }
 
-    const trackBottom = this._tracksY + TRACK_TILE_HEIGHT * TRACK_HEIGHT;
-    const finishLineY = relativeDistance + this._tracksY + TOP_Y;
+    const trackBottom = TRACKS_Y + TRACK_TILE_HEIGHT * TRACK_HEIGHT;
+    const finishLineY = relativeDistance + TRACKS_Y + TOP_Y;
     this._drawTile(
       FINISH_TILE_INDEX,
       this._tracksX + TRACK_TILE_WIDTH * homickIndex,
@@ -359,7 +355,7 @@ class Race {
     this._ctx.fillText(
       name,
       this._tracksX + marginLeft + TRACK_TILE_WIDTH * index,
-      this._tracksY - marginTop
+      TRACKS_Y - marginTop
     );
   }
 
@@ -369,31 +365,16 @@ class Race {
   }
 
   _drawFinishLineOnSide() {
-    // const finishSquareRows = 3;
-    // const finishSquareColumns = 3;
-    // const finishSquareSize = FINISH_LINE_HEIGHT / finishSquareRows;
-    // for (let part = 0; part < 2; part++) {
-    //   for (let row = 0; row < finishSquareRows; row++) {
-    //     for (let column = 0; column < finishSquareColumns; column++) {
-    //       this._ctx.fillStyle = (row + column) % 2 === 0 ? '#000' : '#fff';
-    //       this._ctx.fillRect(
-    //         this._tracksX - (1 - part) * (finishSquareSize * finishSquareColumns) + part * TRACK_TILE_WIDTH * this._homicks.length + column * finishSquareSize,
-    //         this._tracksY + TOP_Y + MAX_DISTANCE_OFFSET + row * finishSquareSize,
-    //         finishSquareSize, finishSquareSize
-    //       );
-    //     }
-    //   }
-    // }
     this._drawTile(
       FINISH_TILE_INDEX,
       this._tracksX - TRACK_TILE_WIDTH,
-      this._tracksY + TOP_Y + MAX_DISTANCE_OFFSET,
+      TRACKS_Y + TOP_Y + MAX_DISTANCE_OFFSET,
     );
 
     this._drawTile(
       FINISH_TILE_INDEX,
       this._tracksX + TRACK_TILE_WIDTH * this._homicks.length,
-      this._tracksY + TOP_Y + MAX_DISTANCE_OFFSET,
+      TRACKS_Y + TOP_Y + MAX_DISTANCE_OFFSET,
     );
   }
 
@@ -408,7 +389,7 @@ class Race {
         this._ctx.fillText(
           FINISH_POSITIONS[position - 1],
           this._tracksX + marginLeft + TRACK_TILE_WIDTH * index,
-          this._tracksY + marginTop
+          TRACKS_Y + marginTop
         );
       }
     });

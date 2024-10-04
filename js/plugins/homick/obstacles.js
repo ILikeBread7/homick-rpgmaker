@@ -11,11 +11,33 @@ const BOOST_LEVEL = 10;
 
 class Obstacles {
 
+  /**
+   * 
+   * @param {number} obstacleDistance 
+   * @param {number} objectDistance 
+   * @param {number} objectHeight 
+   * @returns {boolean}
+   */
   static collides(obstacleDistance, objectDistance, objectHeight) {
     return objectHeight <= this.obstacleHeight
       && objectDistance >= obstacleDistance
       && objectDistance <= obstacleDistance + this.hitboxLength;
   };
+
+  /**
+   * 
+   * @param {(tileIndex: number, x: number, y: number, offsetStart: number, offsetEnd: number) => undefined} drawTileFunction 
+   * @param {number} tileIndex 
+   * @param {number} x 
+   * @param {number} y 
+   * @param {number} tracksY 
+   * @param {number} tracksHeight 
+   */
+  static draw(drawTileFunction, tileIndex, x, y, tracksY, tracksHeight) {
+    const offsetStart = Math.max(0, tracksY - y);
+    const offsetEnd = Math.max(0, y + TRACK_TILE_HEIGHT - tracksY - tracksHeight);
+    drawTileFunction(tileIndex, x, y + offsetStart, offsetStart, offsetEnd);
+  }
 
   /**
    * 
@@ -177,7 +199,7 @@ Obstacles.Obstacle = Object.freeze({
     fallable: true,
     boost: false,
     hurdle: true,
-    draw: function(ctx, x, y, fallen) {
+    draw: function(drawTileFunction, ctx, x, y, tracksY, tracksHeight, fallen) {
       ctx.fillStyle = fallen ? '#999' : '#ddd';
       ctx.fillRect(x, y - HITBOX_LEEWAY, this.spriteWidth, this.hitboxLength + 2 * HITBOX_LEEWAY);
     },
@@ -190,9 +212,9 @@ Obstacles.Obstacle = Object.freeze({
     fallable: false,
     boost: false,
     hurdle: false,
-    draw: function(ctx, x, y, fallen) {
-      ctx.fillStyle = '#321';
-      ctx.fillRect(x + PADDING, y - HITBOX_LEEWAY, this.spriteWidth, this.hitboxLength + 2 * HITBOX_LEEWAY);
+    draw: function(drawTileFunction, ctx, x, y, tracksY, tracksHeight) {
+      const drawY = y - HITBOX_LEEWAY;
+      Obstacles.draw(drawTileFunction, PUDDLE_TILE_INDEX, x, drawY, tracksY, tracksHeight);
     },
     collides: Obstacles.collides
   }),
@@ -203,7 +225,7 @@ Obstacles.Obstacle = Object.freeze({
     fallable: true,
     boost: true,
     hurdle: false,
-    draw: function(ctx, x, y, fallen, totalTime) {
+    draw: function(drawTileFunction, ctx, x, y, tracksY, tracksHeight, fallen, totalTime) {
       ctx.fillStyle = fallen ? '#811' : '#e11';
       ctx.fillRect(x + PADDING, y, this.spriteWidth, this.hitboxLength);
       ctx.strokeStyle = '#ee1';
