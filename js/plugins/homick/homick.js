@@ -15,8 +15,9 @@ class Homick {
   /**
    * @param {number} acceleration 
    * @param {number} maxSpeed 
+   * @param {number} [index=0]
    */
-  constructor(acceleration, maxSpeed) {
+  constructor(acceleration, maxSpeed, index = 0) {
     this._distance = 0;
     this._height = 0;
     this._acceleration = acceleration;
@@ -32,6 +33,7 @@ class Homick {
     this._previousJumpHeight = 0;
     this._hit = false;
     this._jumping = false;
+    this._index = index;
   }
 
   /**
@@ -249,6 +251,10 @@ class Homick {
 
   get maxSpeed() {
     return this._maxSpeed;
+  }
+
+  get index() {
+    return this._index;
   }
 
   get _jumped() {

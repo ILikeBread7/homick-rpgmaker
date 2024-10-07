@@ -3,12 +3,15 @@ const HOMICK_SPRITE_HEIGHT = TRACK_TILE_HEIGHT - 2 * PADDING;
 const TOP_Y = Math.floor(HOMICK_SPRITE_HEIGHT * 1.5);
 const MAX_DISTANCE_OFFSET = Math.floor(TRACK_TILE_HEIGHT * 5);
 const TIME_STEP = 10;
-const FINISH_POSITIONS = ['1st', '2nd', '3rd', '4th'];
 const PLAYER_NAME_COLORS = ['#33e', '#3e3', '#e3e', '#ee3'];
 const CPU_NAME_COLOR = '#e33';
 const FINISH_LINE_HEIGHT = 16 * 3;
 const TRACKS_Y = Math.floor((BASE_HEIGHT - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2);
 const TRACKS_HEIGHT = TRACK_HEIGHT * TRACK_TILE_HEIGHT;
+
+const FINISH_POSITIONS = ['1st', '2nd', '3rd', '4th'];
+const POSITIONS_MARGIN_LEFT = 14;
+const POSITIONS_MARGIN_TOP = Math.floor(TRACKS_Y + TRACK_TILE_HEIGHT * (TRACK_HEIGHT + 0.35));
 
 const COUNTDOWN_TIME = 1000;
 const COUNTDOWN_LEFT = 160;
@@ -27,13 +30,17 @@ class Race {
     this._contents = contents;
     this._ctx = contents._context;
     this._tracksX = (BASE_WIDTH - (TRACK_TILE_WIDTH * homicks.length)) / 2;
-    this._homicks = homicks.map(h => new Homick(h.acceleration, h.maxSpeed));
+    this._homicks = homicks.map((homick, index) => new Homick(homick.acceleration, homick.maxSpeed, index));
     this._players = homicks.map((homick, index) => homick.player(this._homicks[index], obstacles));
     this._obstacles = obstacles;
     this._previousFirstDrawnObstacleIndexes = homicks.map(h => 0);
     this._fallenHurdles = homicks.map(h => []);
     this._totalDistance = totalDistance;
+
+    // For drawing the current position
+    this._homicksOrdered = [...this._homicks].reverse();
     this._finishedPositions = [];
+
     this._numberOfHumanPlayers = numberOfHumanPlayers;
     this._obstacleToDelete = 0;
     if (this._isEndless === 0) {
@@ -89,16 +96,16 @@ class Race {
    */
   draw(totalTime) {
     this._drawBackground();
-    if (this._isEndless) {
-      this._drawEndlessScore(Math.floor(this._homicks[0].distance));
-    } else {
-      this._drawFinishLineOnSide();
-    }
     this._drawHomicksAndTracks(totalTime);
     if (totalTime < COUNTDOWN_TIME * 4) {
       this._drawCountdown(totalTime);
     }
-    this._drawFinishPositions();
+    if (this._isEndless) {
+      this._drawEndlessScore(Math.floor(this._homicks[0].distance));
+    } else {
+      this._drawFinishLineOnSide();
+      this._drawPositions();
+    }
     if (this.isFinished) {
       this._drawRaceFinished();
     }
@@ -378,20 +385,16 @@ class Race {
     );
   }
 
-  _drawFinishPositions() {
-    const marginLeft = 14;
-    const marginTop = TRACK_TILE_HEIGHT * 2.5;
+  _drawPositions() {
     this._ctx.font = '24px Arial';
-    this._homicks.forEach((homick, index) => {
-      const position = this._finishedPositions[index];
+    this._homicksOrdered.sort((h1, h2) => h2.distance - h1.distance).forEach((homick, currentOrder) => {
+      const position = this._finishedPositions[homick.index] || (currentOrder + 1);
       this._ctx.fillStyle = position === 1 ? '#3e3' : '#e33';
-      if (position) {
-        this._ctx.fillText(
-          FINISH_POSITIONS[position - 1],
-          this._tracksX + marginLeft + TRACK_TILE_WIDTH * index,
-          TRACKS_Y + marginTop
-        );
-      }
+      this._ctx.fillText(
+        FINISH_POSITIONS[position - 1],
+        this._tracksX + POSITIONS_MARGIN_LEFT + TRACK_TILE_WIDTH * homick.index,
+        POSITIONS_MARGIN_TOP
+      );
     });
   }
 
