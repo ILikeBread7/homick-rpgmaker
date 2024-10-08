@@ -200,14 +200,9 @@ Obstacles.Obstacle = Object.freeze({
     boost: false,
     hurdle: true,
     draw: function(drawTileFunction, ctx, x, y, tracksY, tracksHeight, fallen) {
-      if (fallen) {
-        ctx.fillStyle = fallen ? '#999' : '#ddd';
-        ctx.fillRect(x, y - HITBOX_LEEWAY, this.spriteWidth, this.hitboxLength + 2 * HITBOX_LEEWAY);
-        return;
-      }
-
+      const tileIndex = fallen ? HURDLE_FALLEN_TILE_INDEX : HURDLE_TILE_INDEX;
       const drawY = y - HITBOX_LEEWAY;
-      Obstacles.draw(drawTileFunction, HURDLE_TILE_INDEX, x, drawY, tracksY, tracksHeight);
+      Obstacles.draw(drawTileFunction, tileIndex, x, drawY, tracksY, tracksHeight);
     },
     collides: Obstacles.collides
   }),
