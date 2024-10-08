@@ -201,7 +201,7 @@ class Homick {
    * @param {number} position 
    */
   _accelerate(time, position) {
-    this._speedOnGround += time * this._effectiveAcceleration(position) * GLOBAL_ACCELERATION_FACTOR * (this._boosting ? BOOST_ACCELERATION_FACTOR : 1);
+    this._speedOnGround += time * this._effectiveAcceleration(position) * GLOBAL_ACCELERATION_FACTOR * (this.isBoosting ? BOOST_ACCELERATION_FACTOR : 1);
     this._speedOnGround = Math.min(this._speedOnGround, this._effectiveMaxSpeed(position));
   }
 
@@ -265,8 +265,12 @@ class Homick {
     return this._previousJumpHeight > 0;
   }
 
-  get _boosting() {
+  get isBoosting() {
     return this._boostTimeout - BOOST_DECELERATION_TIME > 0;
+  }
+
+  get boostTime() {
+    return BOOST_TIME + BOOST_DECELERATION_TIME - this._boostTimeout;
   }
 
 }

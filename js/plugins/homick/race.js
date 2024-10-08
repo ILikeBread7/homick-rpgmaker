@@ -177,9 +177,15 @@ class Race {
    */
   _drawHomick(homick, index, offset) {
     const distanceOffset = this._findDistanceOffset(homick.distance);
+    const x = this._tracksX + index * TRACK_TILE_WIDTH;
+    const y = TRACKS_Y - HOMICK_SPRITE_HEIGHT + TOP_Y - homick.height + distanceOffset;
     this._drawShadow(homick, index, distanceOffset);
     this._ctx.fillStyle = '#8b4513';
-    this._ctx.fillRect(this._tracksX + PADDING + offset + index * TRACK_TILE_WIDTH, TRACKS_Y - HOMICK_SPRITE_HEIGHT + TOP_Y - homick.height + distanceOffset, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
+    this._ctx.fillRect(x + PADDING + offset, y, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
+    if (homick.isBoosting) {
+      const boostFrame = Math.floor(homick.boostTime / 125) % 3;
+      this._drawTile(BOOST_ANIMATION_FRAME_1 + boostFrame, x, y);
+    }
   }
 
   /**
