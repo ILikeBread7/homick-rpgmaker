@@ -2,3 +2,5 @@ https://opengameart.org/content/64x-textures-an-overlays
 https://opengameart.org/content/race-track-tile-set
 https://quxios.github.io/plugins/QPlus
 https://quxios.github.io/plugins/QTouch
+
+RPG Maker MV StickSpecial3 animeation for the boosting animation
