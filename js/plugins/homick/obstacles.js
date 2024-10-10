@@ -227,9 +227,10 @@ Obstacles.Obstacle = Object.freeze({
     boost: true,
     hurdle: false,
     draw: function(drawTileFunction, ctx, x, y, tracksY, tracksHeight, fallen, totalTime) {
-      ctx.fillStyle = fallen ? '#811' : '#e11';
-      ctx.fillRect(x + PADDING, y, this.spriteWidth, this.hitboxLength);
-      ctx.strokeStyle = '#ee1';
+      const tileIndex = fallen ? BOOST_FALLEN_TILE_INDEX : BOOST_TILE_INDEX;
+      Obstacles.draw(drawTileFunction, tileIndex, x, y, tracksY, tracksHeight);
+      
+      ctx.strokeStyle = fallen ? '#cc1' : '#ee1';
       ctx.lineWidth = 5;
       ctx.beginPath();
       for (let i = 0; i < 3; i++) {
