@@ -51,7 +51,7 @@ var ILB_HR = ILB_HR || {};
         // this._bgSprite.initialize(ImageManager.loadBitmapFromPath(bgImagePath));
         // this.addChildToBack(this._bgSprite);
 
-        race = startFunction(this.contents);
+        race = startFunction(this);
         totalTime = 0;
         previousTime = Date.now();
     };
@@ -130,17 +130,17 @@ var ILB_HR = ILB_HR || {};
     }
 
     ILB_HR.startLevel = function(level) {
-        startFunction = contents => HomickRacer.startLevel(contents, level);
+        startFunction = window => HomickRacer.startLevel(window, level);
         SceneManager.push(Scene_HomickRacer);
     };
 
     ILB_HR.startEndlessMode = function() {
-        startFunction = contents => HomickRacer.startEndlessMode(contents);
+        startFunction = window => HomickRacer.startEndlessMode(window);
         SceneManager.push(Scene_HomickRacer);
     };
 
     ILB_HR.startMultiplayer = function(level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
-        startFunction = contents => HomickRacer.startMultiplayer(contents, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty);
+        startFunction = window => HomickRacer.startMultiplayer(window, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty);
         SceneManager.push(Scene_HomickRacer);
     }
 

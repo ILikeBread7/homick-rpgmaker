@@ -11,24 +11,26 @@ const TRACKS_HEIGHT = TRACK_HEIGHT * TRACK_TILE_HEIGHT;
 
 const FINISH_POSITIONS = ['1st', '2nd', '3rd', '4th'];
 const POSITIONS_MARGIN_LEFT = 14;
-const POSITIONS_MARGIN_TOP = Math.floor(TRACKS_Y + TRACK_TILE_HEIGHT * (TRACK_HEIGHT + 0.35));
+const POSITIONS_MARGIN_TOP = Math.floor(TRACKS_Y + TRACK_TILE_HEIGHT * TRACK_HEIGHT);
 
 const COUNTDOWN_TIME = 1000;
-const COUNTDOWN_LEFT = 160;
-const COUNTDOWN_TOP = TRACK_TILE_HEIGHT * 5;
+const COUNTDOWN_LEFT = 165;
+const COUNTDOWN_LEFT_DIGIT_OFFSET = 7;
+const COUNTDOWN_TOP = Math.floor(TRACK_TILE_HEIGHT * 4.5);
 
 class Race {
 
   /**
-   * @param {Bitmap} contents 
+   * @param {Window_Base} window 
    * @param {[{ acceleration: number, maxSpeed: number, player: (homick: Homick, obstacles: {[{ type: Obstacles.Obstacle, distance: number }]}) => { jump(): boolean } }]} homicks
    * @param {[{ type: Obstacles.Obstacle, distance: number }]} obstacles
    * @param {number} totalDistance 0 for endless mode
    * @param {number} [numberOfHumanPlayers = 1]
    */
-  constructor(contents, homicks, obstacles, totalDistance, numberOfHumanPlayers = 1) {
-    this._contents = contents;
-    this._ctx = contents._context;
+  constructor(window, homicks, obstacles, totalDistance, numberOfHumanPlayers = 1) {
+    this._window = window;
+    this._contents = window.contents;
+    this._ctx = this._contents._context;
     this._tracksX = (BASE_WIDTH - (TRACK_TILE_WIDTH * homicks.length)) / 2;
     this._homicks = homicks.map((homick, index) => new Homick(homick.acceleration, homick.maxSpeed, index));
     this._players = homicks.map((homick, index) => homick.player(this._homicks[index], obstacles));
@@ -140,18 +142,18 @@ class Race {
    * @param {number} totalTime 
    */
   _drawCountdown(totalTime) {
-    this._ctx.font = '24px Arial';
-    this._ctx.fillStyle = '#f00';
+    this._contents.fontSize = 32;
     if (totalTime < COUNTDOWN_TIME) {
-      this._ctx.fillText('3', COUNTDOWN_LEFT, COUNTDOWN_TOP);
+      this._window.drawText('3', COUNTDOWN_LEFT + COUNTDOWN_LEFT_DIGIT_OFFSET, COUNTDOWN_TOP);
     } else if (totalTime < COUNTDOWN_TIME * 2) {
-      this._ctx.fillText('2', COUNTDOWN_LEFT, COUNTDOWN_TOP);
+      this._window.drawText('2', COUNTDOWN_LEFT + COUNTDOWN_LEFT_DIGIT_OFFSET, COUNTDOWN_TOP);
     } else if (totalTime < COUNTDOWN_TIME * 3){
-      this._ctx.fillText('1', COUNTDOWN_LEFT, COUNTDOWN_TOP);
+      this._window.drawText('1', COUNTDOWN_LEFT + COUNTDOWN_LEFT_DIGIT_OFFSET, COUNTDOWN_TOP);
     } else {
-      this._ctx.fillStyle = '#0f0';
-      this._ctx.fillText('GO!', COUNTDOWN_LEFT, COUNTDOWN_TOP);
+      this._changeTextColorRPGMaker(RPG_MAKER_COLOR_GREEN);
+      this._window.drawText('GO!', COUNTDOWN_LEFT, COUNTDOWN_TOP);
     }
+    this._window.resetFontSettings();
   }
 
   /**
@@ -392,16 +394,17 @@ class Race {
   }
 
   _drawPositions() {
-    this._ctx.font = '24px Arial';
+    this._contents.fontSize = 24;
     this._homicksOrdered.sort((h1, h2) => h2.distance - h1.distance).forEach((homick, currentOrder) => {
       const position = this._finishedPositions[homick.index] || (currentOrder + 1);
-      this._ctx.fillStyle = position === 1 ? '#3e3' : '#e33';
-      this._ctx.fillText(
+      this._changeTextColorRPGMaker(position === 1 ? RPG_MAKER_COLOR_GREEN : RPG_MAKER_COLOR_RED);
+      this._window.drawText(
         FINISH_POSITIONS[position - 1],
         this._tracksX + POSITIONS_MARGIN_LEFT + TRACK_TILE_WIDTH * homick.index,
         POSITIONS_MARGIN_TOP
       );
     });
+    this._window.resetFontSettings();
   }
 
   _drawRaceFinished() {
@@ -431,6 +434,14 @@ class Race {
    */
   _findDistanceOffset(distance) {
     return this._totalDistance && (distance * MAX_DISTANCE_OFFSET / this._totalDistance);
+  }
+
+  /**
+   * 
+   * @param {number} rpgMakerTextColorCode 
+   */
+  _changeTextColorRPGMaker(rpgMakerTextColorCode) {
+    this._window.changeTextColor(this._window.textColor(rpgMakerTextColorCode));
   }
 
   get isFinished() {
