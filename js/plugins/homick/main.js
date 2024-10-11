@@ -1,11 +1,11 @@
 class HomickRacer {
 
   /**
-   * @param {Bitmap} contents
+   * @param {Window_Base} window
    * @param {number} level -1 for endless mode, use startEndlessMode function instead
    * @returns {race: Race}
    */
-  static startLevel(contents, level) {
+  static startLevel(window, level) {
     console.log(`Level ${level}`);
     
     const totalDistance = this.getTotalDistanceForLevel(level);
@@ -59,28 +59,28 @@ class HomickRacer {
         { acceleration: 2, maxSpeed: 2.72, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 10, 6, 3) }
       ];
     
-    const race = new Race(contents, homicks, obstacles, level === -1 ? 0 : (level === 1 ? (10 * TRACK_TILE_HEIGHT) : totalDistance));
+    const race = new Race(window, homicks, obstacles, level === -1 ? 0 : (level === 1 ? (10 * TRACK_TILE_HEIGHT) : totalDistance));
     return race;
   }
 
   /**
-   * @param {Bitmap} contents
+   * @param {Window_Base} window
    * @returns {race: Race}
    */
-  static startEndlessMode(contents) {
-    return this.startLevel(contents, -1);
+  static startEndlessMode(window) {
+    return this.startLevel(window, -1);
   }
 
   /**
    * 
-   * @param {Bitmap} contents 
+   * @param {Window_Base} window 
    * @param {number} level 
    * @param {number} numberOfHumanPlayers 
    * @param {number} numberOfCpuPlayers 
    * @param {0|1|2} cpuDifficulty 
    * @returns {Race}
    */
-  static startMultiplayer(contents, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
+  static startMultiplayer(window, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
     const homicks = [];
     
     for (let i = 1; i <= numberOfHumanPlayers; i++) {
@@ -102,7 +102,7 @@ class HomickRacer {
 
     const totalDistance = this.getTotalDistanceForLevel(level);
     const obstacles = Obstacles.createObstaclesForLevel(level, totalDistance);
-    const race = new Race(contents, homicks, obstacles, totalDistance);
+    const race = new Race(window, homicks, obstacles, totalDistance);
     return race;
   }
 

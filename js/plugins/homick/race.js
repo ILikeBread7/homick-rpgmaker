@@ -76,19 +76,21 @@ class Race {
       const oneStepTime = Math.min(TIME_STEP, remainingTime);
       this._homicks.forEach((homick, index) => {
         if (homick.isFinished(this._totalDistance)) {
-          if (homick.speed > 0) {
-            const position = this._finishedPositions.filter(x => !!x).length + 1;
-            this._finishedPositions[index] = position;
-          }
+          return;
+        }
+
+        homick.travel(
+          oneStepTime,
+          this._players[index].jump(),
+          this._obstacles,
+          this._fallenHurdles[index],
+          this._homicks.filter(h => h.distance > homick.distance).length + 1
+        );
+
+        if (homick.isFinished(this._totalDistance)) {
+          const position = this._finishedPositions.filter(x => !!x).length + 1;
+          this._finishedPositions[index] = position;
           homick.finish();
-        } else {
-          homick.travel(
-            oneStepTime,
-            this._players[index].jump(),
-            this._obstacles,
-            this._fallenHurdles[index],
-            this._homicks.filter(h => h.distance > homick.distance).length + 1
-          );
         }
       });
     }
@@ -485,6 +487,25 @@ class Race {
       }
     }
     return true;
+  }
+
+  get playerScore() {
+    if (this._isEndless) {
+      return this.currentObstacleIndex;
+    }
+
+    if (this._finishedPositions[0] === 1) {
+      if (this._fallenHurdles[0].some((value, fallenIndex) => this._obstacles[fallenIndex] && this._obstacles[fallenIndex].type.hurdle)) {
+        return 2;
+      }
+      return 3;
+    }
+
+    if (this._finishedPositions[0] === 2) {
+      return 1;
+    }
+
+    return 0;
   }
 
   get _isEndless() {

@@ -5,6 +5,10 @@
 /*:
  * @plugindesc Plugin for the Homick Racer game
  * @author I_LIKE_BREAD7
+ * 
+ * @param Result variable ID
+ * @desc ID of the variable used to store the result of the race (0 if not used)
+ * @default 1
  *
  * @help This plugin does not provide plugin commands.
  */
@@ -14,6 +18,7 @@ var ILB_HR = ILB_HR || {};
 (function() {
     const parameters = PluginManager.parameters('ILB_HomickRacer');
     const startCommonEventId = 0;
+    const resultVarId = Number(parameters['Result variable ID'] || 0);
 
     [
         'global-constants.js',
@@ -37,6 +42,7 @@ var ILB_HR = ILB_HR || {};
     let totalTime;
     let deltaTime;
     let previousTime;
+    let resultSet = false;
 
     function Window_HomickRacer() {
         this.initialize.apply(this, arguments);
@@ -50,6 +56,11 @@ var ILB_HR = ILB_HR || {};
         // this._bgSprite = new Sprite();
         // this._bgSprite.initialize(ImageManager.loadBitmapFromPath(bgImagePath));
         // this.addChildToBack(this._bgSprite);
+
+        if (resultVarId) {
+            $gameVariables.setValue(resultVarId, 0);
+            resultSet = false;
+        }
 
         race = startFunction(this);
         totalTime = 0;
@@ -101,6 +112,11 @@ var ILB_HR = ILB_HR || {};
         race.update(deltaTime, totalTime);
         this._window.refresh();
         previousTime = now;
+
+        if (resultVarId && !resultSet && race.isFinished) {
+            $gameVariables.setValue(resultVarId, race.playerScore);
+            resultSet = true;
+        }
 
         if (
             Input.isTriggered('cancel') || // to be changed later when we have a cancel common event
