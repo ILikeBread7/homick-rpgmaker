@@ -16,7 +16,7 @@ const POSITIONS_MARGIN_TOP = Math.floor(TRACKS_Y + TRACK_TILE_HEIGHT * TRACK_HEI
 
 const COUNTDOWN_TIME = 1000;
 const COUNTDOWN_LEFT = 165;
-const COUNTDOWN_LEFT_DIGIT_OFFSET = 7;
+const COUNTDOWN_DIGIT_LEFT = COUNTDOWN_LEFT + 7;
 const COUNTDOWN_TOP = Math.floor(TRACK_TILE_HEIGHT * 4.5);
 
 class Race {
@@ -144,17 +144,22 @@ class Race {
    */
   _drawCountdown(totalTime) {
     this._contents.fontSize = 32;
+    this._changeTextColorRPGMaker(RPG_MAKER_COLOR_DARK_RED);
     if (totalTime < COUNTDOWN_TIME) {
-      this._window.drawText('3', COUNTDOWN_LEFT + COUNTDOWN_LEFT_DIGIT_OFFSET, COUNTDOWN_TOP);
+      this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
+      this._window.drawText('3', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
     } else if (totalTime < COUNTDOWN_TIME * 2) {
-      this._window.drawText('2', COUNTDOWN_LEFT + COUNTDOWN_LEFT_DIGIT_OFFSET, COUNTDOWN_TOP);
+      this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
+      this._window.drawText('2', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
     } else if (totalTime < COUNTDOWN_TIME * 3){
-      this._window.drawText('1', COUNTDOWN_LEFT + COUNTDOWN_LEFT_DIGIT_OFFSET, COUNTDOWN_TOP);
+      this._changeTextColorRPGMaker(RPG_MAKER_COLOR_YELLOW);
+      this._window.drawText('1', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
     } else {
       this._changeTextColorRPGMaker(RPG_MAKER_COLOR_GREEN);
       this._window.drawText('GO!', COUNTDOWN_LEFT, COUNTDOWN_TOP);
     }
     this._window.resetFontSettings();
+    this._resetTextOutlineColor();
   }
 
   /**
