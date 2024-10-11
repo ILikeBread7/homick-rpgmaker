@@ -20,6 +20,10 @@ var ILB_HR = ILB_HR || {};
     const startCommonEventId = 0;
     const resultVarId = Number(parameters['Result variable ID'] || 0);
 
+    const SINGLEPLAYER_MODE = 0;
+    const MULTIPLAYER_MODE = 1;
+    const ENDLESS_MODE = 2;
+
     [
         'global-constants.js',
         'utils.js',
@@ -43,6 +47,7 @@ var ILB_HR = ILB_HR || {};
     let deltaTime;
     let previousTime;
     let resultSet = false;
+    let mode;
 
     function Window_HomickRacer() {
         this.initialize.apply(this, arguments);
@@ -146,16 +151,19 @@ var ILB_HR = ILB_HR || {};
     }
 
     ILB_HR.startLevel = function(level) {
+        mode = SINGLEPLAYER_MODE;
         startFunction = window => HomickRacer.startLevel(window, level);
         SceneManager.push(Scene_HomickRacer);
     };
 
     ILB_HR.startEndlessMode = function() {
+        mode = ENDLESS_MODE;
         startFunction = window => HomickRacer.startEndlessMode(window);
         SceneManager.push(Scene_HomickRacer);
     };
 
     ILB_HR.startMultiplayer = function(level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
+        mode = MULTIPLAYER_MODE;
         startFunction = window => HomickRacer.startMultiplayer(window, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty);
         SceneManager.push(Scene_HomickRacer);
     }
