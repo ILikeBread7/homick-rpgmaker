@@ -501,11 +501,15 @@ class Race {
       return 3;
     }
 
-    if (this._finishedPositions[0] === 2) {
+    if (this._finishedPositions[0] === 2 && !this.isBoss) {
       return 1;
     }
 
     return 0;
+  }
+
+  get isBoss() {
+    return this._homicks.length === 2;
   }
 
   get _isEndless() {
