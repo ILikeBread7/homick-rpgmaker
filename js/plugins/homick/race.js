@@ -383,7 +383,7 @@ class Race {
       this._tracksX + marginLeft + TRACK_TILE_WIDTH * index,
       TRACKS_Y - marginTop
     );
-    
+
     this._resetTextOutlineColor();
   }
 
@@ -423,11 +423,13 @@ class Race {
   }
 
   _drawRaceFinished() {
-    const marginLeft = 48;
+    const marginLeft = 32;
     const marginTop = TRACK_TILE_HEIGHT * 8;
-    this._ctx.font = '24px Arial';
-    this._ctx.fillStyle = '#e33';
-    this._ctx.fillText('Click to go back to menu', marginLeft, marginTop);
+
+    this._contents.fontSize = 24;
+    this._changeTextColorRPGMaker(RPG_MAKER_COLOR_YELLOW);
+    this._window.drawText('Click to go back to menu', marginLeft, marginTop);
+    this._window.resetFontSettings();
   }
 
   /**
@@ -436,11 +438,13 @@ class Race {
    */
   _drawEndlessScore(distance) {
     const marginLeft = 220;
-    const marginTop = TRACK_TILE_HEIGHT * 4;
-    this._ctx.font = '16px Arial';
-    this._ctx.fillStyle = '#33e';
-    this._ctx.fillText(`Score: ${this.currentObstacleIndex}`, marginLeft, marginTop);
-    this._ctx.fillText(`Distance: ${distance}`, marginLeft, marginTop + 20);
+    const marginTop = TRACK_TILE_HEIGHT * 2;
+
+    this._contents.fontSize = 16;
+    this._changeTextColorRPGMaker(RPG_MAKER_COLOR_YELLOW);
+    this._window.drawText(`Score: ${this.currentObstacleIndex}`, marginLeft, marginTop);
+    this._window.drawText(`Distance: ${Math.floor(distance / 10)}`, marginLeft, marginTop + 20);
+    this._window.resetFontSettings();
   }
 
   /**
