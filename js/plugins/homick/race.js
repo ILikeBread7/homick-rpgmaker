@@ -3,8 +3,8 @@ const HOMICK_SPRITE_HEIGHT = TRACK_TILE_HEIGHT - 2 * PADDING;
 const TOP_Y = Math.floor(HOMICK_SPRITE_HEIGHT * 1.5);
 const MAX_DISTANCE_OFFSET = Math.floor(TRACK_TILE_HEIGHT * 5);
 const TIME_STEP = 10;
-const PLAYER_NAME_COLORS = ['#33e', '#3e3', '#e3e', '#ee3'];
-const CPU_NAME_COLOR = '#e33';
+const PLAYER_NAME_COLORS = [RPG_MAKER_COLOR_BLUE, RPG_MAKER_COLOR_GREEN, RPG_MAKER_COLOR_YELLOW, RPG_MAKER_COLOR_PURPLE];
+const CPU_NAME_COLOR = RPG_MAKER_COLOR_DARK_RED;
 const FINISH_LINE_HEIGHT = 16 * 3;
 const TRACKS_Y = Math.floor((BASE_HEIGHT - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2);
 const TRACKS_HEIGHT = TRACK_HEIGHT * TRACK_TILE_HEIGHT;
@@ -370,14 +370,21 @@ class Race {
    */
   _drawName(name, index, isPlayer) {
     const marginLeft = 8;
-    const marginTop = 10;
-    this._ctx.fillStyle = isPlayer ? PLAYER_NAME_COLORS[index] : CPU_NAME_COLOR;
-    this._ctx.font = '24px Arial';
-    this._ctx.fillText(
+    const marginTop = 32;
+    this._contents.fontSize = 24;
+
+    if (!isPlayer) {
+      this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
+    }
+    this._changeTextColorRPGMaker(isPlayer ? PLAYER_NAME_COLORS[index] : CPU_NAME_COLOR);
+
+    this._window.drawText(
       name,
       this._tracksX + marginLeft + TRACK_TILE_WIDTH * index,
       TRACKS_Y - marginTop
     );
+    
+    this._resetTextOutlineColor();
   }
 
   _drawBackground() {
