@@ -10,6 +10,7 @@ const TRACKS_Y = Math.floor((BASE_HEIGHT - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) /
 const TRACKS_HEIGHT = TRACK_HEIGHT * TRACK_TILE_HEIGHT;
 
 const FINISH_POSITIONS = ['1st', '2nd', '3rd', '4th'];
+const POSITION_COLORS = [RPG_MAKER_COLOR_GREEN, RPG_MAKER_COLOR_YELLOW, RPG_MAKER_COLOR_RED, RPG_MAKER_COLOR_DARK_RED];
 const POSITIONS_MARGIN_LEFT = 14;
 const POSITIONS_MARGIN_TOP = Math.floor(TRACKS_Y + TRACK_TILE_HEIGHT * TRACK_HEIGHT);
 
@@ -394,10 +395,11 @@ class Race {
   }
 
   _drawPositions() {
+    this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
     this._contents.fontSize = 24;
     this._homicksOrdered.sort((h1, h2) => h2.distance - h1.distance).forEach((homick, currentOrder) => {
       const position = this._finishedPositions[homick.index] || (currentOrder + 1);
-      this._changeTextColorRPGMaker(position === 1 ? RPG_MAKER_COLOR_GREEN : RPG_MAKER_COLOR_RED);
+      this._changeTextColorRPGMaker(POSITION_COLORS[position - 1]);
       this._window.drawText(
         FINISH_POSITIONS[position - 1],
         this._tracksX + POSITIONS_MARGIN_LEFT + TRACK_TILE_WIDTH * homick.index,
@@ -405,6 +407,7 @@ class Race {
       );
     });
     this._window.resetFontSettings();
+    this._resetTextOutlineColor();
   }
 
   _drawRaceFinished() {
@@ -442,6 +445,19 @@ class Race {
    */
   _changeTextColorRPGMaker(rpgMakerTextColorCode) {
     this._window.changeTextColor(this._window.textColor(rpgMakerTextColorCode));
+  }
+  
+  /**
+   * 
+   * @param {string} color 
+   */
+  _changeTextOutlineColor(color) {
+    this._contents.outlineColor = color;
+  }
+
+  _resetTextOutlineColor() {
+    // The default outline color
+    this._contents.outlineColor = 'rgba(0, 0, 0, 0.5)';
   }
 
   get isFinished() {
