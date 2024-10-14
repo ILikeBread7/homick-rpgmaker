@@ -387,6 +387,7 @@ class Race {
     );
 
     this._resetTextOutlineColor();
+    this._window.resetFontSettings();
   }
 
   _drawBackground() {
@@ -443,7 +444,6 @@ class Race {
     const marginTop = TRACK_TILE_HEIGHT * 2;
 
     this._contents.fontSize = 16;
-    this._changeTextColorRPGMaker(RPG_MAKER_COLOR_YELLOW);
     this._window.drawText(`Score: ${this.currentObstacleIndex}`, marginLeft, marginTop);
     this._window.drawText(`Distance: ${Math.floor(distance / 10)}`, marginLeft, marginTop + 20);
     this._window.resetFontSettings();
