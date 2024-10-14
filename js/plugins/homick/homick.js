@@ -67,6 +67,7 @@ class Homick {
   }
 
   finish() {
+    this._boostTimeout = 0;
     this._speedOnGround = 0;
     this._setAsLanded();
   }

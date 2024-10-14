@@ -59,7 +59,7 @@ class HomickRacer {
         { acceleration: 2, maxSpeed: 2.72, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 10, 6, 3) }
       ];
     
-    const race = new Race(window, homicks, obstacles, level === -1 ? 0 : (level === 1 ? (10 * TRACK_TILE_HEIGHT) : totalDistance));
+    const race = new Race(window, homicks, obstacles, totalDistance);
     return race;
   }
 
@@ -112,6 +112,16 @@ class HomickRacer {
    * @returns {number}
    */
   static getTotalDistanceForLevel(level) {
-    return (8 + level) * 15 * TRACK_TILE_HEIGHT;
+    // Endless mode
+    if (level === -1) {
+      return 0;
+    }
+
+    const levelsPerStage = 4;
+    const distancePerStage = TRACKS_HEIGHT * 6;
+    const distancePerLevel = TRACKS_HEIGHT * 3;
+    const minDistance = TRACKS_HEIGHT * 5;
+    const levelIndex = level - 1;
+    return minDistance + Math.floor(levelIndex * distancePerStage / levelsPerStage) + (levelIndex % levelsPerStage) * distancePerLevel;
   }
 }
