@@ -274,4 +274,8 @@ class Homick {
     return BOOST_TIME + BOOST_DECELERATION_TIME - this._boostTimeout;
   }
 
+  get isHit() {
+    return this._obstacleHitTimeout > 0;
+  }
+
 }

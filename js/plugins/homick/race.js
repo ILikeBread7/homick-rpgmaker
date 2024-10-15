@@ -1,5 +1,5 @@
 const TRACK_HEIGHT = 9;
-const HOMICK_SPRITE_HEIGHT = 56;
+const HOMICK_SPRITE_HEIGHT = 57;
 const TOP_Y = Math.floor(HOMICK_SPRITE_HEIGHT * 1.5);
 const MAX_DISTANCE_OFFSET = Math.floor(TRACK_TILE_HEIGHT * 5);
 const TIME_STEP = 10;
@@ -168,14 +168,17 @@ class Race {
    * @param {number} totalTime 
    */
   _drawHomicksAndTracks(totalTime) {
-    const offset = (Math.floor((totalTime % 500) / 250) * 2 - 1) * PADDING / 2;
+    const animetionFrameDuration = 125;
+    const homickFrame = Math.round(Math.cos(Math.floor(totalTime / animetionFrameDuration) * Math.PI / 2));
+
+    const offset = homickFrame * PADDING / 2;
     this._drawTracksBackground(this._homicks.length);
     this._homicks.forEach((homick, index) => {
       this._drawName(this._playerNames[index], index, this._players[index].isHuman);
       this._drawTrack(homick.distance, index);
       this._drawObstacles(homick.distance, index, totalTime);
       this._drawTrackPits(index);
-      this._drawHomick(homick, index, offset);
+      this._drawHomick(homick, index, homickFrame, offset);
     });
   }
 
@@ -183,19 +186,22 @@ class Race {
    * 
    * @param {Homick} homick 
    * @param {number} index 
+   * @param {number} homickFrame 
    * @param {number} offset 
    */
-  _drawHomick(homick, index, offset) {
+  _drawHomick(homick, index, homickFrame, offset) {
     const distanceOffset = this._findDistanceOffset(homick.distance);
-    const x = this._tracksX + index * TRACK_TILE_WIDTH;
+    const x = this._tracksX + index * TRACK_TILE_WIDTH + offset;
     const y = TRACKS_Y - HOMICK_SPRITE_HEIGHT + TOP_Y - homick.height + distanceOffset;
-    this._drawShadow(homick, index, distanceOffset);
+    this._drawShadow(homick, index, distanceOffset, offset);
     
-    
-    // this._ctx.fillStyle = '#8b4513';
-    // this._ctx.fillRect(x + PADDING + offset, y, TRACK_TILE_WIDTH - 2 * PADDING, TRACK_TILE_HEIGHT - 2 * PADDING);
-    
-    this._drawTile(HOMICK_SPRITE_INDEX, x + offset, y);
+    let baseSpriteIndex = HOMICK_SPRITE_INDEX;
+    if (homick.isHit) {
+      baseSpriteIndex = HOMICK_SPRITE_HIT_INDEX;
+    } else if (homick.isBoosting) {
+      baseSpriteIndex = HOMICK_BOOSTED_SPRITE_INDEX;
+    }
+    this._drawTile(baseSpriteIndex + homickFrame, x, y);
 
     if (homick.isBoosting) {
       const boostFrame = Math.floor(homick.boostTime / 125) % 3;
@@ -208,16 +214,18 @@ class Race {
    * @param {Homick} homick 
    * @param {number} index 
    * @param {number} distanceOffset
+   * @param {number} xOffset 
    */
-  _drawShadow(homick, index, distanceOffset) {
+  _drawShadow(homick, index, distanceOffset, xOffset) {
     this._ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
     this._ctx.beginPath();
+    const homickSpriteWidth = 35;
     const maxHeightFactor = 128;
     const heightFactor = (maxHeightFactor - Math.min(homick.height, maxHeightFactor)) / maxHeightFactor;
     this._ctx.ellipse(
-      this._tracksX + index * TRACK_TILE_WIDTH + TRACK_TILE_WIDTH / 2,
+      this._tracksX + index * TRACK_TILE_WIDTH + TRACK_TILE_WIDTH / 2 + xOffset / 2,
       TRACKS_Y + TOP_Y + distanceOffset,
-      (TRACK_TILE_WIDTH - PADDING) / 2 * heightFactor,
+      homickSpriteWidth / 2 * heightFactor,
       (TRACK_TILE_WIDTH - PADDING) / 4 * heightFactor,
       0, 0, 2 * Math.PI);
     this._ctx.fill();
