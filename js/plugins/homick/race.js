@@ -508,7 +508,7 @@ class Race {
     }
 
     if (this._finishedPositions[0] === 1) {
-      if (this._fallenHurdles[0].some((value, fallenIndex) => this._obstacles[fallenIndex] && this._obstacles[fallenIndex].type.hurdle)) {
+      if (this._homicks[0].wasHit) {
         return 2;
       }
       return 3;

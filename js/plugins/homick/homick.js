@@ -278,4 +278,8 @@ class Homick {
     return this._obstacleHitTimeout > 0;
   }
 
+  get wasHit() {
+    return this._hit;
+  }
+
 }
