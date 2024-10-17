@@ -6,6 +6,10 @@
  * @plugindesc Plugin for the Homick Racer game
  * @author I_LIKE_BREAD7
  * 
+ * @param Pause common event ID
+ * @desc ID of the common event used when the game is paused (0 if not used)
+ * @default 1
+ * 
  * @param Result variable ID
  * @desc ID of the variable used to store the result of the race (0 if not used)
  * @default 1
@@ -18,6 +22,7 @@ var ILB_HR = ILB_HR || {};
 (function() {
     const parameters = PluginManager.parameters('ILB_HomickRacer');
     const startCommonEventId = 0;
+    const pauseCommonEventId = Number(parameters['Pause common event ID'] || 0);
     const resultVarId = Number(parameters['Result variable ID'] || 0);
 
     const SINGLEPLAYER_MODE = 0;
@@ -44,7 +49,6 @@ var ILB_HR = ILB_HR || {};
     let startFunction;
     let race;
     let totalTime;
-    let deltaTime;
     let previousTime;
     let resultSet = false;
     let mode;
@@ -111,10 +115,13 @@ var ILB_HR = ILB_HR || {};
         Scene_Base.prototype.update.call(this);
 
         const now = Date.now();
-        deltaTime = now - previousTime;
-        totalTime += deltaTime;
+        
+        if (!this.updateInterpreter()) {
+            const deltaTime = now - previousTime;
+            totalTime += deltaTime;
+            race.update(deltaTime, totalTime);
+        }
 
-        race.update(deltaTime, totalTime);
         this._window.refresh();
         previousTime = now;
 
@@ -123,9 +130,13 @@ var ILB_HR = ILB_HR || {};
             resultSet = true;
         }
 
+        if (pauseCommonEventId && Input.isTriggered('cancel')) {
+            this.playCommonEvent(pauseCommonEventId);
+        }
+
         if (
-            Input.isTriggered('cancel') || // to be changed later when we have a cancel common event
-            (race.isFinished && (Input.isTriggered('ok') || Input.isTriggered('cancel') || Input.isTriggered('player1') || Input.isTriggered('player2') || Input.isTriggered('player3') || Input.isTriggered('player4')))
+            race.isFinished &&
+            (Input.isTriggered('ok') || Input.isTriggered('player1') || Input.isTriggered('player2') || Input.isTriggered('player3') || Input.isTriggered('player4'))
         ) {
             this.popScene();
         }
@@ -135,6 +146,22 @@ var ILB_HR = ILB_HR || {};
         var commonEvent = $dataCommonEvents[commonEventId];
         this._interpreter = new Game_Interpreter();
         this._interpreter.setup(commonEvent.list);
+    }
+
+    /**
+     * @returns True if the interpreter kepps running, false otherwise
+     */
+    Scene_HomickRacer.prototype.updateInterpreter = function() {
+        if (this._interpreter) {
+            if (this._interpreter.isRunning()) {
+                this._interpreter.update();
+            }
+            if (!this._interpreter.isRunning()) {
+                this._interpreter = null;
+            }
+            return true;
+        }
+        return false;
     }
 
     function loadScript(filename) {
@@ -166,6 +193,10 @@ var ILB_HR = ILB_HR || {};
         mode = MULTIPLAYER_MODE;
         startFunction = window => HomickRacer.startMultiplayer(window, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty);
         SceneManager.push(Scene_HomickRacer);
+    }
+
+    ILB_HR.stopRace = function() {
+        SceneManager.pop();
     }
 
     ILB_HR.CPU_EASY = 0;
