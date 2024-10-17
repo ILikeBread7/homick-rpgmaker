@@ -57,6 +57,24 @@ var ILB_HR = ILB_HR || {};
     let resultSet = false;
     let mode;
 
+    // Spriteset to handle pictures in common events
+    function Spriteset_Homick() {
+        this.initialize.apply(this, arguments);
+    }
+    
+    Spriteset_Homick.prototype = Object.create(Spriteset_Base.prototype);
+    Spriteset_Homick.prototype.constructor = Spriteset_Homick;
+    
+    Spriteset_Homick.prototype.initialize = function() {
+        Spriteset_Base.prototype.initialize.call(this);
+    };
+    
+    Spriteset_Homick.prototype.createBaseSprite = function() {
+        this._baseSprite = new Sprite();
+        this._baseSprite.setFrame(0, 0, this.width, this.height);
+        this.addChild(this._baseSprite);
+    };
+
     function Window_HomickRacer() {
         this.initialize.apply(this, arguments);
     }
@@ -110,9 +128,15 @@ var ILB_HR = ILB_HR || {};
         this._messageWindow.subWindows().forEach(function(window) {
             this.addChild(window);
         }, this);
+        this.createSpriteset();
         if (startCommonEventId) {
             this.playCommonEvent(startCommonEventId);
         }
+    };
+
+    Scene_HomickRacer.prototype.createSpriteset = function() {
+        this._spriteset = new Spriteset_Homick();
+        this.addChild(this._spriteset);
     };
 
     Scene_HomickRacer.prototype.update = function() {
@@ -126,6 +150,7 @@ var ILB_HR = ILB_HR || {};
             race.update(deltaTime, totalTime);
         }
 
+        $gameScreen.update();
         this._window.refresh();
         previousTime = now;
 
