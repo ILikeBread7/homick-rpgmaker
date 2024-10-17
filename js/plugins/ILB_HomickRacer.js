@@ -6,9 +6,13 @@
  * @plugindesc Plugin for the Homick Racer game
  * @author I_LIKE_BREAD7
  * 
+ * @param Start common event ID
+ * @desc ID of the common event used when the game is started (0 if not used)
+ * @default 1
+ * 
  * @param Pause common event ID
  * @desc ID of the common event used when the game is paused (0 if not used)
- * @default 1
+ * @default 2
  * 
  * @param Result variable ID
  * @desc ID of the variable used to store the result of the race (0 if not used)
@@ -21,7 +25,7 @@ var ILB_HR = ILB_HR || {};
 
 (function() {
     const parameters = PluginManager.parameters('ILB_HomickRacer');
-    const startCommonEventId = 0;
+    const startCommonEventId = Number(parameters['Start common event ID'] || 0);
     const pauseCommonEventId = Number(parameters['Pause common event ID'] || 0);
     const resultVarId = Number(parameters['Result variable ID'] || 0);
 
