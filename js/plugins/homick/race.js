@@ -114,6 +114,7 @@ class Race {
     if (this.isFinished) {
       this._drawRaceFinished();
     }
+    this._drawPauseButton();
   }
 
   /**
@@ -460,6 +461,14 @@ class Race {
     this._window.drawText(`Score: ${this.currentObstacleIndex}`, marginLeft, marginTop);
     this._window.drawText(`Distance: ${Math.floor(distance / 10)}`, marginLeft, marginTop + 20);
     this._window.resetFontSettings();
+  }
+
+  _drawPauseButton() {
+    const pauseSpriteSize = 48;
+    const tileIndex = (TouchInput.x >= BASE_WIDTH - pauseSpriteSize && TouchInput.y <= pauseSpriteSize) ?
+      PAUSE_HOVERED_TILE_INDEX :
+      PAUSE_TILE_INDEX;
+    this._drawTile(tileIndex, BASE_WIDTH - TRACK_TILE_WIDTH, 0);
   }
 
   /**
