@@ -169,7 +169,7 @@ class Race {
    */
   _drawHomicksAndTracks(totalTime) {
     const animetionFrameDuration = 125;
-    const homickFrame = Math.round(Math.cos(Math.floor(totalTime / animetionFrameDuration) * Math.PI / 2));
+    const homickFrame = Math.round(Math.sin(Math.floor(totalTime / animetionFrameDuration) / 2 * Math.PI));
 
     const offset = homickFrame * PADDING / 2;
     this._drawTracksBackground(this._homicks.length);
