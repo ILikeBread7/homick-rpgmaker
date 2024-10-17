@@ -196,10 +196,10 @@ class Race {
     this._drawShadow(homick, index, distanceOffset, offset);
     
     let baseSpriteIndex = HOMICK_SPRITE_INDEX;
-    if (homick.isHit) {
-      baseSpriteIndex = HOMICK_SPRITE_HIT_INDEX;
-    } else if (homick.isBoosting) {
+    if (homick.isBoosting) {
       baseSpriteIndex = HOMICK_BOOSTED_SPRITE_INDEX;
+    } else if (homick.isHit) {
+      baseSpriteIndex = HOMICK_SPRITE_HIT_INDEX;
     }
     this._drawTile(baseSpriteIndex + homickFrame, x, y);
 
