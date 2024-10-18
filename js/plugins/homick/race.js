@@ -98,7 +98,6 @@ class Race {
   }
 
   draw() {
-    this._drawBackground();
     this._drawHomicksAndTracks(this._totalTime);
     if (this._totalTime < COUNTDOWN_TIME * 4) {
       this._drawCountdown(this._totalTime);
@@ -394,11 +393,6 @@ class Race {
 
     this._resetTextOutlineColor();
     this._window.resetFontSettings();
-  }
-
-  _drawBackground() {
-    this._ctx.fillStyle = '#78fbcf';
-    this._ctx.fillRect(0, 0, BASE_WIDTH, BASE_HEIGHT);
   }
 
   _drawFinishLineOnSide() {

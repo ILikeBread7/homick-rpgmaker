@@ -38,6 +38,11 @@ var ILB_HR = ILB_HR || {};
     const MULTIPLAYER_MODE = 1;
     const ENDLESS_MODE = 2;
 
+    const LEVEL_BACKGROUNDS = new Map([
+        [1, 'Tower2'],
+        [11, 'Tower2'],
+    ]);
+
     [
         'global-constants.js',
         'utils.js',
@@ -61,6 +66,9 @@ var ILB_HR = ILB_HR || {};
     let resultSet = false;
     let mode;
     let window;
+
+    const DEFAULT_BG_IMAGE = 'WorldMap1';
+    let bgImageName = DEFAULT_BG_IMAGE;
 
     // Spriteset to handle pictures in common events
     function Spriteset_Homick() {
@@ -89,9 +97,9 @@ var ILB_HR = ILB_HR || {};
 
     Window_HomickRacer.prototype.initialize = function(x, y, width, height) {
         Window_Base.prototype.initialize.call(this, x, y, width, height);
-        // this._bgSprite = new Sprite();
-        // this._bgSprite.initialize(ImageManager.loadBitmapFromPath(bgImagePath));
-        // this.addChildToBack(this._bgSprite);
+        this._bgSprite = new Sprite();
+        this._bgSprite.initialize(ImageManager.loadPicture(bgImageName));
+        this.addChildToBack(this._bgSprite);
 
         resetScoreVar();
         window = this;
@@ -218,18 +226,21 @@ var ILB_HR = ILB_HR || {};
     }
 
     ILB_HR.startLevel = function(level) {
+        bgImageName = LEVEL_BACKGROUNDS.get(level) || DEFAULT_BG_IMAGE;
         mode = SINGLEPLAYER_MODE;
         startFunction = window => HomickRacer.startLevel(window, level);
         SceneManager.push(Scene_HomickRacer);
     };
 
     ILB_HR.startEndlessMode = function() {
+        bgImageName = DEFAULT_BG_IMAGE
         mode = ENDLESS_MODE;
         startFunction = window => HomickRacer.startEndlessMode(window);
         SceneManager.push(Scene_HomickRacer);
     };
 
     ILB_HR.startMultiplayer = function(level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
+        bgImageName = DEFAULT_BG_IMAGE
         mode = MULTIPLAYER_MODE;
         startFunction = window => HomickRacer.startMultiplayer(window, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty);
         SceneManager.push(Scene_HomickRacer);
