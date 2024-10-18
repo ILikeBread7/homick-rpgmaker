@@ -230,6 +230,12 @@ Obstacles.Obstacle = Object.freeze({
       const tileIndex = fallen ? BOOST_FALLEN_TILE_INDEX : BOOST_TILE_INDEX;
       Obstacles.draw(drawTileFunction, tileIndex, x, y, tracksY, tracksHeight);
       
+      // Clip the arrows to the track dimensions
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x, tracksY, TRACK_TILE_WIDTH, TRACKS_HEIGHT);
+      ctx.clip();
+
       ctx.strokeStyle = fallen ? '#cc1' : '#ee1';
       ctx.lineWidth = 5;
       ctx.beginPath();
@@ -243,6 +249,8 @@ Obstacles.Obstacle = Object.freeze({
       ctx.stroke();
       ctx.strokeStyle = '#000';
       ctx.lineWidth = 1;
+
+      ctx.restore();
     },
     collides: Obstacles.collides
   })
