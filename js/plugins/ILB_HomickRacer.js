@@ -14,6 +14,10 @@
  * @desc ID of the common event used when the game is paused (0 if not used)
  * @default 2
  * 
+ * @param End common event ID
+ * @desc ID of the common event used when the game is finished (0 if not used)
+ * @default 3
+ * 
  * @param Result variable ID
  * @desc ID of the variable used to store the result of the race (0 if not used)
  * @default 1
@@ -27,6 +31,7 @@ var ILB_HR = ILB_HR || {};
     const parameters = PluginManager.parameters('ILB_HomickRacer');
     const startCommonEventId = Number(parameters['Start common event ID'] || 0);
     const pauseCommonEventId = Number(parameters['Pause common event ID'] || 0);
+    const endCommonEventId = Number(parameters['End common event ID'] || 0);
     const resultVarId = Number(parameters['Result variable ID'] || 0);
 
     const SINGLEPLAYER_MODE = 0;
@@ -88,11 +93,7 @@ var ILB_HR = ILB_HR || {};
         // this._bgSprite.initialize(ImageManager.loadBitmapFromPath(bgImagePath));
         // this.addChildToBack(this._bgSprite);
 
-        if (resultVarId) {
-            $gameVariables.setValue(resultVarId, 0);
-            resultSet = false;
-        }
-
+        resetScoreVar();
         window = this;
         race = startFunction(window);
         previousTime = Date.now();
@@ -166,7 +167,11 @@ var ILB_HR = ILB_HR || {};
             race.isFinished &&
             (Input.isTriggered('ok') || Input.isTriggered('player1') || Input.isTriggered('player2') || Input.isTriggered('player3') || Input.isTriggered('player4'))
         ) {
-            this.popScene();
+            if (endCommonEventId) {
+                this.playCommonEvent(endCommonEventId);
+            } else {
+                this.popScene();
+            }
         }
     };
 
@@ -205,6 +210,13 @@ var ILB_HR = ILB_HR || {};
         console.error(e);
     }
 
+    function resetScoreVar() {
+        if (resultVarId) {
+            $gameVariables.setValue(resultVarId, 0);
+            resultSet = false;
+        }
+    }
+
     ILB_HR.startLevel = function(level) {
         mode = SINGLEPLAYER_MODE;
         startFunction = window => HomickRacer.startLevel(window, level);
@@ -228,10 +240,19 @@ var ILB_HR = ILB_HR || {};
     }
 
     ILB_HR.restartRace = function() {
+        resetScoreVar();
         race = startFunction(window);
+    }
+
+    ILB_HR.getMode = function() {
+        return mode;
     }
 
     ILB_HR.CPU_EASY = 0;
     ILB_HR.CPU_NORMAL = 1;
     ILB_HR.CPU_HARD = 2;
+
+    ILB_HR.SINGLEPLAYER_MODE = SINGLEPLAYER_MODE;
+    ILB_HR.MULTIPLAYER_MODE = MULTIPLAYER_MODE;
+    ILB_HR.ENDLESS_MODE = ENDLESS_MODE;
 })();
