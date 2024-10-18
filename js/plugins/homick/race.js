@@ -39,6 +39,7 @@ class Race {
     this._previousFirstDrawnObstacleIndexes = homicks.map(h => 0);
     this._fallenHurdles = homicks.map(h => []);
     this._totalDistance = totalDistance;
+    this._totalTime = 0;
 
     // For drawing the current position
     this._homicksOrdered = [...this._homicks].reverse();
@@ -60,10 +61,10 @@ class Race {
   /**
    * 
    * @param {number} deltaTime 
-   * @param {number} totalTime 
    */
-  update(deltaTime, totalTime) {
-    if (totalTime < COUNTDOWN_TIME * 3) {
+  update(deltaTime) {
+    this._totalTime += deltaTime;
+    if (this._totalTime < COUNTDOWN_TIME * 3) {
       return;
     }
     if (this._isEndless && this._obstacles.length - this.currentObstacleIndex <= ENDLESS_OBSTACLES_BATCH / 2) {
@@ -96,14 +97,11 @@ class Race {
     }
   }
 
-  /**
-   * @param {number} totalTime 
-   */
-  draw(totalTime) {
+  draw() {
     this._drawBackground();
-    this._drawHomicksAndTracks(totalTime);
-    if (totalTime < COUNTDOWN_TIME * 4) {
-      this._drawCountdown(totalTime);
+    this._drawHomicksAndTracks(this._totalTime);
+    if (this._totalTime < COUNTDOWN_TIME * 4) {
+      this._drawCountdown(this._totalTime);
     }
     if (this._isEndless) {
       this._drawEndlessScore(Math.floor(this._homicks[0].distance));
@@ -142,19 +140,16 @@ class Race {
     return this._homicks[0].currentObstacleIndex;
   }
 
-  /**
-   * @param {number} totalTime 
-   */
-  _drawCountdown(totalTime) {
+  _drawCountdown() {
     this._contents.fontSize = 32;
     this._changeTextColorRPGMaker(RPG_MAKER_COLOR_DARK_RED);
-    if (totalTime < COUNTDOWN_TIME) {
+    if (this._totalTime < COUNTDOWN_TIME) {
       this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
       this._window.drawText('3', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
-    } else if (totalTime < COUNTDOWN_TIME * 2) {
+    } else if (this._totalTime < COUNTDOWN_TIME * 2) {
       this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
       this._window.drawText('2', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
-    } else if (totalTime < COUNTDOWN_TIME * 3){
+    } else if (this._totalTime < COUNTDOWN_TIME * 3){
       this._changeTextColorRPGMaker(RPG_MAKER_COLOR_YELLOW);
       this._window.drawText('1', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
     } else {
@@ -165,19 +160,16 @@ class Race {
     this._resetTextOutlineColor();
   }
 
-  /**
-   * @param {number} totalTime 
-   */
-  _drawHomicksAndTracks(totalTime) {
+  _drawHomicksAndTracks() {
     const animetionFrameDuration = 125;
-    const homickFrame = Math.round(Math.sin(Math.floor(totalTime / animetionFrameDuration) / 2 * Math.PI));
+    const homickFrame = Math.round(Math.sin(Math.floor(this._totalTime / animetionFrameDuration) / 2 * Math.PI));
 
     const offset = homickFrame * PADDING / 2;
     this._drawTracksBackground(this._homicks.length);
     this._homicks.forEach((homick, index) => {
       this._drawName(this._playerNames[index], index, this._players[index].isHuman);
       this._drawTrack(homick.distance, index);
-      this._drawObstacles(homick.distance, index, totalTime);
+      this._drawObstacles(homick.distance, index);
       this._drawTrackPits(index);
       this._drawHomick(homick, index, homickFrame, offset);
     });
@@ -236,7 +228,7 @@ class Race {
    * @param {number} distance
    * @param {number} homickIndex 
    */
-  _drawObstacles(distance, homickIndex, totalTime) {
+  _drawObstacles(distance, homickIndex) {
     const previousFirstObstacleIndex = this._previousFirstDrawnObstacleIndexes[homickIndex];
     if (previousFirstObstacleIndex === -1) {
       return;
@@ -257,7 +249,7 @@ class Race {
       if (relativeDistance > TRACK_TILE_HEIGHT * TRACK_HEIGHT) {
         return;
       }
-      nextObstacle.type.draw(this._drawTileFunction, this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + TRACKS_Y + TOP_Y, TRACKS_Y, TRACKS_HEIGHT, this._fallenHurdles[homickIndex][i], totalTime);
+      nextObstacle.type.draw(this._drawTileFunction, this._ctx, homickIndex * TRACK_TILE_WIDTH + this._tracksX, relativeDistance + TRACKS_Y + TOP_Y, TRACKS_Y, TRACKS_HEIGHT, this._fallenHurdles[homickIndex][i], this._totalTime);
     }
   }
 

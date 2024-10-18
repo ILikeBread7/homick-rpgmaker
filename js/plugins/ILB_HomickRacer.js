@@ -52,7 +52,6 @@ var ILB_HR = ILB_HR || {};
 
     let startFunction;
     let race;
-    let totalTime;
     let previousTime;
     let resultSet = false;
     let mode;
@@ -94,13 +93,12 @@ var ILB_HR = ILB_HR || {};
         }
 
         race = startFunction(this);
-        totalTime = 0;
         previousTime = Date.now();
     };
 
     Window_HomickRacer.prototype.refresh = function() {
         this.contents.clear();
-        race.draw(totalTime);
+        race.draw();
     };
 
     Window_HomickRacer.prototype.standardPadding = function() {
@@ -146,8 +144,7 @@ var ILB_HR = ILB_HR || {};
         
         if (!this.updateInterpreter()) {
             const deltaTime = now - previousTime;
-            totalTime += deltaTime;
-            race.update(deltaTime, totalTime);
+            race.update(deltaTime);
         }
 
         $gameScreen.update();
