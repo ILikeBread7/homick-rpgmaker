@@ -55,6 +55,7 @@ var ILB_HR = ILB_HR || {};
     let previousTime;
     let resultSet = false;
     let mode;
+    let window;
 
     // Spriteset to handle pictures in common events
     function Spriteset_Homick() {
@@ -92,7 +93,8 @@ var ILB_HR = ILB_HR || {};
             resultSet = false;
         }
 
-        race = startFunction(this);
+        window = this;
+        race = startFunction(window);
         previousTime = Date.now();
     };
 
@@ -223,6 +225,10 @@ var ILB_HR = ILB_HR || {};
 
     ILB_HR.stopRace = function() {
         SceneManager.pop();
+    }
+
+    ILB_HR.restartRace = function() {
+        race = startFunction(window);
     }
 
     ILB_HR.CPU_EASY = 0;
