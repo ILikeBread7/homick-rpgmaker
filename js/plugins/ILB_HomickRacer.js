@@ -21,6 +21,10 @@
  * @param Result variable ID
  * @desc ID of the variable used to store the result of the race (0 if not used)
  * @default 1
+ * 
+ * @param Final position variable ID
+ * @desc ID of the variable used to store the final position of the player (0 if not used)
+ * @default 2
  *
  * @help This plugin does not provide plugin commands.
  */
@@ -33,6 +37,7 @@ var ILB_HR = ILB_HR || {};
     const pauseCommonEventId = Number(parameters['Pause common event ID'] || 0);
     const endCommonEventId = Number(parameters['End common event ID'] || 0);
     const resultVarId = Number(parameters['Result variable ID'] || 0);
+    const finalPositionVarId = Number(parameters['Final position variable ID'] || 0);
 
     const SINGLEPLAYER_MODE = 0;
     const MULTIPLAYER_MODE = 1;
@@ -162,8 +167,13 @@ var ILB_HR = ILB_HR || {};
         this._window.refresh();
         previousTime = now;
 
-        if (resultVarId && !resultSet && race.isFinished) {
-            $gameVariables.setValue(resultVarId, race.playerScore);
+        if ((resultVarId || finalPositionVarId) && !resultSet && race.isFinished) {
+            if (resultVarId) {
+                $gameVariables.setValue(resultVarId, race.playerScore);
+            }
+            if (finalPositionVarId) {
+                $gameVariables.setValue(finalPositionVarId, race.playerFinalPosition);
+            }
             resultSet = true;
         }
 

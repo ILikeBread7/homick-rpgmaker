@@ -516,6 +516,10 @@ class Race {
     return 0;
   }
 
+  get playerFinalPosition() {
+    return this._finishedPositions[0];
+  }
+
   get isBoss() {
     return this._homicks.length === 2;
   }
