@@ -67,7 +67,10 @@ class Obstacles {
     if (level >= BOOST_LEVEL) {
       obstacleSpec.push(
         { value: 1 / 7, func: this._createSingleBoost },
-        { value: 1 / 7, func: this._createHurdleBoost }
+        { value: 1 / 14, func: this._createHurdleBoost },
+        { value: 1 / 28, func: this._createBoostHurdle },
+        { value: 1 / 28, func: this._createPuddleBoost },
+        { value: 1 / 28, func: this._createBoostPuddle }
       );
     }
 
@@ -166,11 +169,11 @@ class Obstacles {
    * @returns {[{ type: Obstacles.Obstacle, distance: number }]}
    */
   static _createHurdlePuddle(distance) {
-      return [
-        { type: Obstacles.Obstacle.HURDLE, distance: distance },
-        { type: Obstacles.Obstacle.PUDDLE, distance: distance + DOUBLE_OBSTACLE_DISTANCE }
-      ];
-    }
+    return [
+      { type: Obstacles.Obstacle.HURDLE, distance: distance },
+      { type: Obstacles.Obstacle.PUDDLE, distance: distance + DOUBLE_OBSTACLE_DISTANCE }
+    ];
+  }
 
   /**
    * 
@@ -190,6 +193,42 @@ class Obstacles {
     return [
       { type: Obstacles.Obstacle.HURDLE, distance: distance },
       { type: Obstacles.Obstacle.BOOST, distance: distance + DOUBLE_OBSTACLE_DISTANCE }
+    ];
+  }
+
+  /**
+   * 
+   * @param {number} distance 
+   * @returns {[{ type: Obstacles.Obstacle, distance: number }]}
+   */
+  static _createBoostHurdle(distance) {
+    return [
+      { type: Obstacles.Obstacle.BOOST, distance: distance },
+      { type: Obstacles.Obstacle.HURDLE, distance: distance + DOUBLE_OBSTACLE_DISTANCE * 2 }
+    ];
+  }
+
+  /**
+   * 
+   * @param {number} distance 
+   * @returns {[{ type: Obstacles.Obstacle, distance: number }]}
+   */
+  static _createPuddleBoost(distance) {
+    return [
+      { type: Obstacles.Obstacle.PUDDLE, distance: distance },
+      { type: Obstacles.Obstacle.BOOST, distance: distance + DOUBLE_OBSTACLE_DISTANCE }
+    ];
+  }
+
+  /**
+   * 
+   * @param {number} distance 
+   * @returns {[{ type: Obstacles.Obstacle, distance: number }]}
+   */
+  static _createBoostPuddle(distance) {
+    return [
+      { type: Obstacles.Obstacle.BOOST, distance: distance },
+      { type: Obstacles.Obstacle.PUDDLE, distance: distance + DOUBLE_OBSTACLE_DISTANCE * 2 }
     ];
   }
 
