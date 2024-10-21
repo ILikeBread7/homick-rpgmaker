@@ -6,8 +6,9 @@ const MIN_OBSTACLE_DISTANCE = TRACK_TILE_HEIGHT * 3;
 const MAX_OBSTACLE_DISTANCE = TRACK_TILE_HEIGHT * 8;
 const DOUBLE_OBSTACLE_DISTANCE = TRACK_TILE_HEIGHT;
 const ENDLESS_OBSTACLES_BATCH = 8;
+const DOUBLE_HURDLE_LEVEL = 2;
 const PUDDLE_LEVEL = 5;
-const BOOST_LEVEL = 10;
+const BOOST_LEVEL = 9;
 
 class Obstacles {
 
@@ -46,35 +47,38 @@ class Obstacles {
    */
   static createObstaclesForLevel(level, totalDistance) {
 
-    if (level === 5) {
-      return this._createObstacles(totalDistance, [
-        { value: 1, func: this._createSingleBoost }
-      ]);
-    }
-
     const obstacleSpec = [
-      { value: 7, func: this._createSingleHurdle },
-      { value: 1, func: this._createDoubleHurdle }
+      { value: 1, func: this._createSingleHurdle }
     ];
 
-    if (level > PUDDLE_LEVEL) {
+    if (level >= DOUBLE_HURDLE_LEVEL) {
       obstacleSpec.push(
-        { value: 2, func: this._createSinglePuddle },
-        { value: 1, func: this._createHurdlePuddle }
+        { value: 1 / 7, func: this._createDoubleHurdle }
       );
     }
 
-    if (level > BOOST_LEVEL) {
+    if (level >= PUDDLE_LEVEL) {
       obstacleSpec.push(
-        { value: 1, func: this._createSingleBoost },
-        { value: 1, func: this._createHurdleBoost }
+        { value: 2 / 7, func: this._createSinglePuddle },
+        { value: 1 / 7, func: this._createHurdlePuddle }
+      );
+    }
+
+    if (level >= BOOST_LEVEL) {
+      obstacleSpec.push(
+        { value: 1 / 7, func: this._createSingleBoost },
+        { value: 1 / 7, func: this._createHurdleBoost }
       );
     }
 
     return this._createObstacles(totalDistance, obstacleSpec);
   }
 
-  static createObstaclesForEndless(startDistance) {
+  /**
+   * 
+   * @param {number} [startDistance = 0] 
+   */
+  static createObstaclesForEndless(startDistance = 0) {
     const totalDistance = startDistance + MAX_OBSTACLE_DISTANCE * ENDLESS_OBSTACLES_BATCH;
     
     const obstacleSpec = [

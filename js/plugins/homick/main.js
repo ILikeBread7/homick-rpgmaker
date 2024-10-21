@@ -6,49 +6,11 @@ class HomickRacer {
    * @returns {race: Race}
    */
   static startLevel(window, level) {
-    console.log(`Level ${level}`);
-    
     const totalDistance = this.getTotalDistanceForLevel(level);
-    const obstacles = [];
-
-    let obstacleToDelete = 0;
-    const addNewEndlessObstacles = () => {
-      const obstacleDistance = obstacles.length ? obstacles[obstacles.length - 1].distance : 0;
-      for (; obstacleToDelete < obstacles.length - ENDLESS_OBSTACLES_BATCH; obstacleToDelete++) {
-        delete obstacles[obstacleToDelete];
-      }
-
-      obstacles.push(...Obstacles.createObstaclesForEndless(obstacleDistance));
-    };
-
-    switch (level) {
-      case 1:
-        for (let i = 0; i < 30; i++) {
-          obstacles.push({ type: Obstacles.Obstacle.HURDLE, distance: 6 * (i + 1) * TRACK_TILE_HEIGHT })
-        }
-      break;
-      case 2:
-        for (let i = 0; i < 30; i++) {
-          obstacles.push({ type: Obstacles.Obstacle.HURDLE, distance: 7 * (i + 1) * TRACK_TILE_HEIGHT })
-          obstacles.push({ type: Obstacles.Obstacle.PUDDLE, distance: (7 * (i + 1) + 2) * TRACK_TILE_HEIGHT })
-        }
-      break;
-      case 3:
-        for (let i = 0; i < 30; i++) {
-          obstacles.push({ type: Obstacles.Obstacle.HURDLE, distance: 8 * (i + 1) * TRACK_TILE_HEIGHT })
-          obstacles.push({ type: Obstacles.Obstacle.PUDDLE, distance: (8 * (i + 1) + 2) * TRACK_TILE_HEIGHT })
-          obstacles.push({ type: Obstacles.Obstacle.BOOST, distance: (8 * (i + 1) + 3) * TRACK_TILE_HEIGHT })
-        }
-      break;
-      case -1:
-        addNewEndlessObstacles();
-      break;
-      default:
-        obstacles.push(...Obstacles.createObstaclesForLevel(level, totalDistance));
-      break;
-    }
-
-    obstacles.sort((o1, o2) => o1.distance - o2.distance);
+    const obstacles = level === -1
+      ? Obstacles.createObstaclesForEndless()
+      : Obstacles.createObstaclesForLevel(level, totalDistance)
+    ;
 
     const homicks = level === -1
       ? [ { acceleration: 0.75, maxSpeed: 2, player: () => new HumanPlayer() } ]

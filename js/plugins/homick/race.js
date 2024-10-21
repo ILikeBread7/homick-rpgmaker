@@ -451,9 +451,9 @@ class Race {
 
   _drawPauseButton() {
     const pauseSpriteSize = 48;
-    const tileIndex = (TouchInput.x >= BASE_WIDTH - pauseSpriteSize && TouchInput.y <= pauseSpriteSize) ?
-      PAUSE_HOVERED_TILE_INDEX :
-      PAUSE_TILE_INDEX;
+    const tileIndex = (TouchInput.x >= BASE_WIDTH - pauseSpriteSize && TouchInput.y <= pauseSpriteSize)
+      ? PAUSE_HOVERED_TILE_INDEX
+      : PAUSE_TILE_INDEX;
     this._drawTile(tileIndex, BASE_WIDTH - TRACK_TILE_WIDTH, 0);
   }
 
