@@ -19,6 +19,13 @@ const COUNTDOWN_LEFT = 165;
 const COUNTDOWN_DIGIT_LEFT = COUNTDOWN_LEFT + 7;
 const COUNTDOWN_TOP = Math.floor(TRACK_TILE_HEIGHT * 4.5);
 
+const COUNTDOWN_SOUNDS = [
+  { name: 'go', volume: 90, pitch: 100, pan: 0},
+  { name: '1', volume: 90, pitch: 100, pan: 0},
+  { name: '2', volume: 90, pitch: 100, pan: 0},
+  { name: '3', volume: 90, pitch: 100, pan: 0}
+];
+
 class Race {
 
   /**
@@ -40,6 +47,7 @@ class Race {
     this._fallenHurdles = homicks.map(h => []);
     this._totalDistance = totalDistance;
     this._totalTime = 0;
+    this._lastPlayedCountdownSe = Number.MAX_SAFE_INTEGER;
 
     // For drawing the current position
     this._homicksOrdered = [...this._homicks].reverse();
@@ -145,18 +153,33 @@ class Race {
     if (this._totalTime < COUNTDOWN_TIME) {
       this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
       this._window.drawText('3', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
+      this._playCountdownSe(3);
     } else if (this._totalTime < COUNTDOWN_TIME * 2) {
       this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
       this._window.drawText('2', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
+      this._playCountdownSe(2);
     } else if (this._totalTime < COUNTDOWN_TIME * 3){
       this._changeTextColorRPGMaker(RPG_MAKER_COLOR_YELLOW);
       this._window.drawText('1', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
+      this._playCountdownSe(1);
     } else {
       this._changeTextColorRPGMaker(RPG_MAKER_COLOR_GREEN);
       this._window.drawText('GO!', COUNTDOWN_LEFT, COUNTDOWN_TOP);
+      this._playCountdownSe(0);
     }
     this._window.resetFontSettings();
     this._resetTextOutlineColor();
+  }
+
+  /**
+   * 
+   * @param {number} countdownValue 0 for "GO"
+   */
+  _playCountdownSe(countdownValue) {
+    if (this._lastPlayedCountdownSe > countdownValue) {
+      AudioManager.playSe(COUNTDOWN_SOUNDS[countdownValue]);
+      this._lastPlayedCountdownSe = countdownValue;
+    }
   }
 
   _drawHomicksAndTracks() {
