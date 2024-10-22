@@ -41,3 +41,9 @@ const RPG_MAKER_COLOR_BLUE = 1;
 const RPG_MAKER_COLOR_PURPLE = 13;
 
 const WHITE_OUTLINE_COLOR = 'rgba(255, 255, 255, 0.5)'
+
+const HIT_SE = { name: 'Explosion_04', volume: 90, pitch: 100, pan: 0 };
+const JUMP_SE = { name: 'Jump_03', volume: 90, pitch: 100, pan: 0 };
+const DOUBLE_JUMP_SE = { name: 'Jump_03', volume: 90, pitch: 110, pan: 0 };
+const BOOST_SE = { name: 'Pickup_04', volume: 90, pitch: 100, pan: 0 };
+const FINISH_SE = { name: 'Collect_Point_01', volume: 90, pitch: 100, pan: 0 };

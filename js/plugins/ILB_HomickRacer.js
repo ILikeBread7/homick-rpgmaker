@@ -158,41 +158,40 @@ var ILB_HR = ILB_HR || {};
         Scene_Base.prototype.update.call(this);
 
         const now = Date.now();
-        
         if (!this.updateInterpreter()) {
             const deltaTime = now - previousTime;
             race.update(deltaTime);
+
+            if ((resultVarId || finalPositionVarId) && !resultSet && race.isFinished) {
+                if (resultVarId) {
+                    $gameVariables.setValue(resultVarId, race.playerScore);
+                }
+                if (finalPositionVarId) {
+                    $gameVariables.setValue(finalPositionVarId, race.playerFinalPosition);
+                }
+                resultSet = true;
+            }
+    
+            if (pauseCommonEventId && Input.isTriggered('cancel')) {
+                this.playCommonEvent(pauseCommonEventId);
+            }
+    
+            if (
+                race.isFinished &&
+                (Input.isTriggered('ok') || Input.isTriggered('player1') || Input.isTriggered('player2') || Input.isTriggered('player3') || Input.isTriggered('player4'))
+            ) {
+                if (endCommonEventId) {
+                    this.playCommonEvent(endCommonEventId);
+                } else {
+                    AudioManager.stopBgm();
+                    this.popScene();
+                }
+            }
         }
 
+        previousTime = now;
         $gameScreen.update();
         this._window.refresh();
-        previousTime = now;
-
-        if ((resultVarId || finalPositionVarId) && !resultSet && race.isFinished) {
-            if (resultVarId) {
-                $gameVariables.setValue(resultVarId, race.playerScore);
-            }
-            if (finalPositionVarId) {
-                $gameVariables.setValue(finalPositionVarId, race.playerFinalPosition);
-            }
-            resultSet = true;
-        }
-
-        if (pauseCommonEventId && Input.isTriggered('cancel')) {
-            this.playCommonEvent(pauseCommonEventId);
-        }
-
-        if (
-            race.isFinished &&
-            (Input.isTriggered('ok') || Input.isTriggered('player1') || Input.isTriggered('player2') || Input.isTriggered('player3') || Input.isTriggered('player4'))
-        ) {
-            if (endCommonEventId) {
-                this.playCommonEvent(endCommonEventId);
-            } else {
-                AudioManager.stopBgm();
-                this.popScene();
-            }
-        }
     };
 
     Scene_HomickRacer.prototype.playCommonEvent = function(commonEventId) {

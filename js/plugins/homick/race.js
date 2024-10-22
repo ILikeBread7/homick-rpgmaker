@@ -103,6 +103,9 @@ class Race {
           const position = this._finishedPositions.filter(x => !!x).length + 1;
           this._finishedPositions[index] = position;
           homick.finish();
+          if (!this._isEndless) {
+            AudioManager.playSe(FINISH_SE);
+          }
         }
       });
     }
