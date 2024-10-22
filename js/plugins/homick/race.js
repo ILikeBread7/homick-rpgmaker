@@ -30,15 +30,17 @@ class Race {
 
   /**
    * @param {Window_Base} window 
+   * @param {string} bgmName 
    * @param {[{ acceleration: number, maxSpeed: number, player: (homick: Homick, obstacles: {[{ type: Obstacles.Obstacle, distance: number }]}) => { jump(): boolean } }]} homicks
    * @param {[{ type: Obstacles.Obstacle, distance: number }]} obstacles
    * @param {number} totalDistance 0 for endless mode
    * @param {number} [numberOfHumanPlayers = 1]
    */
-  constructor(window, homicks, obstacles, totalDistance, numberOfHumanPlayers = 1) {
+  constructor(window, bgmName, homicks, obstacles, totalDistance, numberOfHumanPlayers = 1) {
     this._window = window;
     this._contents = window.contents;
     this._ctx = this._contents._context;
+    this._bgmName = bgmName;
     this._tracksX = (BASE_WIDTH - (TRACK_TILE_WIDTH * homicks.length)) / 2;
     this._homicks = homicks.map((homick, index) => new Homick(homick.acceleration, homick.maxSpeed, index));
     this._players = homicks.map((homick, index) => homick.player(this._homicks[index], obstacles));
@@ -48,6 +50,7 @@ class Race {
     this._totalDistance = totalDistance;
     this._totalTime = 0;
     this._lastPlayedCountdownSe = Number.MAX_SAFE_INTEGER;
+    this._bgmStarted = false;
 
     // For drawing the current position
     this._homicksOrdered = [...this._homicks].reverse();
@@ -166,6 +169,7 @@ class Race {
       this._changeTextColorRPGMaker(RPG_MAKER_COLOR_GREEN);
       this._window.drawText('GO!', COUNTDOWN_LEFT, COUNTDOWN_TOP);
       this._playCountdownSe(0);
+      this._playRaceBgm();
     }
     this._window.resetFontSettings();
     this._resetTextOutlineColor();
@@ -180,6 +184,20 @@ class Race {
       AudioManager.playSe(COUNTDOWN_SOUNDS[countdownValue]);
       this._lastPlayedCountdownSe = countdownValue;
     }
+  }
+
+  _playRaceBgm() {
+    if (this._bgmStarted) {
+      return;
+    }
+
+    AudioManager.playBgm({
+      name: this._bgmName,
+      volume: 90,
+      pitch: 100,
+      pan: 0
+    });
+    this._bgmStarted = true;
   }
 
   _drawHomicksAndTracks() {

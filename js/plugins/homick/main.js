@@ -2,10 +2,11 @@ class HomickRacer {
 
   /**
    * @param {Window_Base} window
+   * @param {string} bgmName 
    * @param {number} level -1 for endless mode, use startEndlessMode function instead
    * @returns {race: Race}
    */
-  static startLevel(window, level) {
+  static startLevel(window, bgmName, level) {
     const totalDistance = this.getTotalDistanceForLevel(level);
     const obstacles = level === -1
       ? Obstacles.createObstaclesForEndless()
@@ -21,28 +22,30 @@ class HomickRacer {
         { acceleration: 2, maxSpeed: 2.72, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 12, 10, 6, 3) }
       ];
     
-    const race = new Race(window, homicks, obstacles, totalDistance);
+    const race = new Race(window, bgmName, homicks, obstacles, totalDistance);
     return race;
   }
 
   /**
    * @param {Window_Base} window
+   * @param {string} bgmName 
    * @returns {race: Race}
    */
-  static startEndlessMode(window) {
-    return this.startLevel(window, -1);
+  static startEndlessMode(window, bgmName) {
+    return this.startLevel(window, bgmName, -1);
   }
 
   /**
    * 
    * @param {Window_Base} window 
+   * @param {string} bgmName 
    * @param {number} level 
    * @param {number} numberOfHumanPlayers 
    * @param {number} numberOfCpuPlayers 
    * @param {0|1|2} cpuDifficulty 
    * @returns {Race}
    */
-  static startMultiplayer(window, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
+  static startMultiplayer(window, bgmName, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
     const homicks = [];
     
     for (let i = 1; i <= numberOfHumanPlayers; i++) {
@@ -64,7 +67,7 @@ class HomickRacer {
 
     const totalDistance = this.getTotalDistanceForLevel(level);
     const obstacles = Obstacles.createObstaclesForLevel(level, totalDistance);
-    const race = new Race(window, homicks, obstacles, totalDistance);
+    const race = new Race(window, bgmName, homicks, obstacles, totalDistance);
     return race;
   }
 

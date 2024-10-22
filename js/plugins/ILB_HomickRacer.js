@@ -72,6 +72,7 @@ var ILB_HR = ILB_HR || {};
     let mode;
     let window;
 
+    const DEFAULT_BGM = 'Battle2';
     const DEFAULT_BG_IMAGE = 'WorldMap1';
     let bgImageName = DEFAULT_BG_IMAGE;
 
@@ -188,6 +189,7 @@ var ILB_HR = ILB_HR || {};
             if (endCommonEventId) {
                 this.playCommonEvent(endCommonEventId);
             } else {
+                AudioManager.stopBgm();
                 this.popScene();
             }
         }
@@ -235,32 +237,39 @@ var ILB_HR = ILB_HR || {};
         }
     }
 
+    function getBgmForLevel(level) {
+        return DEFAULT_BGM;
+    }
+
     ILB_HR.startLevel = function(level) {
         bgImageName = LEVEL_BACKGROUNDS.get(level) || DEFAULT_BG_IMAGE;
         mode = SINGLEPLAYER_MODE;
-        startFunction = window => HomickRacer.startLevel(window, level);
+        const bgmName = getBgmForLevel(level);
+        startFunction = window => HomickRacer.startLevel(window, bgmName, level);
         SceneManager.push(Scene_HomickRacer);
     };
 
     ILB_HR.startEndlessMode = function() {
         bgImageName = DEFAULT_BG_IMAGE
         mode = ENDLESS_MODE;
-        startFunction = window => HomickRacer.startEndlessMode(window);
+        startFunction = window => HomickRacer.startEndlessMode(window, DEFAULT_BGM);
         SceneManager.push(Scene_HomickRacer);
     };
 
     ILB_HR.startMultiplayer = function(level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
         bgImageName = DEFAULT_BG_IMAGE
         mode = MULTIPLAYER_MODE;
-        startFunction = window => HomickRacer.startMultiplayer(window, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty);
+        startFunction = window => HomickRacer.startMultiplayer(window, DEFAULT_BGM, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty);
         SceneManager.push(Scene_HomickRacer);
     }
 
     ILB_HR.stopRace = function() {
+        AudioManager.stopBgm();
         SceneManager.pop();
     }
 
     ILB_HR.restartRace = function() {
+        AudioManager.stopBgm();
         resetScoreVar();
         race = startFunction(window);
     }
