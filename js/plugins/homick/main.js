@@ -90,19 +90,19 @@ class HomickRacer {
   static _getHomicksForLevel(level) {
     // Endless mode
     if (level === -1) {
-      return [ { acceleration: 0.75, maxSpeed: 2.5, player: () => new HumanPlayer() } ];
+      return [ { acceleration: 1, maxSpeed: 2.5, player: () => new HumanPlayer() } ];
     }
 
     const playerMinSpeed = 2.5;
-    const playerMaxSpeed = 3.5;
+    const playerMaxSpeed = 3.25;
     const playerSpeed = this._getHomickSpeedForLevel(level, playerMinSpeed, playerMaxSpeed);
     
-    const homicks = [ { acceleration: 0.75, maxSpeed: playerSpeed, player: () => new HumanPlayer() } ];
+    const homicks = [ { acceleration: 1, maxSpeed: playerSpeed, player: () => new HumanPlayer() } ];
 
     // Not a boss level, add mobs
     if (level % 4 !== 0) {
       const homickMobMinSpeed = 2;
-      const homickMobMaxSpeed = 3.15;
+      const homickMobMaxSpeed = 2.9;
       const homickMobSpeed = this._getHomickSpeedForLevel(level, homickMobMinSpeed, homickMobMaxSpeed);
       homicks.push(
         { acceleration: 2, maxSpeed: homickMobSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 20, 10, 8, 5) },
