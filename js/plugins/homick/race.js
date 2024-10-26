@@ -86,6 +86,7 @@ class Race {
     }
     for (let remainingTime = deltaTime; remainingTime > 0; remainingTime -= TIME_STEP) {
       const oneStepTime = Math.min(TIME_STEP, remainingTime);
+      const leadingDistance = this._homicks.reduce((currentMaxDistance, current) => current.distance > currentMaxDistance ? current.distance : currentMaxDistance, 0);
       this._homicks.forEach((homick, index) => {
         if (homick.isFinished(this._totalDistance)) {
           return;
@@ -96,7 +97,7 @@ class Race {
           this._players[index].jump(),
           this._obstacles,
           this._fallenHurdles[index],
-          this._homicks.filter(h => h.distance > homick.distance).length + 1
+          (leadingDistance - homick.distance) / this._totalDistance
         );
 
         if (homick.isFinished(this._totalDistance)) {
