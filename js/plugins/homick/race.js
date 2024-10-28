@@ -92,12 +92,13 @@ class Race {
           return;
         }
 
+        const distanceToFirst = this._totalDistance ? ((leadingDistance - homick.distance) / this._totalDistance) : 0;
         homick.travel(
           oneStepTime,
           this._players[index].jump(),
           this._obstacles,
           this._fallenHurdles[index],
-          (leadingDistance - homick.distance) / this._totalDistance
+          distanceToFirst
         );
 
         if (homick.isFinished(this._totalDistance)) {
