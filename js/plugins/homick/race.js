@@ -86,7 +86,7 @@ class Race {
     }
     for (let remainingTime = deltaTime; remainingTime > 0; remainingTime -= TIME_STEP) {
       const oneStepTime = Math.min(TIME_STEP, remainingTime);
-      const leadingDistance = this._homicks.reduce((currentMaxDistance, current) => current.distance > currentMaxDistance ? current.distance : currentMaxDistance, 0);
+      const leadingDistance = this._homicks.reduce((currentMaxDistance, current) => Math.max(current.distance, currentMaxDistance), 0);
       this._homicks.forEach((homick, index) => {
         if (homick.isFinished(this._totalDistance)) {
           return;
