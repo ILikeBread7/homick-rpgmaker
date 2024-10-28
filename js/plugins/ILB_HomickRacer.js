@@ -110,7 +110,7 @@ var ILB_HR = ILB_HR || {};
         resetScoreVar();
         window = this;
         race = startFunction(window);
-        previousTime = Date.now();
+        previousTime = performance.now();
     };
 
     Window_HomickRacer.prototype.refresh = function() {
@@ -157,7 +157,7 @@ var ILB_HR = ILB_HR || {};
     Scene_HomickRacer.prototype.update = function() {
         Scene_Base.prototype.update.call(this);
 
-        const now = Date.now();
+        const now = performance.now();
         if (!this.updateInterpreter()) {
             const deltaTime = now - previousTime;
             race.update(deltaTime);
