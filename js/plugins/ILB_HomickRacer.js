@@ -44,8 +44,18 @@ var ILB_HR = ILB_HR || {};
     const ENDLESS_MODE = 2;
 
     const LEVEL_BACKGROUNDS = new Map([
-        [1, 'Tower2'],
-        [11, 'Tower2'],
+        [1, 'plains'],
+        [2, 'desert'],
+        [3, 'jungle'],
+        [4, 'antarctica'],
+        [5, 'moon'],
+        [6, 'mars'],
+        [7, 'saturn'],
+        [8, 'asteroid_belt'],
+        [9, 'sun'],
+        [10, 'alpha_centauri'],
+        [11, 'sirius'],
+        [12, 'procyon'],
     ]);
 
     [

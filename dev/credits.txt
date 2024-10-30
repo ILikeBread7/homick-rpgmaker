@@ -1,8 +1,20 @@
 https://opengameart.org/content/64x-textures-an-overlays
 https://opengameart.org/content/race-track-tile-set
 https://opengameart.org/content/mobile-game-gui-buttons
+https://opengameart.org/content/terrain-textures-pack-from-stunt-rally-23
+
+https://www.flickr.com/photos/scitechtrend/38533491760
+https://commons.wikimedia.org/wiki/File:Saturn_Portrait.jpg
+https://commons.wikimedia.org/wiki/File:Plan%C3%A8te_Mars.jpg
+https://commons.wikimedia.org/wiki/File:Full_Moon_as_Seen_From_Denmark.jpg
+https://opengameart.org/content/the-sun
+https://opengameart.org/content/space-backgrounds-2
+https://opengameart.org/content/another-space-backgrounds
+
 https://opengameart.org/content/voiceover-pack-40-lines
 https://opengameart.org/content/8-bit-sound-effects-library
+
+
 https://quxios.github.io/plugins/QPlus
 https://quxios.github.io/plugins/QTouch
 

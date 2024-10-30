@@ -426,9 +426,6 @@ class Race {
     const marginTop = 32;
     this._contents.fontSize = 24;
 
-    if (!isPlayer) {
-      this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
-    }
     this._changeTextColorRPGMaker(isPlayer ? PLAYER_NAME_COLORS[index] : CPU_NAME_COLOR);
 
     this._window.drawText(
@@ -437,7 +434,6 @@ class Race {
       TRACKS_Y - marginTop
     );
 
-    this._resetTextOutlineColor();
     this._window.resetFontSettings();
   }
 
@@ -456,7 +452,6 @@ class Race {
   }
 
   _drawPositions() {
-    this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
     this._contents.fontSize = 24;
     this._homicksOrdered.sort((h1, h2) => h2.distance - h1.distance).forEach((homick, currentOrder) => {
       const position = this._finishedPositions[homick.index] || (currentOrder + 1);
@@ -468,7 +463,6 @@ class Race {
       );
     });
     this._window.resetFontSettings();
-    this._resetTextOutlineColor();
   }
 
   _drawRaceFinished() {
