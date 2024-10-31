@@ -39,7 +39,7 @@ var ILB_HR = ILB_HR || {};
     const resultVarId = Number(parameters['Result variable ID'] || 0);
     const finalPositionVarId = Number(parameters['Final position variable ID'] || 0);
 
-    const SINGLEPLAYER_MODE = 0;
+    const STORY_MODE = 0;
     const MULTIPLAYER_MODE = 1;
     const ENDLESS_MODE = 2;
 
@@ -252,7 +252,7 @@ var ILB_HR = ILB_HR || {};
 
     ILB_HR.startLevel = function(level) {
         bgImageName = LEVEL_BACKGROUNDS.get(level) || DEFAULT_BG_IMAGE;
-        mode = SINGLEPLAYER_MODE;
+        mode = STORY_MODE;
         const bgmName = getBgmForLevel(level);
         startFunction = window => HomickRacer.startLevel(window, bgmName, level);
         SceneManager.push(Scene_HomickRacer);
@@ -291,7 +291,7 @@ var ILB_HR = ILB_HR || {};
     ILB_HR.CPU_NORMAL = 1;
     ILB_HR.CPU_HARD = 2;
 
-    ILB_HR.SINGLEPLAYER_MODE = SINGLEPLAYER_MODE;
+    ILB_HR.STORY_MODE = STORY_MODE;
     ILB_HR.MULTIPLAYER_MODE = MULTIPLAYER_MODE;
     ILB_HR.ENDLESS_MODE = ENDLESS_MODE;
 })();
