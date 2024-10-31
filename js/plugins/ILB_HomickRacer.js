@@ -47,7 +47,7 @@ var ILB_HR = ILB_HR || {};
         [1, 'plains'],
         [2, 'desert'],
         [3, 'jungle'],
-        [4, 'antarctica'],
+        [4, 'tundra'],
         [5, 'moon'],
         [6, 'mars'],
         [7, 'saturn'],
