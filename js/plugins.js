@@ -10,5 +10,6 @@ var $plugins =
 {"name":"ILB_ClickToButtonPress","status":true,"description":"Makes clicking at a certain part of the screen work like a button press","parameters":{}},
 {"name":"QPlus","status":true,"description":"<QPlus> (Should go above all Q Plugins)\nSome small changes to MV for easier plugin development.","parameters":{"Quick Test":"false","Default Enabled Switches":"[]","Ignore Mouse when inactive":"false"}},
 {"name":"QTouch","status":true,"description":"<QTouch>\nBetter mouse handling for MV","parameters":{"Mouse Decay":"60","Default Cursor":"","Pointer Cursor":""}},
-{"name":"FullscreenButton","status":true,"description":"Adds a fullscreen button to the bottom right of the screen.","parameters":{"Disable expression":"window.cordova || window.navigator.standalone","Button text":"Fullscreen"}}
+{"name":"FullscreenButton","status":true,"description":"Adds a fullscreen button to the bottom right of the screen.","parameters":{"Disable expression":"window.cordova || window.navigator.standalone","Button text":"Fullscreen"}},
+{"name":"ILB_DefaultChoices","status":true,"description":"Allows you to set the default choice and remember the last chosen option","parameters":{"Default choice variable ID":"40"}}
 ];
