@@ -93,27 +93,37 @@ class HomickRacer {
       return [ { acceleration: 1, maxSpeed: 2.5, player: () => new HumanPlayer() } ];
     }
 
-    const playerMinSpeed = 2.5;
-    const playerMaxSpeed = 3.25;
+    const hardMode = this._isHardMode(level);
+    const hardModeSpeedModifier = hardMode ? 0.25 : 0;
+    const hardModeVarianceModifier = hardMode ? 3 : 0;
+    const hardModeBoostVarianceModifier = hardMode ? 2 : 0;
+
+    const playerMinSpeed = 2.5 + hardModeSpeedModifier;
+    const playerMaxSpeed = 3.25 + hardModeSpeedModifier;
     const playerSpeed = this._getHomickSpeedForLevel(level, playerMinSpeed, playerMaxSpeed);
     
     const homicks = [ { acceleration: 1, maxSpeed: playerSpeed, player: () => new HumanPlayer() } ];
 
     // Not a boss level, add mobs
     if (level % 4 !== 0) {
-      const homickMobMinSpeed = 2;
-      const homickMobMaxSpeed = 3;
+      const homickMobMinSpeed = 2 + hardModeSpeedModifier * 2;
+      const homickMobMaxSpeed = 3 + hardModeSpeedModifier * 2;
       const homickMobSpeed = this._getHomickSpeedForLevel(level, homickMobMinSpeed, homickMobMaxSpeed);
       homicks.push(
-        { acceleration: 2, maxSpeed: homickMobSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 20, 10, 8, 5) },
-        { acceleration: 2, maxSpeed: homickMobSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 10, 8,  5, 4) }
+        { acceleration: 2, maxSpeed: homickMobSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 20 - hardModeVarianceModifier, 10 - hardModeVarianceModifier, 8 - hardModeBoostVarianceModifier, 5 - hardModeBoostVarianceModifier) },
+        { acceleration: 2, maxSpeed: homickMobSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 10 - hardModeVarianceModifier, 8 - hardModeBoostVarianceModifier,  5 - hardModeBoostVarianceModifier, 4 - hardModeBoostVarianceModifier) }
       );
     }
 
     // Boss homick
-    homicks.push({ acceleration: 2, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 15, 7, 6, 3) });
+    homicks.push({ acceleration: 2, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 15 - hardModeVarianceModifier, 7 - hardModeVarianceModifier, 6 - hardModeBoostVarianceModifier, 3 - hardModeBoostVarianceModifier) });
+
 
     return homicks;
+  }
+
+  static _isHardMode(level) {
+    return level > NUM_OF_LEVELS;
   }
 
   /**

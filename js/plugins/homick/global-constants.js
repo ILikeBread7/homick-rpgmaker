@@ -2,6 +2,7 @@ const FPS = 60;
 const TRACKS_NUMBER = 4;
 const BASE_WIDTH = 360;
 const BASE_HEIGHT = 640;
+const NUM_OF_LEVELS = 16;
 
 const TRACK_TILES_COLS = 9;
 

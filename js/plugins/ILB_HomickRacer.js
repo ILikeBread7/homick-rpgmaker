@@ -43,6 +43,7 @@ var ILB_HR = ILB_HR || {};
     const MULTIPLAYER_MODE = 1;
     const ENDLESS_MODE = 2;
 
+    const NUM_OF_LEVELS = 16;
     const LEVEL_BACKGROUNDS = new Map([
         [1, 'plains'],
         [2, 'desert'],
@@ -247,11 +248,21 @@ var ILB_HR = ILB_HR || {};
     }
 
     function getBgmForLevel(level) {
+        const mappedLevel = mapHardModeLevel(level);
         return DEFAULT_BGM;
     }
 
+    function getBackgroundForLevel(level) {
+        const mappedLevel = mapHardModeLevel(level);
+        return LEVEL_BACKGROUNDS.get(mappedLevel) || DEFAULT_BG_IMAGE;
+    }
+
+    function mapHardModeLevel(level) {
+        return level > NUM_OF_LEVELS ? level - NUM_OF_LEVELS : level;
+    }
+
     ILB_HR.startLevel = function(level) {
-        bgImageName = LEVEL_BACKGROUNDS.get(level) || DEFAULT_BG_IMAGE;
+        bgImageName = getBackgroundForLevel(level);
         mode = STORY_MODE;
         const bgmName = getBgmForLevel(level);
         startFunction = window => HomickRacer.startLevel(window, bgmName, level);

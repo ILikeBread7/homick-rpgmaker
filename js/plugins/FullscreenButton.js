@@ -53,6 +53,7 @@
         
         button.onclick = () => {
             Graphics._switchFullScreen();
+            button.blur();
         };
 
         button.onmouseover = () => {
