@@ -298,6 +298,10 @@ var ILB_HR = ILB_HR || {};
         return mode;
     }
 
+    ILB_HR.getScore = function() {
+        return race ? race.playerScore : 0;
+    }
+
     ILB_HR.CPU_EASY = 0;
     ILB_HR.CPU_NORMAL = 1;
     ILB_HR.CPU_HARD = 2;
