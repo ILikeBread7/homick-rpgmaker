@@ -3,7 +3,7 @@ https://opengameart.org/content/race-track-tile-set
 https://opengameart.org/content/mobile-game-gui-buttons
 https://opengameart.org/content/terrain-textures-pack-from-stunt-rally-23
 
-https://opengameart.org/content/patterns-and-cursors ???
+https://opengameart.org/content/patterns-and-cursors
 
 https://www.flickr.com/photos/scitechtrend/38533491760
 https://commons.wikimedia.org/wiki/File:Saturn_Portrait.jpg
@@ -20,4 +20,4 @@ https://opengameart.org/content/8-bit-sound-effects-library
 https://quxios.github.io/plugins/QPlus
 https://quxios.github.io/plugins/QTouch
 
-RPG Maker MV StickSpecial3 animeation for the boosting animation
+RPG Maker MV StickSpecial3 animation for the boosting animation
