@@ -57,6 +57,10 @@ var ILB_HR = ILB_HR || {};
         [10, 'alpha_centauri'],
         [11, 'sirius'],
         [12, 'procyon'],
+        [13, 'black_hole_outskirts'],
+        [14, 'black_hole_plunging_region'],
+        [15, 'black_hole_event_horizon'],
+        [16, 'black_hole_singularity'],
     ]);
 
     [
