@@ -30,7 +30,8 @@
     
     const _Game_Message_setChoices = Game_Message.prototype.setChoices;
     const setChoiceFunction = function(choices, defaultType, cancelType) {
-        const defaultChoice = $gameVariables.value(defaultChoiceVariableId);
+        const defaultChoiceFromVariable = $gameVariables.value(defaultChoiceVariableId);
+        const defaultChoice = defaultChoiceFromVariable < 0 ? defaultType : defaultChoiceFromVariable;  // If the choice was "Cancel - Branch" revert back to using the built-in default
         _Game_Message_setChoices.call(this, choices, defaultChoice, cancelType);
         Game_Message.prototype.setChoices = _Game_Message_setChoices;
     };
