@@ -41,14 +41,14 @@ class HomickRacer {
     const homicks = [];
     
     for (let i = 1; i <= numberOfHumanPlayers; i++) {
-      homicks.push({ acceleration: 0.75, maxSpeed: 3, player: () => new HumanPlayer(i) });
+      homicks.push({ acceleration: 1, maxSpeed: 3, player: () => new HumanPlayer(i) });
     }
 
     if (numberOfCpuPlayers) {
-      const acceleration = 1.5 + cpuDifficulty * 0.5;
-      const maxSpeed = 2 + cpuDifficulty * 0.5;
-      const preJumpDistance = 12 - cpuDifficulty * 2;
-      const varianceRange = 12 - cpuDifficulty;
+      const acceleration = 2;
+      const maxSpeed = 2.5 + cpuDifficulty * 0.25;
+      const preJumpDistance = 20 - cpuDifficulty * 2;
+      const varianceRange = 12 - cpuDifficulty * 2;
       const boostPreJumpDistance = cpuDifficulty && (3 * (3 - cpuDifficulty));
       const boostVarianceRange = cpuDifficulty && (2 * (3 - cpuDifficulty));
       const homick = { acceleration, maxSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, preJumpDistance, varianceRange, boostPreJumpDistance, boostVarianceRange) };
