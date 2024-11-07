@@ -22,6 +22,9 @@ https://opengameart.org/content/8-bit-sound-effects-library
 
 
 https://quxios.github.io/plugins/QPlus
+Edited line 985 to
+    return !!($dataMap.meta && $dataMap.meta.noTilemap);
+
 https://quxios.github.io/plugins/QTouch
 http://yanfly.moe/2015/10/10/yep-2-message-core/ - message core plugin!!! not main menu manager
 

@@ -156,6 +156,12 @@ class Race {
   }
 
   _drawCountdown() {
+    if (this._totalTime === 0) {
+      // Don't start the countdown when the
+      // start common event is still running
+      return;
+    }
+    
     this._contents.fontSize = 32;
     this._changeTextColorRPGMaker(RPG_MAKER_COLOR_DARK_RED);
     if (this._totalTime < COUNTDOWN_TIME) {
