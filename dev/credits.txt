@@ -27,5 +27,6 @@ Edited line 985 to
 
 https://quxios.github.io/plugins/QTouch
 http://yanfly.moe/2015/10/10/yep-2-message-core/ - message core plugin!!! not main menu manager
+https://forums.rpgmakerweb.com/index.php?threads/conditional-show-choices-hide-or-disable-choices.96941/
 
 RPG Maker MV StickSpecial3 animation for the boosting animation
