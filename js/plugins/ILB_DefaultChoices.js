@@ -28,19 +28,28 @@
     const parameters = PluginManager.parameters('ILB_DefaultChoices');
     const defaultChoiceVariableId = Number(parameters['Default choice variable ID'] || 0);
     
+    const _Game_Message_onChoice = Game_Message.prototype.onChoice;
     const _Game_Message_setChoices = Game_Message.prototype.setChoices;
+    
+    const onChoicePlusResetDefault = function(n) {
+        Game_Message.prototype.onChoice = _Game_Message_onChoice;
+        Game_Message.prototype.setChoices = _Game_Message_setChoices;
+        _Game_Message_onChoice.call(this, n);
+    }
+
+    const saveChoiceFunction = function(n) {
+        onChoicePlusResetDefault.call(this, n);
+        $gameVariables.setValue(defaultChoiceVariableId, n);
+        Game_Message.prototype.onChoice = _Game_Message_onChoice;
+    };
+
     const setChoiceFunction = function(choices, defaultType, cancelType) {
         const defaultChoiceFromVariable = $gameVariables.value(defaultChoiceVariableId);
         const defaultChoice = defaultChoiceFromVariable < 0 ? defaultType : defaultChoiceFromVariable;  // If the choice was "Cancel - Branch" revert back to using the built-in default
+        if (Game_Message.prototype.onChoice !== saveChoiceFunction) {
+            Game_Message.prototype.onChoice = onChoicePlusResetDefault;
+        }
         _Game_Message_setChoices.call(this, choices, defaultChoice, cancelType);
-        Game_Message.prototype.setChoices = _Game_Message_setChoices;
-    };
-    
-    const _Game_Message_onChoice = Game_Message.prototype.onChoice;
-    const saveChoiceFunction = function(n) {
-        _Game_Message_onChoice.call(this, n);
-        $gameVariables.setValue(defaultChoiceVariableId, n);
-        Game_Message.prototype.onChoice = _Game_Message_onChoice;
     };
 
     const _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
