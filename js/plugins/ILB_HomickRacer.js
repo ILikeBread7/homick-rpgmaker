@@ -88,8 +88,11 @@ var ILB_HR = ILB_HR || {};
     let window;
 
     const DEFAULT_BGM = 'Battle2';
-    const DEFAULT_BG_IMAGE = 'WorldMap1';
-    let bgImageName = DEFAULT_BG_IMAGE;
+    let bgImageName;
+
+    function getRandomBgImage() {
+        return LEVEL_BACKGROUNDS.get(Math.floor(Math.random() * LEVEL_BACKGROUNDS.size) + 1);
+    }
 
     // Spriteset to handle pictures in common events
     function Spriteset_Homick() {
@@ -258,7 +261,7 @@ var ILB_HR = ILB_HR || {};
 
     function getBackgroundForLevel(level) {
         const mappedLevel = mapHardModeLevel(level);
-        return LEVEL_BACKGROUNDS.get(mappedLevel) || DEFAULT_BG_IMAGE;
+        return LEVEL_BACKGROUNDS.get(mappedLevel);
     }
 
     function mapHardModeLevel(level) {
@@ -274,14 +277,14 @@ var ILB_HR = ILB_HR || {};
     };
 
     ILB_HR.startEndlessMode = function() {
-        bgImageName = DEFAULT_BG_IMAGE
+        bgImageName = getRandomBgImage()
         mode = ENDLESS_MODE;
         startFunction = window => HomickRacer.startEndlessMode(window, DEFAULT_BGM);
         SceneManager.push(Scene_HomickRacer);
     };
 
     ILB_HR.startMultiplayer = function(level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
-        bgImageName = DEFAULT_BG_IMAGE
+        bgImageName = getRandomBgImage()
         mode = MULTIPLAYER_MODE;
         startFunction = window => HomickRacer.startMultiplayer(window, DEFAULT_BGM, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty);
         SceneManager.push(Scene_HomickRacer);
