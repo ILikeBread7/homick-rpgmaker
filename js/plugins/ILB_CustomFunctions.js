@@ -43,11 +43,35 @@ var $f = $f || {};
         [10, 'Alpha centauri'],
         [11, 'Sirius'],
         [12, 'Procyon'],
-        [13, 'Black hole outskirts'],
-        [14, 'Black hole plunging region'],
-        [15, 'Black hole event horizon'],
-        [16, 'Black hole singularity']
+        [13, 'Outskirts'],
+        [14, 'Plunging region'],
+        [15, 'Event horizon'],
+        [16, 'Singularity']
     ]);
+
+    const _STAGE_NAMES = new Map([
+        [1, 'Earth'],
+        [2, 'Solar system'],
+        [3, 'Milky way'],
+        [4, 'Black hole']
+    ]);
+
+    $f.mapStageName = function(stage) {
+        const numberOfStages = _STAGE_NAMES.size;
+        if (stage > numberOfStages) {
+            stage -= numberOfStages;
+        }
+
+        // Center the name
+        let name = _STAGE_NAMES.get(stage);
+        const lineWidth = 20;
+        for (let i = 0; i < Math.floor((lineWidth - name.length) / 2); i++) {
+            name = ' ' + name;
+        }
+
+        const stageNameVarId = 47;
+        return $gameVariables.setValue(stageNameVarId, name);
+    }
 
     $f.mapLevelOptionNames = function(stage) {
         const levelsPerStage = 4;
