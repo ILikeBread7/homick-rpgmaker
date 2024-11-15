@@ -80,6 +80,7 @@ var $f = $f || {};
         const levelsPerStage = 4;
         const highscoreVarId = 7;
         const optionChoiceVarId = 41;
+        const numOfLevels = _LEVEL_NAMES.size;
         
         for (let i = 0; i < levelsPerStage; i++) {
             const level = (stage - 1) * levelsPerStage + i + 1;
@@ -90,8 +91,12 @@ var $f = $f || {};
                 levelHighscoreVarId - 1
             ) > 0;
 
+            let mappedLevel = level;
+            if (level > numOfLevels) {
+                mappedLevel -= numOfLevels;
+            }
             const optionName = unlocked
-                ? `${_LEVEL_NAMES.get(level)} ${$f.mapScoreToStars($gameVariables.value(levelHighscoreVarId))}`
+                ? `${_LEVEL_NAMES.get(mappedLevel)} ${$f.mapScoreToStars($gameVariables.value(levelHighscoreVarId))}`
                 : '???';
             $gameVariables.setValue(optionChoiceVarId + i, optionName);
         }
@@ -110,6 +115,23 @@ var $f = $f || {};
         }
 
         return starsString;
+    }
+
+    $f.getMaxUnlockedStage = function() {
+        const highscoreVarId = 7;
+        const numberOfStages = _STAGE_NAMES.size * 2;
+        const levelsPerStage = 4;
+
+        for (let stage = numberOfStages; stage > 1; stage--) {
+            const previousStageBossVarId = highscoreVarId + (stage - 1) * levelsPerStage;
+
+            if ($gameVariables.value(previousStageBossVarId) > 0) {
+                return stage;
+            }
+        }
+
+        // If no stages are unlocked, only the first one is available
+        return 1;
     }
 
 })();
