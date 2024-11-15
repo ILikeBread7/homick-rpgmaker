@@ -58,14 +58,17 @@ var $f = $f || {};
 
     $f.mapStageName = function(stage) {
         const numberOfStages = _STAGE_NAMES.size;
+        let difficulty = '';
         if (stage > numberOfStages) {
             stage -= numberOfStages;
+            difficulty = ' (Hard)';
         }
 
         // Center the name
-        let name = _STAGE_NAMES.get(stage);
-        const lineWidth = 20;
-        for (let i = 0; i < Math.floor((lineWidth - name.length) / 2); i++) {
+        let name = _STAGE_NAMES.get(stage) + difficulty;
+        const baseNameLength = name.length;
+        const lineWidth = 23;
+        for (let i = 0; i < Math.floor((lineWidth - baseNameLength) / 2); i++) {
             name = ' ' + name;
         }
 
