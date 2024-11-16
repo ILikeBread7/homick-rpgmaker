@@ -96,7 +96,7 @@ var $f = $f || {};
                 mappedLevel -= numOfLevels;
             }
             const optionName = unlocked
-                ? `${_LEVEL_NAMES.get(mappedLevel)} ${$f.mapScoreToStars($gameVariables.value(levelHighscoreVarId))}`
+                ? `${$f.mapScoreToStars($gameVariables.value(levelHighscoreVarId))} ${_LEVEL_NAMES.get(mappedLevel)}`
                 : '???';
             $gameVariables.setValue(optionChoiceVarId + i, optionName);
         }
