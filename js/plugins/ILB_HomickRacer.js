@@ -309,6 +309,15 @@ var ILB_HR = ILB_HR || {};
         return race ? race.playerScore : 0;
     }
 
+    ILB_HR.getLevelBackground = function(level) {
+        const totalLevels = LEVEL_BACKGROUNDS.size;
+        if (level > totalLevels) {
+            level -= totalLevels;
+        }
+
+        return LEVEL_BACKGROUNDS.get(level);
+    }
+
     ILB_HR.CPU_EASY = 0;
     ILB_HR.CPU_NORMAL = 1;
     ILB_HR.CPU_HARD = 2;
