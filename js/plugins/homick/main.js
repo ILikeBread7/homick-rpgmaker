@@ -116,8 +116,13 @@ class HomickRacer {
     }
 
     // Boss homick
-    homicks.push({ acceleration: 2, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 15 - hardModeVarianceModifier, 7 - hardModeVarianceModifier, 6 - hardModeBoostVarianceModifier, 3 - hardModeBoostVarianceModifier) });
-
+    let spriteIndex = undefined; // Don't set if not boss level
+    if (level % 4 === 0) {
+      const mappedLevel = level > NUM_OF_LEVELS ? level - NUM_OF_LEVELS : level;
+      const bossSpriteOffset = 4;
+      spriteIndex = Math.floor(mappedLevel / 4) - 1 + bossSpriteOffset;
+    }
+    homicks.push({ acceleration: 2, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 15 - hardModeVarianceModifier, 7 - hardModeVarianceModifier, 6 - hardModeBoostVarianceModifier, 3 - hardModeBoostVarianceModifier), spriteIndex });
 
     return homicks;
   }

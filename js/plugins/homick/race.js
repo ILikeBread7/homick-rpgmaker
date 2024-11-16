@@ -42,7 +42,7 @@ class Race {
     this._ctx = this._contents._context;
     this._bgmName = bgmName;
     this._tracksX = (BASE_WIDTH - (TRACK_TILE_WIDTH * homicks.length)) / 2;
-    this._homicks = homicks.map((homick, index) => new Homick(homick.acceleration, homick.maxSpeed, index));
+    this._homicks = homicks.map((homick, index) => new Homick(homick.acceleration, homick.maxSpeed, homick.spriteIndex || index, index));
     this._players = homicks.map((homick, index) => homick.player(this._homicks[index], obstacles));
     this._obstacles = obstacles;
     this._previousFirstDrawnObstacleIndexes = homicks.map(h => 0);
@@ -239,11 +239,11 @@ class Race {
     const y = TRACKS_Y - HOMICK_SPRITE_HEIGHT + TOP_Y - homick.height + distanceOffset;
     this._drawShadow(homick, index, distanceOffset, offset);
     
-    let baseSpriteIndex = HOMICK_SPRITE_INDEX;
+    let baseSpriteIndex = HOMICK_SPRITE_INDEX + homick.spriteIndex * TRACK_TILES_COLS;
     if (homick.isBoosting) {
-      baseSpriteIndex = HOMICK_BOOSTED_SPRITE_INDEX;
+      baseSpriteIndex += HOMICK_BOOSTED_SPRITE_INDEX - HOMICK_SPRITE_INDEX;
     } else if (homick.isHit) {
-      baseSpriteIndex = HOMICK_SPRITE_HIT_INDEX;
+      baseSpriteIndex += HOMICK_SPRITE_HIT_INDEX - HOMICK_SPRITE_INDEX;
     }
     this._drawTile(baseSpriteIndex + homickFrame, x, y);
 
