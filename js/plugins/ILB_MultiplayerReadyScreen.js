@@ -41,7 +41,6 @@
         'M'
     ];
 
-    let maxAreaWidth;
     let numOfPlayers;
     let areas;
     let playersReady;
@@ -83,7 +82,6 @@
     Scene_MultiplayerReady.prototype.constructor = Scene_MultiplayerReady;
 
     Scene_MultiplayerReady.prototype.initialize = function() {
-        maxAreaWidth = Graphics.boxWidth / 2;
         numOfPlayers = $gameVariables.value(numOfPlayersVarId);
         areas = _getAreas(numOfPlayers);
         playersReady = areas.map(_ => false);
@@ -107,12 +105,13 @@
             if (Input.isTriggered(`player${index + 1}`) ||
                 (TouchInput.isTriggered() && _touchInputInArea(area, TouchInput.x, TouchInput.y))
             ) {
-                _triggerReady(index);
+                _triggerReady(area, index);
             }
         });
 
+        // Player 1 can also use the ok (ENTER / SPACE/ Z) button
         if (Input.isTriggered('ok')) {
-            _triggerReady(0);
+            _triggerReady(areas[0], 0);
         }
 
         // If all players are ready
@@ -125,11 +124,11 @@
         return x >= area.x && x <= area.x + area.w && y >= area.y && y <= area.y + area.h;
     }
 
-    function _triggerReady(playerIndex) {
+    function _triggerReady(area, playerIndex) {
         if (!playersReady[playerIndex]) {
             AudioManager.playSe(readySoundEffect);
             playersReady[playerIndex] = true;
-            _drawReadyText(readyTexts[playerIndex].bitmap, playerIndex, maxAreaWidth, true);
+            _drawReadyText(readyTexts[playerIndex].bitmap, playerIndex, area.w, true);
         }
     }
 
@@ -137,12 +136,12 @@
         const maxHeight = Graphics.boxHeight / 2;
         const offsetY = Math.floor(area.h / 8);
 
-        const bitmap = new Bitmap(maxAreaWidth, maxHeight);
-        _drawReadyText(bitmap, index, maxAreaWidth, false);
+        const bitmap = new Bitmap(area.w, maxHeight);
+        _drawReadyText(bitmap, index, area.w, false);
        
         const sprite = new Sprite();
         sprite.initialize(bitmap);
-        sprite.move(area.x + Math.floor((area.w - maxAreaWidth) / 2), area.y + offsetY + Math.floor((area.h - maxHeight) / 2));
+        sprite.move(area.x, area.y + offsetY + Math.floor((area.h - maxHeight) / 2));
 
         return sprite;
     }
