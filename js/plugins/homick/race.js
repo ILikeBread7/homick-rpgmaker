@@ -14,8 +14,6 @@ const POSITION_COLORS = [RPG_MAKER_COLOR_GREEN, RPG_MAKER_COLOR_YELLOW, RPG_MAKE
 const POSITIONS_MARGIN_TOP = Math.floor(TRACKS_Y + TRACK_TILE_HEIGHT * TRACK_HEIGHT);
 
 const COUNTDOWN_TIME = 1000;
-const COUNTDOWN_LEFT = 165;
-const COUNTDOWN_DIGIT_LEFT = COUNTDOWN_LEFT + 7;
 const COUNTDOWN_TOP = Math.floor(TRACK_TILE_HEIGHT * 4.5);
 
 const COUNTDOWN_SOUNDS = [
@@ -165,24 +163,28 @@ class Race {
     this._changeTextColorRPGMaker(RPG_MAKER_COLOR_DARK_RED);
     if (this._totalTime < COUNTDOWN_TIME) {
       this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
-      this._window.drawText('3', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
+      this._drawCountdownDigit('3');
       this._playCountdownSe(3);
     } else if (this._totalTime < COUNTDOWN_TIME * 2) {
       this._changeTextOutlineColor(WHITE_OUTLINE_COLOR);
-      this._window.drawText('2', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
+      this._drawCountdownDigit('2');
       this._playCountdownSe(2);
     } else if (this._totalTime < COUNTDOWN_TIME * 3){
       this._changeTextColorRPGMaker(RPG_MAKER_COLOR_YELLOW);
-      this._window.drawText('1', COUNTDOWN_DIGIT_LEFT, COUNTDOWN_TOP);
+      this._drawCountdownDigit('1');
       this._playCountdownSe(1);
     } else {
       this._changeTextColorRPGMaker(RPG_MAKER_COLOR_GREEN);
-      this._window.drawText('GO!', COUNTDOWN_LEFT, COUNTDOWN_TOP);
+      this._drawCountdownDigit('GO!');
       this._playCountdownSe(0);
       this._playRaceBgm();
     }
     this._window.resetFontSettings();
     this._resetTextOutlineColor();
+  }
+
+  _drawCountdownDigit(digit) {
+    this._window.drawText(digit, 0, COUNTDOWN_TOP, BASE_WIDTH, 'center');
   }
 
   /**
@@ -474,12 +476,11 @@ class Race {
   }
 
   _drawRaceFinished() {
-    const marginLeft = 32;
     const marginTop = TRACK_TILE_HEIGHT * 8;
 
     this._contents.fontSize = 24;
     this._changeTextColorRPGMaker(RPG_MAKER_COLOR_YELLOW);
-    this._window.drawText('Click to go back to menu', marginLeft, marginTop);
+    this._window.drawText('Click to go back to menu', 0, marginTop, BASE_WIDTH, 'center');
     this._window.resetFontSettings();
   }
 
