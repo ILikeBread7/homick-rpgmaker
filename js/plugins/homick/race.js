@@ -11,7 +11,6 @@ const TRACKS_HEIGHT = TRACK_HEIGHT * TRACK_TILE_HEIGHT;
 
 const FINISH_POSITIONS = ['1st', '2nd', '3rd', '4th'];
 const POSITION_COLORS = [RPG_MAKER_COLOR_GREEN, RPG_MAKER_COLOR_YELLOW, RPG_MAKER_COLOR_RED, RPG_MAKER_COLOR_DARK_RED];
-const POSITIONS_MARGIN_LEFT = 14;
 const POSITIONS_MARGIN_TOP = Math.floor(TRACKS_Y + TRACK_TILE_HEIGHT * TRACK_HEIGHT);
 
 const COUNTDOWN_TIME = 1000;
@@ -428,7 +427,6 @@ class Race {
    * @param {boolean} isPlayer
    */
   _drawName(name, index, isPlayer) {
-    const marginLeft = 8;
     const marginTop = 32;
     this._contents.fontSize = 24;
 
@@ -436,8 +434,10 @@ class Race {
 
     this._window.drawText(
       name,
-      this._tracksX + marginLeft + TRACK_TILE_WIDTH * index,
-      TRACKS_Y - marginTop
+      this._tracksX + TRACK_TILE_WIDTH * index,
+      TRACKS_Y - marginTop,
+      TRACK_TILE_WIDTH,
+      'center'
     );
 
     this._window.resetFontSettings();
@@ -464,8 +464,10 @@ class Race {
       this._changeTextColorRPGMaker(POSITION_COLORS[position - 1]);
       this._window.drawText(
         FINISH_POSITIONS[position - 1],
-        this._tracksX + POSITIONS_MARGIN_LEFT + TRACK_TILE_WIDTH * homick.index,
-        POSITIONS_MARGIN_TOP
+        this._tracksX + TRACK_TILE_WIDTH * homick.index,
+        POSITIONS_MARGIN_TOP,
+        TRACK_TILE_WIDTH,
+        'center'
       );
     });
     this._window.resetFontSettings();
