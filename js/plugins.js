@@ -17,5 +17,6 @@ var $plugins =
 {"name":"ILB_CustomFunctions","status":true,"description":"Exposes a global object $f to store custom functions for use in script calls.","parameters":{}},
 {"name":"ILB_MultiplayerReadyScreen","status":true,"description":"Plugin specifically for the game Homick Racer, creates a ready screen for multiplayer mode","parameters":{"Number of players var ID":"1","Ready sound effect":"{\"name\":\"Collect_Point_01\",\"volume\":90,\"pitch\":100,\"pan\":0}"}},
 {"name":"CustomTitleCommand","status":true,"description":"Adds a custom option to the title screen to run a common event.","parameters":{"Command Text":"Credits","Common Event ID":"8"}},
-{"name":"ILB_RemoveContinue","status":true,"description":"Removes the continue option from the title screen","parameters":{}}
+{"name":"ILB_RemoveContinue","status":true,"description":"Removes the continue option from the title screen","parameters":{}},
+{"name":"JKL_PersistentData","status":true,"description":"Jackkel's Persistent Data Plugin (v5)","parameters":{"Persistent Switches":"3","Save Switches when Set":"false","Persistent Variables":"7-39,50","Save Variables when Set":"false"}}
 ];
