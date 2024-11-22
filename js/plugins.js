@@ -15,5 +15,7 @@ var $plugins =
 {"name":"ALOE_ConditionalChoices","status":true,"description":"v1.2.0\nDefine conditions to hide or disable choices in the event menu","parameters":{"patternStart":"<<","patternEnd":">>"}},
 {"name":"ILB_DefaultChoices","status":true,"description":"Allows you to set the default choice and remember the last chosen option","parameters":{"Default choice variable ID":"40"}},
 {"name":"ILB_CustomFunctions","status":true,"description":"Exposes a global object $f to store custom functions for use in script calls.","parameters":{}},
-{"name":"ILB_MultiplayerReadyScreen","status":true,"description":"Plugin specifically for the game Homick Racer, creates a ready screen for multiplayer mode","parameters":{"Number of players var ID":"1","Ready sound effect":"{\"name\":\"Collect_Point_01\",\"volume\":90,\"pitch\":100,\"pan\":0}"}}
+{"name":"ILB_MultiplayerReadyScreen","status":true,"description":"Plugin specifically for the game Homick Racer, creates a ready screen for multiplayer mode","parameters":{"Number of players var ID":"1","Ready sound effect":"{\"name\":\"Collect_Point_01\",\"volume\":90,\"pitch\":100,\"pan\":0}"}},
+{"name":"CustomTitleCommand","status":true,"description":"Adds a custom option to the title screen to run a common event.","parameters":{"Command Text":"Credits","Common Event ID":"8"}},
+{"name":"ILB_RemoveContinue","status":true,"description":"Removes the continue option from the title screen","parameters":{}}
 ];
