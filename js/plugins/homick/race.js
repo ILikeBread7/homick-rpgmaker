@@ -499,6 +499,7 @@ class Race {
   }
 
   _drawPauseButton() {
+    console.log(TouchInput.date)
     const pauseSpriteSize = 48;
     const tileIndex = (TouchInput.x >= BASE_WIDTH - pauseSpriteSize && TouchInput.y <= pauseSpriteSize)
       ? PAUSE_HOVERED_TILE_INDEX

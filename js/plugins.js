@@ -18,5 +18,8 @@ var $plugins =
 {"name":"ILB_MultiplayerReadyScreen","status":true,"description":"Plugin specifically for the game Homick Racer, creates a ready screen for multiplayer mode","parameters":{"Number of players var ID":"1","Ready sound effect":"{\"name\":\"Collect_Point_01\",\"volume\":90,\"pitch\":100,\"pan\":0}"}},
 {"name":"CustomTitleCommand","status":true,"description":"Adds a custom option to the title screen to run a common event.","parameters":{"Command Text":"Credits","Common Event ID":"8"}},
 {"name":"ILB_RemoveContinue","status":true,"description":"Removes the continue option from the title screen","parameters":{}},
-{"name":"JKL_PersistentData","status":true,"description":"Jackkel's Persistent Data Plugin (v5)","parameters":{"Persistent Switches":"3","Save Switches when Set":"false","Persistent Variables":"7-39,50","Save Variables when Set":"false"}}
+{"name":"JKL_PersistentData","status":true,"description":"Jackkel's Persistent Data Plugin (v5)","parameters":{"Persistent Switches":"3","Save Switches when Set":"false","Persistent Variables":"7-39,50","Save Variables when Set":"false"}},
+{"name":"ILB_MouseLeaveClear","status":true,"description":"Clears TouchInput when the mouse leaves the game window to prevent unintended input issues.","parameters":{}},
+{"name":"TitleCommandPosition","status":true,"description":"Changes the position of the title command window.","parameters":{"Offset X":"0","Offset Y":"0","Width":"360","Background":"1"}},
+{"name":"ILB_TitleCommandTextAlign","status":true,"description":"Allows customization of the title screen command text alignment.","parameters":{"Text Alignment":"center"}}
 ];
