@@ -4,7 +4,7 @@ var $plugins =
 [
 {"name":"MAC_High_Hz_Fixes","status":true,"description":"Fixed various issues on high refresh rate monitors","parameters":{}},
 {"name":"Community_Basic","status":true,"description":"Plugin used to set basic parameters.","parameters":{"cacheLimit":"20","screenWidth":"360","screenHeight":"640","changeWindowWidthTo":"","changeWindowHeightTo":"","renderingMode":"auto","alwaysDash":"off"}},
-{"name":"ILB_OptionsMatchWidth","status":true,"description":"Matches the width of the options window to the width of the screen","parameters":{"Padding":"10"}},
+{"name":"ILB_OptionsMatchWidth","status":true,"description":"Matches the width of the options window to the width of the screen","parameters":{"Padding":"10","Background":"1"}},
 {"name":"ILB_HomickRacer","status":true,"description":"Plugin for the Homick Racer game","parameters":{"Start common event ID":"3","Pause common event ID":"2","End common event ID":"5","Result variable ID":"4","Final position variable ID":"5"}},
 {"name":"ILB_RemoveUnusedOptions","status":true,"description":"Removes unused options from the options menu","parameters":{"Enable Always dash":"false","Enable Command remember":"false","Enable Bgm volume":"true","Enable Bgs volume":"false","Enable Me volume":"false","Enable Se volume":"true"}},
 {"name":"ILB_ClickToButtonPress","status":true,"description":"Makes clicking at a certain part of the screen work like a button press","parameters":{}},
@@ -21,5 +21,7 @@ var $plugins =
 {"name":"JKL_PersistentData","status":true,"description":"Jackkel's Persistent Data Plugin (v5)","parameters":{"Persistent Switches":"3","Save Switches when Set":"false","Persistent Variables":"7-39,50","Save Variables when Set":"false"}},
 {"name":"ILB_MouseLeaveClear","status":true,"description":"Clears TouchInput when the mouse leaves the game window to prevent unintended input issues.","parameters":{}},
 {"name":"TitleCommandPosition","status":true,"description":"Changes the position of the title command window.","parameters":{"Offset X":"0","Offset Y":"0","Width":"360","Background":"1"}},
-{"name":"ILB_TitleCommandTextAlign","status":true,"description":"Allows customization of the title screen command text alignment.","parameters":{"Text Alignment":"center"}}
+{"name":"ILB_TitleCommandTextAlign","status":true,"description":"Allows customization of the title screen command text alignment.","parameters":{"Text Alignment":"center"}},
+{"name":"ILB_SelectableTextAlign","status":true,"description":"Allows customization of the text alignment for the \"Show Choices\" event command by modifying itemRectForText.","parameters":{"Text Alignment":"center"}},
+{"name":"SelectableFullWidth","status":true,"description":"Makes all selectable windows (like choices) use the full width of the screen.","parameters":{}}
 ];
