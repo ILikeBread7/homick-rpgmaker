@@ -32,9 +32,10 @@
     const hoverBgColor = '#0d517c';
     const buttonStyles = `
         position: absolute;
-        bottom: 3px;
-        right: 3px;
-        padding: 4px;
+        bottom: 1px;
+        right: 1px;
+        padding: 2px;
+        font-family: GameFont;
         font-size: 12px;
         background-color: ${normalBgColor};
         color: #fff;
