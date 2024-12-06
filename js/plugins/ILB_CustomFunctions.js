@@ -134,4 +134,25 @@ var $f = $f || {};
         return 1;
     }
 
+    $f.saveScore = function() {
+        const score = ILB_HR.getScore();
+        const highscoreUpdatedSwitchId = 1;
+        const newLevelBeatenSwitchId = 5;
+        let highscoreVarId = 7; // 7 = endless, 8 = level 1, ...
+
+        if (ILB_HR.getMode() === ILB_HR.STORY_MODE) {
+            const levelVarId = 6;
+            highscoreVarId += $gameVariables.value(levelVarId);
+
+            if (score > 0 && $gameVariables.value(highscoreVarId) === 0) {
+                $gameSwitches.setValue(newLevelBeatenSwitchId, true);
+            }
+        }
+
+        if (score > $gameVariables.value(highscoreVarId)) {
+            $gameVariables.setValue(highscoreVarId, score);
+            $gameSwitches.setValue(highscoreUpdatedSwitchId, true);
+        }
+    }
+
 })();
