@@ -32,7 +32,7 @@
 
         const text = Window_Base.prototype.convertEscapeCharacters(this.commandName(index));
         if (textAlign === 'center') {
-            rect.x += (rect.width - this.textWidth(text)) / 2;
+            rect.x += Math.floor((rect.width - this.textWidth(text)) / 2);
         } else if (textAlign === 'right') {
             rect.x += rect.width - this.textWidth(text);
         }
