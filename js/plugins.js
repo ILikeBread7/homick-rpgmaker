@@ -23,5 +23,6 @@ var $plugins =
 {"name":"TitleCommandPosition","status":true,"description":"Changes the position of the title command window.","parameters":{"Offset X":"0","Offset Y":"0","Width":"360","Background":"1"}},
 {"name":"ILB_TitleCommandTextAlign","status":true,"description":"Allows customization of the title screen command text alignment.","parameters":{"Text Alignment":"center"}},
 {"name":"ILB_SelectableTextAlign","status":true,"description":"Allows customization of the text alignment for the \"Show Choices\" event command by modifying itemRectForText.","parameters":{"Text Alignment":"center"}},
-{"name":"SelectableFullWidth","status":true,"description":"Makes all selectable windows (like choices) use the full width of the screen.","parameters":{}}
+{"name":"SelectableFullWidth","status":true,"description":"Makes all selectable windows (like choices) use the full width of the screen.","parameters":{}},
+{"name":"GALV_MessageSoundEffects","status":true,"description":"Play sound effects when during Show Text event commands.","parameters":{"Delay Time":"10","Default Talk SE":"Menu_Navigate_01,80,100","Default Confirm SE":"Menu_Navigate_02,80,100","-----------":"","Quick SE 1":"Menu_Navigate_01,80,70","Quick SE 2":"Menu_Navigate_01,80,80","Quick SE 3":"Menu_Navigate_01,80,120","Quick SE 4":"Menu_Navigate_01,80,60"}}
 ];
