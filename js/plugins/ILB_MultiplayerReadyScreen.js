@@ -126,7 +126,7 @@
 
     function _triggerReady(area, playerIndex) {
         if (!playersReady[playerIndex]) {
-            AudioManager.playSe(readySoundEffect);
+            AudioManager.playSe(HomickUtils.makeSeVariedPitch(readySoundEffect));
             playersReady[playerIndex] = true;
             _drawReadyText(readyTexts[playerIndex].bitmap, playerIndex, area.w, true);
         }
