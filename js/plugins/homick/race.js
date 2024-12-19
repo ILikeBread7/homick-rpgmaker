@@ -103,7 +103,7 @@ class Race {
           this._finishedPositions[index] = position;
           homick.finish();
           if (!this._isEndless) {
-            AudioManager.playSe(FINISH_SE);
+            AudioManager.playSe(HomickUtils.makeSeVariedPitch(FINISH_SE));
           }
         }
       });

@@ -120,7 +120,7 @@ class Homick {
     }
 
     if (this._jumped) {
-      AudioManager.playSe(this._isDoubleJumping ? DOUBLE_JUMP_SE : JUMP_SE);
+      AudioManager.playSe(HomickUtils.makeSeVariedPitch(this._isDoubleJumping ? DOUBLE_JUMP_SE : JUMP_SE));
     }
 
     return false;
@@ -180,7 +180,7 @@ class Homick {
             this._speedOnGround = 0;
             this._boostTimeout = 0;
             this._setAsLanded();
-            AudioManager.playSe(HIT_SE);
+            AudioManager.playSe(HomickUtils.makeSeVariedPitch(HIT_SE));
           }
           fallenHurdles[this._currentObstacleIndex] = true;
         } else {
@@ -192,7 +192,7 @@ class Homick {
 
   _addBoost() {
     this._boostTimeout = BOOST_TIME + BOOST_DECELERATION_TIME;
-    AudioManager.playSe(BOOST_SE);
+    AudioManager.playSe(HomickUtils.makeSeVariedPitch(BOOST_SE));
   }
 
   _setAsLanded() {
