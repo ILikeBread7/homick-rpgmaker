@@ -15,17 +15,28 @@
  * @desc The sound effect played when a player is ready
  * @default {"name":"Absorb1","volume":90,"pitch":100,"pan":0}
  * 
+ * @param Background picture
+ * @desc The picture displayed as the background
+ * 
+ * @param Background tile size
+ * @desc Size of the background picture tile for scrolling, 0 to not scroll
+ * @default 64
+ * 
  * @help Plugin specifically for the game Homick Racer.
  * 
  * Plugin Command:
  *   ILB_MultiplayerReadyScreen # Starts the scene
  */
 
+var ILB_HR = ILB_HR || {};
+
 (function() {
 
     const parameters = PluginManager.parameters('ILB_MultiplayerReadyScreen');
     const numOfPlayersVarId = Number(parameters['Number of players var ID'] || 1);
     const readySoundEffect = JSON.parse(parameters['Ready sound effect'] || '{"name":"Absorb1","volume":90,"pitch":100,"pan":0}');
+    const backgroundPicture = parameters['Background picture'];
+    const backgroundTileSize = Number(parameters['Background tile size'] || 0);
 
     const _COLORS = [
         '#66cc40',
@@ -45,6 +56,9 @@
     let areas;
     let playersReady;
     let readyTexts;
+    let bgSprite;
+
+    let cancelled = false;
 
     function Window_MultiplayerReady() {
         this.initialize.apply(this, arguments);
@@ -56,12 +70,18 @@
     Window_MultiplayerReady.prototype.initialize = function(x, y, width, height) {
         Window_Base.prototype.initialize.call(this, x, y, width, height);
         
+        bgSprite = new Sprite();
+        bgSprite.initialize(ImageManager.loadPicture(backgroundPicture));
+        bgSprite.move(-backgroundTileSize, -backgroundTileSize);
+        this.addChildToBack(bgSprite);
+
         areas.forEach((area, index) => {
             const bitmap = new Bitmap(area.w, area.h);
             bitmap.fillRect(0, 0, area.w, area.h, _COLORS[index]);
             
             const sprite = new Sprite();
             sprite.initialize(bitmap);
+            sprite.opacity = 128;
             sprite.move(area.x, area.y);
             this.addChild(sprite);
         });
@@ -82,6 +102,7 @@
     Scene_MultiplayerReady.prototype.constructor = Scene_MultiplayerReady;
 
     Scene_MultiplayerReady.prototype.initialize = function() {
+        cancelled = false;
         numOfPlayers = $gameVariables.value(numOfPlayersVarId);
         areas = _getAreas(numOfPlayers);
         playersReady = areas.map(_ => false);
@@ -101,6 +122,13 @@
     };
 
     Scene_MultiplayerReady.prototype.updateScene = function() {
+        if (backgroundTileSize > 0) {
+            bgSprite.move(
+                ((bgSprite.x + 1 + backgroundTileSize) % backgroundTileSize) - backgroundTileSize,
+                ((bgSprite.y + 1 + backgroundTileSize) % backgroundTileSize) - backgroundTileSize
+            );
+        }
+
         areas.forEach((area, index) => {
             if (Input.isTriggered(`player${index + 1}`) ||
                 (TouchInput.isTriggered() && _touchInputInArea(area, TouchInput.x, TouchInput.y))
@@ -116,6 +144,11 @@
 
         // If all players are ready
         if (!playersReady.contains(false)) {
+            this.popScene();
+        }
+
+        if (Input.isTriggered('cancel') || TouchInput.isCancelled()) {
+            cancelled = true;
             this.popScene();
         }
     }
@@ -193,5 +226,9 @@
             SceneManager.push(Scene_MultiplayerReady);
         }
     };
+
+    ILB_HR.multiplayerReadyCancelled = function() {
+        return cancelled;
+    }
 
 })();
