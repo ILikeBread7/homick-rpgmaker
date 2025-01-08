@@ -37,6 +37,11 @@ var ILB_HR = ILB_HR || {};
     const readySoundEffect = JSON.parse(parameters['Ready sound effect'] || '{"name":"Absorb1","volume":90,"pitch":100,"pan":0}');
     const backgroundPicture = parameters['Background picture'];
     const backgroundTileSize = Number(parameters['Background tile size'] || 0);
+    
+    const homeIconNormal = 'home_icon';
+    const homeIconHovered = 'home_icon_hovered';
+    const homeIconSize = 48;
+    const homeIconX = 360 - homeIconSize;
 
     const _COLORS = [
         '#66cc40',
@@ -57,6 +62,9 @@ var ILB_HR = ILB_HR || {};
     let playersReady;
     let readyTexts;
     let bgSprite;
+    let homeSprite;
+    let homeBitmapNormal;
+    let homeBitmapHovered;
 
     let cancelled = false;
 
@@ -88,6 +96,14 @@ var ILB_HR = ILB_HR || {};
 
         readyTexts = areas.map(_mapAreaToText);
         readyTexts.forEach(text => this.addChild(text));
+
+
+        homeBitmapNormal = ImageManager.loadPicture(homeIconNormal);
+        homeBitmapHovered = ImageManager.loadPicture(homeIconHovered);
+        homeSprite = new Sprite();
+        homeSprite.initialize(homeBitmapNormal);
+        homeSprite.move(homeIconX, 0);
+        this.addChild(homeSprite);
     };
 
     Window_MultiplayerReady.prototype.standardPadding = function() {
@@ -129,6 +145,23 @@ var ILB_HR = ILB_HR || {};
             );
         }
 
+        if (TouchInput.x >= homeIconX && TouchInput.y <= homeIconSize) {
+            homeSprite.bitmap = homeBitmapHovered;
+            if (TouchInput.isTriggered()) {
+                cancelScene();
+                return;
+            }
+        } else {
+            homeSprite.bitmap = homeBitmapNormal;
+        }
+
+        if (
+            Input.isTriggered('cancel')
+            || TouchInput.isCancelled()
+        ) {
+            cancelScene();
+        }
+
         areas.forEach((area, index) => {
             if (Input.isTriggered(`player${index + 1}`) ||
                 (TouchInput.isTriggered() && _touchInputInArea(area, TouchInput.x, TouchInput.y))
@@ -146,11 +179,11 @@ var ILB_HR = ILB_HR || {};
         if (!playersReady.contains(false)) {
             this.popScene();
         }
+    }
 
-        if (Input.isTriggered('cancel') || TouchInput.isCancelled()) {
-            cancelled = true;
-            this.popScene();
-        }
+    function cancelScene() {
+        cancelled = true;
+        SceneManager.pop();
     }
 
     function _touchInputInArea(area, x, y) {
