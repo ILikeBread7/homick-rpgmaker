@@ -22,6 +22,14 @@
  * @desc Size of the background picture tile for scrolling, 0 to not scroll
  * @default 64
  * 
+ * @param Home icon picture normal
+ * @desc The picture to display as the exit icon
+ * @default home_icon
+ * 
+ * @param Home icon picture hovered
+ * @desc The picture to display as the exit icon when hovered
+ * @default home_icon_hovered
+ * 
  * @help Plugin specifically for the game Homick Racer.
  * 
  * Plugin Command:
@@ -37,12 +45,9 @@ var ILB_HR = ILB_HR || {};
     const readySoundEffect = JSON.parse(parameters['Ready sound effect'] || '{"name":"Absorb1","volume":90,"pitch":100,"pan":0}');
     const backgroundPicture = parameters['Background picture'];
     const backgroundTileSize = Number(parameters['Background tile size'] || 0);
+    const homeIconNormal = parameters['Home icon picture normal'];
+    const homeIconHovered = parameters['Home icon picture hovered'];
     
-    const homeIconNormal = 'home_icon';
-    const homeIconHovered = 'home_icon_hovered';
-    const homeIconSize = 48;
-    const homeIconX = 360 - homeIconSize;
-
     const _COLORS = [
         '#66cc40',
         '#4387b9',
@@ -102,7 +107,6 @@ var ILB_HR = ILB_HR || {};
         homeBitmapHovered = ImageManager.loadPicture(homeIconHovered);
         homeSprite = new Sprite();
         homeSprite.initialize(homeBitmapNormal);
-        homeSprite.move(homeIconX, 0);
         this.addChild(homeSprite);
     };
 
@@ -145,7 +149,12 @@ var ILB_HR = ILB_HR || {};
             );
         }
 
-        if (TouchInput.x >= homeIconX && TouchInput.y <= homeIconSize) {
+        // Can't move the sprite on initialization
+        // because the sprite loading is deferred
+        // and its width is not known at that point.
+        homeSprite.x = Graphics.boxWidth - homeSprite.width;
+        
+        if (TouchInput.x >= (Graphics.boxWidth - homeSprite.width) && TouchInput.y <= homeSprite.height) {
             homeSprite.bitmap = homeBitmapHovered;
             if (TouchInput.isTriggered()) {
                 cancelScene();
@@ -200,7 +209,7 @@ var ILB_HR = ILB_HR || {};
 
     function _mapAreaToText(area, index) {
         const maxHeight = Graphics.boxHeight / 2;
-        const offsetY = Math.floor(area.h / 8);
+        const offsetY = Math.floor(area.h / 6);
 
         const bitmap = new Bitmap(area.w, maxHeight);
         _drawReadyText(bitmap, index, area.w, false);
