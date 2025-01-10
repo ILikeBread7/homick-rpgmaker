@@ -155,11 +155,11 @@ var ILB_HR = ILB_HR || {};
         homeSprite.x = Graphics.boxWidth - homeSprite.width;
         
         if (TouchInput.x >= (Graphics.boxWidth - homeSprite.width) && TouchInput.y <= homeSprite.height) {
-            homeSprite.bitmap = homeBitmapHovered;
             if (TouchInput.isTriggered()) {
                 cancelScene();
                 return;
             }
+            homeSprite.bitmap = homeBitmapHovered;
         } else {
             homeSprite.bitmap = homeBitmapNormal;
         }
