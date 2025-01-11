@@ -227,13 +227,17 @@ var ILB_HR = ILB_HR || {};
             `Player ${index + 1}
             Press ${_PLAYER_KEYS[index]}
             or tap
-            the screen.
-
-            ${ready ? 'Ready!' : 'Waiting...'}`;
+            the screen.`;
+        const textReadyWaiting = ready ? 'Ready!' : 'Waiting...';
 
         const lineHeight = 28;
-        text.split('\n')
+
+        const textLines = text.split('\n');
+        textLines
             .forEach((line, index) => bitmap.drawText(line.trim(), 0, index * lineHeight, width, lineHeight, 'center'));
+        bitmap.textColor = ready ? '#66cc40' : '#ffcc20';
+        bitmap.drawText(textReadyWaiting, 0, (textLines.length + 1) * lineHeight, width, lineHeight, 'center');
+        bitmap.textColor = '#ffffff';
     }
 
     function _getAreas(numOfPlayers) {
