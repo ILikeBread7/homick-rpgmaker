@@ -47,6 +47,8 @@ var ILB_HR = ILB_HR || {};
     const backgroundTileSize = Number(parameters['Background tile size'] || 0);
     const homeIconNormal = parameters['Home icon picture normal'];
     const homeIconHovered = parameters['Home icon picture hovered'];
+
+    const lineHeight = 28;
     
     const _COLORS = [
         '#66cc40',
@@ -208,15 +210,18 @@ var ILB_HR = ILB_HR || {};
     }
 
     function _mapAreaToText(area, index) {
-        const maxHeight = Graphics.boxHeight / 2;
-        const offsetY = Math.floor(area.h / 6);
+        // I don't know why 7.5, but if it's 7 or lower
+        // the text gets cut off.
+        // The actual number of lines is 6.
+        const maxHeight = Math.floor(lineHeight * 7.5);
+        const offsetY = Math.floor((area.h - maxHeight) / 2);
 
         const bitmap = new Bitmap(area.w, maxHeight);
         _drawReadyText(bitmap, index, area.w, false);
        
         const sprite = new Sprite();
         sprite.initialize(bitmap);
-        sprite.move(area.x, area.y + offsetY + Math.floor((area.h - maxHeight) / 2));
+        sprite.move(area.x, area.y + offsetY);
 
         return sprite;
     }
@@ -230,13 +235,13 @@ var ILB_HR = ILB_HR || {};
             the screen.`;
         const textReadyWaiting = ready ? 'Ready!' : 'Waiting...';
 
-        const lineHeight = 28;
-
         const textLines = text.split('\n');
+        const linesNumber = textLines.length + 2;
+
         textLines
             .forEach((line, index) => bitmap.drawText(line.trim(), 0, index * lineHeight, width, lineHeight, 'center'));
         bitmap.textColor = ready ? '#66cc40' : '#ffcc20';
-        bitmap.drawText(textReadyWaiting, 0, (textLines.length + 1) * lineHeight, width, lineHeight, 'center');
+        bitmap.drawText(textReadyWaiting, 0, linesNumber * lineHeight, width, lineHeight, 'center');
         bitmap.textColor = '#ffffff';
     }
 
