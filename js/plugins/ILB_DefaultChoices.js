@@ -19,6 +19,8 @@
  * Plugin Command:
  *   ILB_DefaultChoices set  - sets the default choice to the variable's value
  *   ILB_DefaultChoices save - saves the selected choice to the variable
+ *   ILB_DefaultChoices remember name - remembers the selected choice with a name (no spaces allowed), all choices with the same name will have the same value
+ *   ILB_DefaultChoices remember - remembers the selected choice with an auto generated name (mapId_eventId_index), in case of collisions specify a name
  *   ILB_DefaultChoices reset set - cancels the set plugin command
  *   ILB_DefaultChoices reset save - cancels the save plugin command
  *   ILB_DefaultChoices reset - cancels both the save and set plugin commands
@@ -30,6 +32,9 @@
     
     const _Game_Message_onChoice = Game_Message.prototype.onChoice;
     const _Game_Message_setChoices = Game_Message.prototype.setChoices;
+
+    let name;
+    const namesMap = new Map();
     
     const onChoicePlusResetDefault = function(n) {
         Game_Message.prototype.onChoice = _Game_Message_onChoice;
@@ -39,13 +44,34 @@
 
     const saveChoiceFunction = function(n) {
         onChoicePlusResetDefault.call(this, n);
-        $gameVariables.setValue(defaultChoiceVariableId, n);
+        
+        if (n !== this._choiceCancelType) {
+            if (name) {
+                namesMap.set(name, n);
+            } else {
+                $gameVariables.setValue(defaultChoiceVariableId, n);
+            }
+        }
+        name = undefined;
+
         Game_Message.prototype.onChoice = _Game_Message_onChoice;
     };
 
     const setChoiceFunction = function(choices, defaultType, cancelType) {
-        const defaultChoiceFromVariable = $gameVariables.value(defaultChoiceVariableId);
-        const defaultChoice = defaultChoiceFromVariable < 0 ? defaultType : defaultChoiceFromVariable;  // If the choice was "Cancel - Branch" revert back to using the built-in default
+        let newDefaultChoice;
+
+        if (name) {
+            const defaultChoiceFromName = namesMap.get(name);
+
+            // -1 to use the value provided in the game editor
+            // in case the value in the map isn't present
+            newDefaultChoice = defaultChoiceFromName === undefined ? -1 : defaultChoiceFromName;
+        } else {
+            const defaultChoiceFromVariable = $gameVariables.value(defaultChoiceVariableId);
+            newDefaultChoice = defaultChoiceFromVariable;
+        }
+
+        const defaultChoice = newDefaultChoice < 0 ? defaultType : newDefaultChoice;  // If the choice was "Cancel - Branch" revert back to using the built-in default
         if (Game_Message.prototype.onChoice !== saveChoiceFunction) {
             Game_Message.prototype.onChoice = onChoicePlusResetDefault;
         }
@@ -65,15 +91,26 @@
                 break;
                 case 'reset':
                     const resetArg = args[1];
-                    if (!resetArg || resetArg === 'set') {
+                    if (!resetArg || resetArg === 'set' || resetArg === 'remember') {
                         Game_Message.prototype.setChoices = _Game_Message_setChoices;
                     }
-                    if (!resetArg || resetArg === 'save') {
+                    if (!resetArg || resetArg === 'save' || resetArg === 'remember') {
                         Game_Message.prototype.onChoice = _Game_Message_onChoice;
+                        name = undefined;
                     }
+                break;
+                case 'remember':
+                    const nameArg = args[1];
+                    name = nameArg || _generateName(this);
+                    Game_Message.prototype.setChoices = setChoiceFunction;
+                    Game_Message.prototype.onChoice = saveChoiceFunction;
                 break;
             }
         }
+    }
+
+    function _generateName(interpreter) {
+        return `${interpreter._mapId}_${interpreter._eventId}_${interpreter._index}`;
     }
 
 })();
