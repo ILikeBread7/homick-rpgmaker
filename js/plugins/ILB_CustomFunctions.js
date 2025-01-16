@@ -155,4 +155,40 @@ var $f = $f || {};
         }
     }
 
+    $f.showLevelBackgroundOnMenu = function(level) {
+        const highscoreVarId = 7;
+        const levelHighscoreVarId = highscoreVarId + level;
+        const unlocked = level === 1 || $gameVariables.value(levelHighscoreVarId - 1) > 0;
+        const inMenuSwitchId = 2;
+
+        if (unlocked) {
+            const imageName = ILB_HR.getLevelBackground(level);
+            $gameScreen.showPicture(1, imageName, 0, 0, 0, 100, 100, 255, 0);
+            const homickImageName = _getBossHomickPictureForLevel(level);
+            if (homickImageName) {
+                $gameScreen.showPicture(2, homickImageName, 0, 170, 405, 100, 100, 255, 0);
+            }
+        } else {
+            $gameSwitches.setValue(inMenuSwitchId, true);
+        }
+    }
+
+    function _getBossHomickPictureForLevel(level) {
+        if (level > 16) {
+            level -= 16;
+        }
+        switch (level) {
+            case 4:
+                return 'tundra_homick';
+            case 8:
+                return 'roedent';
+            case 12:
+                return 'ginny';
+            case 16:
+                return 'brad';
+            default:
+                return undefined;
+        }
+    }
+
 })();
