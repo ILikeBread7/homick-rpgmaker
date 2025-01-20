@@ -265,7 +265,15 @@ var ILB_HR = ILB_HR || {};
     }
 
     function mapHardModeLevel(level) {
-        return level > NUM_OF_LEVELS ? level - NUM_OF_LEVELS : level;
+        if (level > NUM_OF_LEVELS) {
+            level -= NUM_OF_LEVELS;
+
+            // Bonus level
+            if (level > NUM_OF_LEVELS) {
+                level--;
+            }
+        }
+        return level;
     }
 
     ILB_HR.startLevel = function(level) {

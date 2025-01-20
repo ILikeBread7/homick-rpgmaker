@@ -9,8 +9,8 @@ const FINISH_LINE_HEIGHT = 16 * 3;
 const TRACKS_Y = Math.floor((BASE_HEIGHT - (TRACK_TILE_HEIGHT * TRACK_HEIGHT)) / 2);
 const TRACKS_HEIGHT = TRACK_HEIGHT * TRACK_TILE_HEIGHT;
 
-const FINISH_POSITIONS = ['1st', '2nd', '3rd', '4th'];
-const POSITION_COLORS = [RPG_MAKER_COLOR_GREEN, RPG_MAKER_COLOR_YELLOW, RPG_MAKER_COLOR_RED, RPG_MAKER_COLOR_DARK_RED];
+const FINISH_POSITIONS = ['1st', '2nd', '3rd', '4th', '5th'];
+const POSITION_COLORS = [RPG_MAKER_COLOR_GREEN, RPG_MAKER_COLOR_YELLOW, RPG_MAKER_COLOR_RED, RPG_MAKER_COLOR_DARK_RED, RPG_MAKER_COLOR_PURPLE];
 const POSITIONS_MARGIN_TOP = Math.floor(TRACKS_Y + TRACK_TILE_HEIGHT * TRACK_HEIGHT);
 
 const COUNTDOWN_TIME = 1000;
@@ -39,7 +39,7 @@ class Race {
     this._ctx = this._contents._context;
     this._bgmName = bgmName;
     this._tracksX = (BASE_WIDTH - (TRACK_TILE_WIDTH * homicks.length)) / 2;
-    this._homicks = homicks.map((homick, index) => new Homick(homick.acceleration, homick.maxSpeed, homick.spriteIndex || index, index));
+    this._homicks = homicks.map((homick, index) => new Homick(homick.acceleration, homick.maxSpeed, (homick.spriteIndex !== undefined ? homick.spriteIndex : index), index));
     this._players = homicks.map((homick, index) => homick.player(this._homicks[index], obstacles));
     this._obstacles = obstacles;
     this._previousFirstDrawnObstacleIndexes = homicks.map(h => 0);
@@ -58,7 +58,9 @@ class Race {
     if (this._isEndless === 0) {
       this._addNewEndlessObstacles();
     }
-    this._playerNames = this._players.map((player, index) => player.isHuman ? `P${index + 1}` : 'CPU');
+    this._playerNames = this._players.map((player, index) => player.isHuman ? `P${(homicks[index].spriteIndex !== undefined ? homicks[index].spriteIndex : index) + 1}` : 'CPU');
+    this._playerColors = this._players.map((player, index) => player.isHuman ? PLAYER_NAME_COLORS[(homicks[index].spriteIndex !== undefined ? homicks[index].spriteIndex : index)] : CPU_NAME_COLOR);
+    console.log(this._playerColors)
     this._tiles = ImageManager.loadPicture('tiles');
 
     // Only to be passed to Obstacle.draw function
@@ -219,7 +221,7 @@ class Race {
     const offset = homickFrame * PADDING / 2;
     this._drawTracksBackground(this._homicks.length);
     this._homicks.forEach((homick, index) => {
-      this._drawName(this._playerNames[index], index, this._players[index].isHuman);
+      this._drawName(this._playerNames[index], this._playerColors[index], index);
       this._drawTrack(homick.distance, index);
       this._drawObstacles(homick.distance, index);
       this._drawTrackPits(index);
@@ -426,13 +428,13 @@ class Race {
    * 
    * @param {string} name 
    * @param {number} index 
-   * @param {boolean} isPlayer
+   * @param {number} rpgMakerColor
    */
-  _drawName(name, index, isPlayer) {
+  _drawName(name, rpgMakerColor, index) {
     const marginTop = 32;
     this._contents.fontSize = 24;
 
-    this._changeTextColorRPGMaker(isPlayer ? PLAYER_NAME_COLORS[index] : CPU_NAME_COLOR);
+    this._changeTextColorRPGMaker(rpgMakerColor);
 
     this._window.drawText(
       name,
@@ -570,7 +572,7 @@ class Race {
   }
 
   get isBoss() {
-    return this._homicks.length === 2;
+    return this._homicks.length === 2 || this._homicks.length === 5;
   }
 
   get _isEndless() {

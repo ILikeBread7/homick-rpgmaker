@@ -101,8 +101,29 @@ class HomickRacer {
     const playerMinSpeed = 2.5 + hardModeSpeedModifier;
     const playerMaxSpeed = 3.25 + hardModeSpeedModifier;
     const playerSpeed = this._getHomickSpeedForLevel(level, playerMinSpeed, playerMaxSpeed);
-    
-    const homicks = [ { acceleration: 1, maxSpeed: playerSpeed, player: () => new HumanPlayer() } ];
+    const playerSpriteIndex = 0;
+
+    const homicks = [ { acceleration: 1, maxSpeed: playerSpeed, player: () => new HumanPlayer(), spriteIndex: playerSpriteIndex } ];
+
+    const bossPreJumpDistance = 15 - hardModeVarianceModifier;
+    const bossVarianceRange = 7 - hardModeVarianceModifier;
+    const bossBoostPreJumpDistance = 6 - hardModeBoostVarianceModifier;
+    const bossBoostVarianceRange = 3 - hardModeBoostVarianceModifier;
+    const bossSpriteOffset = 4;
+
+    // If it's the bonus level add all bosses
+    if (level === 33) {
+      homicks.unshift(
+        { acceleration: 2, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, bossPreJumpDistance, bossVarianceRange, bossBoostPreJumpDistance, bossBoostVarianceRange), spriteIndex: bossSpriteOffset },
+        { acceleration: 2, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, bossPreJumpDistance, bossVarianceRange, bossBoostPreJumpDistance, bossBoostVarianceRange), spriteIndex: bossSpriteOffset + 1 }
+      );
+      homicks.push(
+        { acceleration: 2, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, bossPreJumpDistance, bossVarianceRange, bossBoostPreJumpDistance, bossBoostVarianceRange), spriteIndex: bossSpriteOffset + 2 },
+        { acceleration: 2, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, bossPreJumpDistance, bossVarianceRange, bossBoostPreJumpDistance, bossBoostVarianceRange), spriteIndex: bossSpriteOffset + 3 }
+      );
+
+      return homicks;
+    }
 
     // Not a boss level, add mobs
     if (level % 4 !== 0) {
@@ -119,10 +140,9 @@ class HomickRacer {
     let spriteIndex = undefined; // Don't set if not boss level
     if (level % 4 === 0) {
       const mappedLevel = level > NUM_OF_LEVELS ? level - NUM_OF_LEVELS : level;
-      const bossSpriteOffset = 4;
       spriteIndex = Math.floor(mappedLevel / 4) - 1 + bossSpriteOffset;
     }
-    homicks.push({ acceleration: 2, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 15 - hardModeVarianceModifier, 7 - hardModeVarianceModifier, 6 - hardModeBoostVarianceModifier, 3 - hardModeBoostVarianceModifier), spriteIndex });
+    homicks.push({ acceleration: 2, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, bossPreJumpDistance, bossVarianceRange, bossBoostPreJumpDistance, bossBoostVarianceRange), spriteIndex });
 
     return homicks;
   }

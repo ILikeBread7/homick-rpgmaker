@@ -32,13 +32,15 @@
     const hoverBgColor = '#0d517c';
     const buttonStyles = `
         position: absolute;
-        bottom: 1px;
-        right: 1px;
+        bottom: 2px;
+        right: 2px;
         padding: 2px;
         font-family: GameFont;
-        font-size: 12px;
+        width: 26px;
+        height: 26px;
         background-color: ${normalBgColor};
-        color: #fff;
+        color: #ffffff;
+        fill: #ffffff;
         border-style: solid;
         border-width: 1px;
         border-radius: 5px;
