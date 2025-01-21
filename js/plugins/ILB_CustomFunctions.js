@@ -119,7 +119,8 @@ var $f = $f || {};
 
     $f.getMaxUnlockedStage = function() {
         const highscoreVarId = 7;
-        const numberOfStages = _STAGE_NAMES.size * 2;
+        // * 2 to include hard mode, +1 for bonus level
+        const numberOfStages = _STAGE_NAMES.size * 2 + 1;
         const levelsPerStage = 4;
 
         for (let stage = numberOfStages; stage > 1; stage--) {
