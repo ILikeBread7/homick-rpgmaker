@@ -50,6 +50,9 @@ class Obstacles {
    * @param {number} totalDistance 
    */
   static createObstaclesForLevel(level, totalDistance) {
+    if (level > NUM_OF_LEVELS) {
+      level -= NUM_OF_LEVELS;
+    }
 
     const obstacleSpec = [
       { value: 1, func: this._createSingleHurdle }

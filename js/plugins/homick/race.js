@@ -60,7 +60,6 @@ class Race {
     }
     this._playerNames = this._players.map((player, index) => player.isHuman ? `P${(homicks[index].spriteIndex !== undefined ? homicks[index].spriteIndex : index) + 1}` : 'CPU');
     this._playerColors = this._players.map((player, index) => player.isHuman ? PLAYER_NAME_COLORS[(homicks[index].spriteIndex !== undefined ? homicks[index].spriteIndex : index)] : CPU_NAME_COLOR);
-    console.log(this._playerColors)
     this._tiles = ImageManager.loadPicture('tiles');
 
     // Only to be passed to Obstacle.draw function
@@ -553,14 +552,17 @@ class Race {
       return this.currentObstacleIndex;
     }
 
-    if (this._finishedPositions[0] === 1) {
-      if (this._homicks[0].wasHit) {
+    const playerIndex = this.isBonus ? 2 : 0;
+    console.log(playerIndex, this._finishedPositions)
+
+    if (this._finishedPositions[playerIndex] === 1) {
+      if (this._homicks[playerIndex].wasHit) {
         return 2;
       }
       return 3;
     }
 
-    if (this._finishedPositions[0] === 2 && !this.isBoss) {
+    if (this._finishedPositions[playerIndex] === 2 && !this.isBoss) {
       return 1;
     }
 
@@ -568,11 +570,16 @@ class Race {
   }
 
   get playerFinalPosition() {
-    return this._finishedPositions[0];
+    const playerIndex = this.isBonus ? 2 : 0;
+    return this._finishedPositions[playerIndex];
+  }
+
+  get isBonus() {
+    return this._homicks.length === 5;
   }
 
   get isBoss() {
-    return this._homicks.length === 2 || this._homicks.length === 5;
+    return this._homicks.length === 2 || this.isBonus;
   }
 
   get _isEndless() {

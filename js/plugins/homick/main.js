@@ -74,6 +74,16 @@ class HomickRacer {
       return 0;
     }
 
+    // Bonus level
+    if (level === 33) {
+      // Make the distance "boss distance"
+      level += 3;
+    }
+
+    if (level > NUM_OF_LEVELS) {
+      level -= NUM_OF_LEVELS - 8;
+    }
+
     const levelsPerStage = 4;
     const distancePerStage = TRACKS_HEIGHT * 6;
     const distancePerLevel = TRACKS_HEIGHT * 3;
