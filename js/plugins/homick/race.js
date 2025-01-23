@@ -553,7 +553,6 @@ class Race {
     }
 
     const playerIndex = this.isBonus ? 2 : 0;
-    console.log(playerIndex, this._finishedPositions)
 
     if (this._finishedPositions[playerIndex] === 1) {
       if (this._homicks[playerIndex].wasHit) {
