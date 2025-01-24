@@ -160,7 +160,6 @@ var $f = $f || {};
         const highscoreVarId = 7;
         const levelHighscoreVarId = highscoreVarId + level;
         const unlocked = level === 1 || $gameVariables.value(levelHighscoreVarId - 1) > 0;
-        const inMenuSwitchId = 2;
 
         if (unlocked) {
             const imageName = ILB_HR.getLevelBackground(level);
@@ -170,6 +169,7 @@ var $f = $f || {};
                 $gameScreen.showPicture(2, homickImageName, 0, 170, 405, 100, 100, 255, 0);
             }
         } else {
+            const inMenuSwitchId = 2;
             $gameSwitches.setValue(inMenuSwitchId, true);
         }
     }
@@ -204,6 +204,54 @@ var $f = $f || {};
         }
 
         return true;
+    }
+
+    const _STORY_THEATRE_OPTIONS = [
+        { name: 'Introduction', storyProgress: 0, background: 'plains', character: 'announcer' },
+        { name: 'Le Mingue before', storyProgress: 4, background: 'tundra', character: 'tundra_homick' },
+        { name: 'Le Mingue after', storyProgress: 6, background: 'tundra', character: 'tundra_homick' },
+        { name: 'Test', storyProgress: 999, background: 'black_hole_singularity', character: 'brad' },
+        { name: 'Test 2', storyProgress: 7, background: 'asteroid_belt', character: 'roedent' },
+        { name: 'Test 3', storyProgress: 7, background: 'procyon', character: 'ginny' },
+        { name: 'Test 4', storyProgress: 7, background: 'black_hole_singularity', character: 'brad' },
+        { name: 'Test 5', storyProgress: 7, background: 'black_hole_singularity', character: 'brad' },
+        { name: 'Test 6', storyProgress: 999, background: 'black_hole_singularity', character: 'brad' },
+    ];
+
+    $f.mapStoryTheatreOptionNames = function(page) {
+        const storyProgressVarId = 50;
+        const storyProgress = $gameVariables.value(storyProgressVarId);
+        const optionsVarIds = [41, 42, 43, 44];
+        optionsVarIds.forEach((varId, index) => {
+            $gameVariables.setValue(varId, _mapPageAndIndexToStoryTheatreOptionName(page, index, storyProgress));
+        });
+
+        const nextPageStoryProgressVarId = 56;
+        const nextOption = _STORY_THEATRE_OPTIONS[page * 4];
+        $gameVariables.setValue(nextPageStoryProgressVarId, nextOption.storyProgress);
+    }
+
+    function _mapPageAndIndexToStoryTheatreOptionName(page, index, storyProgress) {
+        const option = _STORY_THEATRE_OPTIONS[(page - 1) * 4 + index];
+        return storyProgress >= option.storyProgress ? option.name : '???';
+    }
+
+    $f.showLevelBackgroundOnStoryTheatreMenu = function(index) {
+        const storyProgressVarId = 50;
+        const storyProgress = $gameVariables.value(storyProgressVarId);
+        const option = _STORY_THEATRE_OPTIONS[index];
+
+        if (storyProgress >= option.storyProgress) {
+            $gameScreen.showPicture(1, option.background, 0, 0, 0, 100, 100, 255, 0);
+            if (option.character === 'announcer') {
+                $gameScreen.showPicture(2, option.character, 0, 0, 401, 100, 100, 255, 0);
+            } else {
+                $gameScreen.showPicture(2, option.character, 0, 170, 405, 100, 100, 255, 0);
+            }
+        } else {
+            const inMenuSwitchId = 2;
+            $gameSwitches.setValue(inMenuSwitchId, true);
+        }
     }
 
 })();
