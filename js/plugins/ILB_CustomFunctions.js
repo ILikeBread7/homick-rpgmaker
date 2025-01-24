@@ -192,4 +192,18 @@ var $f = $f || {};
         }
     }
 
+    $f.checkAllLevels3Stars = function() {
+        const level1HighscoreVarId = 8;
+        const levelLastHighscoreVarId = 40;
+
+        for (let levelHighscoreVarId = levelLastHighscoreVarId; levelHighscoreVarId >= level1HighscoreVarId; levelHighscoreVarId--) {
+            const highscore = $gameVariables.value(levelHighscoreVarId);
+            if (highscore < 3) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 })();
