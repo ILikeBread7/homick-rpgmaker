@@ -210,12 +210,23 @@ var $f = $f || {};
         { name: 'Introduction', storyProgress: 0, background: 'plains', character: 'announcer' },
         { name: 'Le Mingue before', storyProgress: 4, background: 'tundra', character: 'tundra_homick' },
         { name: 'Le Mingue after', storyProgress: 6, background: 'tundra', character: 'tundra_homick' },
-        { name: 'Test', storyProgress: 999, background: 'black_hole_singularity', character: 'brad' },
-        { name: 'Test 2', storyProgress: 7, background: 'asteroid_belt', character: 'roedent' },
-        { name: 'Test 3', storyProgress: 7, background: 'procyon', character: 'ginny' },
-        { name: 'Test 4', storyProgress: 7, background: 'black_hole_singularity', character: 'brad' },
-        { name: 'Test 5', storyProgress: 7, background: 'black_hole_singularity', character: 'brad' },
-        { name: 'Test 6', storyProgress: 999, background: 'black_hole_singularity', character: 'brad' },
+        { name: 'Roe Dent before', storyProgress: 10, background: 'asteroid_belt', character: 'roedent' },
+        { name: 'Roe Dent after', storyProgress: 12, background: 'asteroid_belt', character: 'roedent' },
+        { name: 'Ginny before', storyProgress: 16, background: 'procyon', character: 'ginny' },
+        { name: 'Ginny after', storyProgress: 18, background: 'procyon', character: 'ginny' },
+        { name: 'Brad before', storyProgress: 22, background: 'black_hole_singularity', character: 'brad' },
+        { name: 'Brad after', storyProgress: 24, background: 'black_hole_singularity', character: 'brad' },
+        { name: 'Introduction (Hard)', storyProgress: 25, background: 'plains', character: 'announcer' },
+        { name: 'Le Mingue before (Hard)', storyProgress: 29, background: 'tundra', character: 'tundra_homick' },
+        { name: 'Le Mingue after (Hard)', storyProgress: 31, background: 'tundra', character: 'tundra_homick' },
+        { name: 'Roe Dent before (Hard)', storyProgress: 35, background: 'asteroid_belt', character: 'roedent' },
+        { name: 'Roe Dent after (Hard)', storyProgress: 37, background: 'asteroid_belt', character: 'roedent' },
+        { name: 'Ginny before (Hard)', storyProgress: 41, background: 'procyon', character: 'ginny' },
+        { name: 'Ginny after (Hard)', storyProgress: 43, background: 'procyon', character: 'ginny' },
+        { name: 'Brad before (Hard)', storyProgress: 47, background: 'black_hole_singularity', character: 'brad' },
+        { name: 'Brad after (Hard)', storyProgress: 49, background: 'black_hole_singularity', character: 'brad' },
+        { name: 'Bonus! after', storyProgress: 51, background: 'black_hole_singularity', character: 'trophy' },
+        { name: 'All 3 stars!', storyProgress: 53, background: 'black_hole_singularity', character: 'trophy' },
     ];
 
     $f.mapStoryTheaterOptionNames = function(page) {
@@ -228,7 +239,7 @@ var $f = $f || {};
 
         const nextPageStoryProgressVarId = 56;
         const nextOption = _STORY_THEATRE_OPTIONS[(page + 1) * 4];
-        $gameVariables.setValue(nextPageStoryProgressVarId, nextOption.storyProgress);
+        $gameVariables.setValue(nextPageStoryProgressVarId, nextOption ? nextOption.storyProgress : Number.MAX_SAFE_INTEGER);
     }
 
     function _mapPageAndIndexToStoryTheaterOptionName(page, index, storyProgress) {
@@ -245,6 +256,8 @@ var $f = $f || {};
             $gameScreen.showPicture(1, option.background, 0, 0, 0, 100, 100, 255, 0);
             if (option.character === 'announcer') {
                 $gameScreen.showPicture(2, option.character, 0, 0, 401, 100, 100, 255, 0);
+            } else if (option.character === 'trophy') {
+                $gameScreen.showPicture(2, option.character, 0, 116, 30, 100, 100, 255, 0);
             } else {
                 $gameScreen.showPicture(2, option.character, 0, 170, 405, 100, 100, 255, 0);
             }
