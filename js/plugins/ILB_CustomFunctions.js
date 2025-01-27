@@ -218,25 +218,25 @@ var $f = $f || {};
         { name: 'Test 6', storyProgress: 999, background: 'black_hole_singularity', character: 'brad' },
     ];
 
-    $f.mapStoryTheatreOptionNames = function(page) {
+    $f.mapStoryTheaterOptionNames = function(page) {
         const storyProgressVarId = 50;
         const storyProgress = $gameVariables.value(storyProgressVarId);
         const optionsVarIds = [41, 42, 43, 44];
         optionsVarIds.forEach((varId, index) => {
-            $gameVariables.setValue(varId, _mapPageAndIndexToStoryTheatreOptionName(page, index, storyProgress));
+            $gameVariables.setValue(varId, _mapPageAndIndexToStoryTheaterOptionName(page, index, storyProgress));
         });
 
         const nextPageStoryProgressVarId = 56;
-        const nextOption = _STORY_THEATRE_OPTIONS[page * 4];
+        const nextOption = _STORY_THEATRE_OPTIONS[(page + 1) * 4];
         $gameVariables.setValue(nextPageStoryProgressVarId, nextOption.storyProgress);
     }
 
-    function _mapPageAndIndexToStoryTheatreOptionName(page, index, storyProgress) {
-        const option = _STORY_THEATRE_OPTIONS[(page - 1) * 4 + index];
+    function _mapPageAndIndexToStoryTheaterOptionName(page, index, storyProgress) {
+        const option = _STORY_THEATRE_OPTIONS[page * 4 + index];
         return storyProgress >= option.storyProgress ? option.name : '???';
     }
 
-    $f.showLevelBackgroundOnStoryTheatreMenu = function(index) {
+    $f.showLevelBackgroundOnStoryTheaterMenu = function(index) {
         const storyProgressVarId = 50;
         const storyProgress = $gameVariables.value(storyProgressVarId);
         const option = _STORY_THEATRE_OPTIONS[index];

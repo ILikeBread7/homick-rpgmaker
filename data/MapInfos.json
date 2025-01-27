@@ -3,5 +3,5 @@ null,
 {"id":1,"expanded":true,"name":"Main menu","order":1,"parentId":0,"scrollX":423.5,"scrollY":318},
 {"id":2,"expanded":true,"name":"Story mode","order":2,"parentId":0,"scrollX":832,"scrollY":640},
 {"id":3,"expanded":false,"name":"Multiplayer","order":3,"parentId":0,"scrollX":423.5,"scrollY":318},
-{"id":4,"expanded":true,"name":"Story theatre","order":4,"parentId":0,"scrollX":423.5,"scrollY":318}
+{"id":4,"expanded":true,"name":"Story theater","order":4,"parentId":0,"scrollX":423.5,"scrollY":318}
 ]
