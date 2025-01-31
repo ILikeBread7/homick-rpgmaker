@@ -239,7 +239,7 @@ var $f = $f || {};
 
         const nextPageStoryProgressVarId = 56;
         const nextOption = _STORY_THEATRE_OPTIONS[(page + 1) * 4];
-        $gameVariables.setValue(nextPageStoryProgressVarId, nextOption ? nextOption.storyProgress : Number.MAX_SAFE_INTEGER);
+        $gameVariables.setValue(nextPageStoryProgressVarId, nextOption ? nextOption.storyProgress : 0);
     }
 
     function _mapPageAndIndexToStoryTheaterOptionName(page, index, storyProgress) {
