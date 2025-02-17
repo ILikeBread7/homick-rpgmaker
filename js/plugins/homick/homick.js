@@ -148,10 +148,12 @@ class Homick {
    * @param {number} distanceToFirst 
    */
   _handleMoving(time, obstacles, fallenHurdles, justLanded, distanceToFirst) {
+    const oldSpeed = this.effectiveSpeed;
     if (this.isOnGround) {
       this._accelerate(time, distanceToFirst);
     }
-    this._distance += time * this.effectiveSpeed;
+    // Average out the speed over time for more accurate movement
+    this._distance += time * (this.effectiveSpeed + oldSpeed) / 2;
 
     this._currentObstacleIndex = HomickUtils.findIndexStartingAt(obstacles, this._currentObstacleIndex, o => o.distance > this._distance || o.type.collides(o.distance, this._distance, 0));
     if (this._currentObstacleIndex !== -1) {
