@@ -207,26 +207,26 @@ var $f = $f || {};
     }
 
     const _STORY_THEATRE_OPTIONS = [
-        { name: 'Introduction', storyProgress: 0, background: 'plains', character: 'announcer' },
-        { name: 'Le Mingue before', storyProgress: 4, background: 'tundra', character: 'tundra_homick' },
-        { name: 'Le Mingue after', storyProgress: 6, background: 'tundra', character: 'tundra_homick' },
-        { name: 'Roe Dent before', storyProgress: 10, background: 'asteroid_belt', character: 'roedent' },
-        { name: 'Roe Dent after', storyProgress: 12, background: 'asteroid_belt', character: 'roedent' },
-        { name: 'Ginny before', storyProgress: 16, background: 'procyon', character: 'ginny' },
-        { name: 'Ginny after', storyProgress: 18, background: 'procyon', character: 'ginny' },
-        { name: 'Brad before', storyProgress: 22, background: 'black_hole_singularity', character: 'brad' },
-        { name: 'Brad after', storyProgress: 24, background: 'black_hole_singularity', character: 'brad' },
-        { name: 'Introduction (Hard)', storyProgress: 25, background: 'plains', character: 'announcer' },
-        { name: 'Le Mingue before (Hard)', storyProgress: 29, background: 'tundra', character: 'tundra_homick' },
-        { name: 'Le Mingue after (Hard)', storyProgress: 31, background: 'tundra', character: 'tundra_homick' },
-        { name: 'Roe Dent before (Hard)', storyProgress: 35, background: 'asteroid_belt', character: 'roedent' },
-        { name: 'Roe Dent after (Hard)', storyProgress: 37, background: 'asteroid_belt', character: 'roedent' },
-        { name: 'Ginny before (Hard)', storyProgress: 41, background: 'procyon', character: 'ginny' },
-        { name: 'Ginny after (Hard)', storyProgress: 43, background: 'procyon', character: 'ginny' },
-        { name: 'Brad before (Hard)', storyProgress: 47, background: 'black_hole_singularity', character: 'brad' },
-        { name: 'Brad after (Hard)', storyProgress: 49, background: 'black_hole_singularity', character: 'brad' },
-        { name: 'Bonus! after', storyProgress: 51, background: 'black_hole_singularity', character: 'trophy' },
-        { name: 'All 3 stars!', storyProgress: 53, background: 'black_hole_singularity', character: 'trophy' },
+        { name: { 'English': 'Introduction', '日本語': '紹介', 'Polski': '' }, storyProgress: 0, background: 'plains', character: 'announcer' },
+        { name: { 'English': 'Le Mingue before', '日本語': 'レ・ミング前', 'Polski': '' }, storyProgress: 4, background: 'tundra', character: 'tundra_homick' },
+        { name: { 'English': 'Le Mingue after', '日本語': 'レ・ミング後', Polski: '' }, storyProgress: 6, background: 'tundra', character: 'tundra_homick' },
+        { name: { 'English': 'Roe Dent before', '日本語': 'ロー・デント前', Polski: '' }, storyProgress: 10, background: 'asteroid_belt', character: 'roedent' },
+        { name: { 'English': 'Roe Dent after', '日本語': 'ロー・デント後', Polski: '' }, storyProgress: 12, background: 'asteroid_belt', character: 'roedent' },
+        { name: { 'English': 'Ginny before', '日本語': 'ギニー前', Polski: '' }, storyProgress: 16, background: 'procyon', character: 'ginny' },
+        { name: { 'English': 'Ginny after', '日本語': 'ギニー後', Polski: '' }, storyProgress: 18, background: 'procyon', character: 'ginny' },
+        { name: { 'English': 'Brad before', '日本語': 'ブラッド前', Polski: '' }, storyProgress: 22, background: 'black_hole_singularity', character: 'brad' },
+        { name: { 'English': 'Brad after', '日本語': 'ブラッド後', Polski: '' }, storyProgress: 24, background: 'black_hole_singularity', character: 'brad' },
+        { name: { 'English': 'Introduction (Hard)', '日本語': '紹介（ハード）', Polski: '' }, storyProgress: 25, background: 'plains', character: 'announcer' },
+        { name: { 'English': 'Le Mingue before (Hard)', '日本語': 'レ・ミング前（ハード）', Polski: '' }, storyProgress: 29, background: 'tundra', character: 'tundra_homick' },
+        { name: { 'English': 'Le Mingue after (Hard)', '日本語': 'レ・ミング後（ハード）', Polski: '' }, storyProgress: 31, background: 'tundra', character: 'tundra_homick' },
+        { name: { 'English': 'Roe Dent before (Hard)', '日本語': 'ロー・デント前（ハード）', Polski: '' }, storyProgress: 35, background: 'asteroid_belt', character: 'roedent' },
+        { name: { 'English': 'Roe Dent after (Hard)', '日本語': 'ロー・デント後（ハード）', Polski: '' }, storyProgress: 37, background: 'asteroid_belt', character: 'roedent' },
+        { name: { 'English': 'Ginny before (Hard)', '日本語': 'ギニー前（ハード）', Polski: '' }, storyProgress: 41, background: 'procyon', character: 'ginny' },
+        { name: { 'English': 'Ginny after (Hard)', '日本語': 'ギニー後（ハード）', Polski: '' }, storyProgress: 43, background: 'procyon', character: 'ginny' },
+        { name: { 'English': 'Brad before (Hard)', '日本語': 'ブラッド前（ハード）', Polski: '' }, storyProgress: 47, background: 'black_hole_singularity', character: 'brad' },
+        { name: { 'English': 'Brad after (Hard)', '日本語': 'ブラッド後（ハード）', Polski: '' }, storyProgress: 49, background: 'black_hole_singularity', character: 'brad' },
+        { name: { 'English': 'Bonus! after', '日本語': 'ボーナス！前', Polski: '' }, storyProgress: 51, background: 'black_hole_singularity', character: 'trophy' },
+        { name: { 'English': 'All 3 stars!', '日本語': '全ステージ３星！', Polski: '' }, storyProgress: 53, background: 'black_hole_singularity', character: 'trophy' },
     ];
 
     $f.mapStoryTheaterOptionNames = function(page) {
@@ -244,7 +244,7 @@ var $f = $f || {};
 
     function _mapPageAndIndexToStoryTheaterOptionName(page, index, storyProgress) {
         const option = _STORY_THEATRE_OPTIONS[page * 4 + index];
-        return storyProgress >= option.storyProgress ? option.name : '???';
+        return storyProgress >= option.storyProgress ? option.name[ConfigManager.getLanguage()] : '???';
     }
 
     $f.showLevelBackgroundOnStoryTheaterMenu = function(index) {
@@ -265,6 +265,10 @@ var $f = $f || {};
             const inMenuSwitchId = 2;
             $gameSwitches.setValue(inMenuSwitchId, true);
         }
+    }
+
+    $f.getTranslation = function(cmd) {
+        return $dataTranslations.cmd[cmd][ConfigManager.getLanguage()] || cmd;
     }
 
 })();
