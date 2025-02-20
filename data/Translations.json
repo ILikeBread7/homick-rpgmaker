@@ -1,1 +1,278 @@
-{"msg":{"Number of players":{"日本語":"プレイヤー人数"},"Number of cpu":{"日本語":"CPU数"},"Cpu difficulty":{"日本語":"CPUの難易度"},"Track difficulty":{"日本語":"コースの難易度"},"Pause!\nWould you like to quit?":{"日本語":"一時休止！\nレースをやめますか？"},"Are you sure you want\nto restart?":{"日本語":"本当に最初から\nやり直しますか？"},"Are you sure you want\nto quit?":{"日本語":"本当にレースを\nやめますか？"},"Your score is: \\V[4]":{"日本語":"得点スコアは\\V[4]点！"},"It's a new highscore!":{"日本語":"新最高得点です！"},"Would you like to\nplay again?":{"日本語":"もう一度遊びますか？"},"You finished \\V[5]!\nYour score is: \\V[48]":{"日本語":"\\V[5]です！\nスコアは\\V[48]！"},"Are you sure you want\nto quit and return\nto the main menu?":{"日本語":"本当にメインメニューへ\n戻っても\nよろしいですか？"},"         Bonus!":{"日本語":"       ボーナス！"}},"cmd":{"Yes":{"日本語":"はい"},"No":{"日本語":"いいえ"},"Start Game":{"日本語":"ゲームスタート"},"Options":{"日本語":"設定"},"Credits":{"日本語":"クレジット"},"Language":{"日本語":"言語"},"BGM Volume":{"日本語":"BGM音量"},"SE Volume":{"日本語":"SE音量"},"Story mode":{"日本語":"ストーリーモード"},"Endless mode":{"日本語":"エンドレスモード"},"Multiplayer":{"日本語":"マルチプレイ"},"Story theater":{"日本語":"ストーリー鑑賞"},"Return to title":{"日本語":"タイトルに戻る"},"Quit":{"日本語":"戻る"},"Cancel":{"日本語":"キャンセル"},"Easy":{"日本語":"優しい"},"Normal":{"日本語":"普通"},"Hard":{"日本語":"難しい"},"Very hard":{"日本語":"激ムズ"},"Continue":{"日本語":"続ける"},"Restart":{"日本語":"最初からやり直す"},"Play again":{"日本語":"もう一度遊ぶ"},"Next":{"日本語":"次へ"},"Previous":{"日本語":"前へ"},"Back to start":{"日本語":"最初へ"},"\\V[41] Bonus!":{"日本語":"\\V[41] ボーナス！"}},"terms":{},"custom":{"日本語":{"_regex":[["Player (\\d)","","プレイヤー$1"],["Press (\\w)","","「$1」キーを"],["Distance: (\\d+)","","距離: $1"],["Score: (\\d+)","","スコア: $1"]],"or tap":"押すか画面を","the screen.":"タッチしてください。","Click to go back to menu":"メニューへ戻るには、画面をタッチしてください","Ready!":"準備万端！","Waiting...":"待機中…"}}}
+{
+    "msg": {
+        "Number of players": {
+            "日本語": "プレイヤー人数"
+        },
+        "Number of cpu": {
+            "日本語": "CPU数"
+        },
+        "Cpu difficulty": {
+            "日本語": "CPUの難易度"
+        },
+        "Track difficulty": {
+            "日本語": "コースの難易度"
+        },
+        "Pause!\nWould you like to quit?": {
+            "日本語": "一時休止！\nレースをやめますか？"
+        },
+        "Are you sure you want\nto restart?": {
+            "日本語": "本当に最初から\nやり直しますか？"
+        },
+        "Are you sure you want\nto quit?": {
+            "日本語": "本当にレースを\nやめますか？"
+        },
+        "Your score is: \\V[4]": {
+            "日本語": "得点スコアは\\V[4]点！"
+        },
+        "It's a new highscore!": {
+            "日本語": "新最高得点です！"
+        },
+        "Would you like to\nplay again?": {
+            "日本語": "もう一度遊びますか？"
+        },
+        "You finished \\V[5]!\nYour score is: \\V[48]": {
+            "日本語": "\\V[5]です！\nスコアは\\V[48]！"
+        },
+        "Are you sure you want\nto quit and return\nto the main menu?": {
+            "日本語": "本当にメインメニューへ\n戻っても\nよろしいですか？"
+        },
+        "         Bonus!": {
+            "日本語": "       ボーナス！"
+        }
+    },
+    "cmd": {
+        "Yes": {
+            "日本語": "はい"
+        },
+        "No": {
+            "日本語": "いいえ"
+        },
+        "Start Game": {
+            "日本語": "ゲームスタート"
+        },
+        "Options": {
+            "日本語": "設定"
+        },
+        "Credits": {
+            "日本語": "クレジット"
+        },
+        "Language": {
+            "日本語": "言語"
+        },
+        "BGM Volume": {
+            "日本語": "BGM音量"
+        },
+        "SE Volume": {
+            "日本語": "SE音量"
+        },
+        "Story mode": {
+            "日本語": "ストーリーモード"
+        },
+        "Endless mode": {
+            "日本語": "エンドレスモード"
+        },
+        "Multiplayer": {
+            "日本語": "マルチプレイ"
+        },
+        "Story theater": {
+            "日本語": "ストーリー鑑賞"
+        },
+        "Return to title": {
+            "日本語": "タイトルに戻る"
+        },
+        "Quit": {
+            "日本語": "戻る"
+        },
+        "Cancel": {
+            "日本語": "キャンセル"
+        },
+        "Easy": {
+            "日本語": "優しい"
+        },
+        "Normal": {
+            "日本語": "普通"
+        },
+        "Hard": {
+            "日本語": "難しい"
+        },
+        "Very hard": {
+            "日本語": "激ムズ"
+        },
+        "Continue": {
+            "日本語": "続ける"
+        },
+        "Restart": {
+            "日本語": "最初からやり直す"
+        },
+        "Play again": {
+            "日本語": "もう一度遊ぶ"
+        },
+        "Next": {
+            "日本語": "次へ"
+        },
+        "Previous": {
+            "日本語": "前へ"
+        },
+        "Back to start": {
+            "日本語": "最初へ"
+        },
+        "\\V[41] Bonus!": {
+            "日本語": "\\V[41] ボーナス！"
+        },
+        " (Hard)": {
+            "日本語": "（ハード）"
+        },
+        "Introduction": {
+            "日本語": "紹介"
+        },
+        "Le Mingue before": {
+            "日本語": "レ・ミング前"
+        },
+        "Le Mingue after": {
+            "日本語": "レ・ミング後"
+        },
+        "Roe Dent before": {
+            "日本語": "ロー・デント前"
+        },
+        "Roe Dent after": {
+            "日本語": "ロー・デント後"
+        },
+        "Ginny before": {
+            "日本語": "ギニー前"
+        },
+        "Ginny after": {
+            "日本語": "ギニー後"
+        },
+        "Brad before": {
+            "日本語": "ブラッド前"
+        },
+        "Brad after": {
+            "日本語": "ブラッド後"
+        },
+        "Introduction (Hard)": {
+            "日本語": "紹介（ハード）"
+        },
+        "Le Mingue before (Hard)": {
+            "日本語": "レ・ミング前（ハード）"
+        },
+        "Le Mingue after (Hard)": {
+            "日本語": "レ・ミング後（ハード）"
+        },
+        "Roe Dent before (Hard)": {
+            "日本語": "ロー・デント前（ハード）"
+        },
+        "Roe Dent after (Hard)": {
+            "日本語": "ロー・デント後（ハード）"
+        },
+        "Ginny before (Hard)": {
+            "日本語": "ギニー前（ハード）"
+        },
+        "Ginny after (Hard)": {
+            "日本語": "ギニー後（ハード）"
+        },
+        "Brad before (Hard)": {
+            "日本語": "ブラッド前（ハード）"
+        },
+        "Brad after (Hard)": {
+            "日本語": "ブラッド後（ハード）"
+        },
+        "Bonus! after": {
+            "日本語": "ボーナス！前"
+        },
+        "All 3 stars!": {
+            "日本語": "全ステージ３星！"
+        },
+        "Earth": {
+            "日本語": "地球"
+        },
+        "Solar system": {
+            "日本語": "太陽系"
+        },
+        "Milky way": {
+            "日本語": "天の川"
+        },
+        "Black hole": {
+            "日本語": "ブラックホール"
+        },
+        "Plains": {
+            "日本語": "草原"
+        },
+        "Desert": {
+            "日本語": "砂漠"
+        },
+        "Jungle": {
+            "日本語": "ジャングル"
+        },
+        "Tundra": {
+            "日本語": "凍原"
+        },
+        "Moon": {
+            "日本語": "月"
+        },
+        "Mars": {
+            "日本語": "火星"
+        },
+        "Saturn": {
+            "日本語": "土星"
+        },
+        "Asteroid belt": {
+            "日本語": "小惑星帯"
+        },
+        "Sun": {
+            "日本語": "太陽"
+        },
+        "Alpha centauri": {
+            "日本語": "ケンタウルス座アルファ星"
+        },
+        "Sirius": {
+            "日本語": "シリウス"
+        },
+        "Procyon": {
+            "日本語": "プロキオン"
+        },
+        "Outskirts": {
+            "日本語": "外縁"
+        },
+        "Plunging region": {
+            "日本語": "墜落領域"
+        },
+        "Event horizon": {
+            "日本語": "事象の地平線"
+        },
+        "Singularity": {
+            "日本語": "特異点"
+        }
+    },
+    "terms": {},
+    "custom": {
+        "日本語": {
+            "_regex": [
+                [
+                    "Player (\\d)",
+                    "",
+                    "プレイヤー$1"
+                ],
+                [
+                    "Press (\\w)",
+                    "",
+                    "「$1」キーを"
+                ],
+                [
+                    "Distance: (\\d+)",
+                    "",
+                    "距離: $1"
+                ],
+                [
+                    "Score: (\\d+)",
+                    "",
+                    "スコア: $1"
+                ]
+            ],
+            "or tap": "押すか画面を",
+            "the screen.": "タッチしてください。",
+            "Click to go back to menu": "メニューへ戻るには、画面をタッチしてください",
+            "Ready!": "準備万端！",
+            "Waiting...": "待機中…"
+        }
+    }
+}
