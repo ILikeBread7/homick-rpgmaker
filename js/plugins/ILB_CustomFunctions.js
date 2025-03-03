@@ -74,6 +74,21 @@ var $f = $f || {};
             name = space + name;
         }
 
+        // If the name is too long shorten it
+        // by removing the last space in it
+        // That only happens for hard mode names
+        // so the space removed will be the space
+        // between the name and "(Hard)" text
+        // Added specifically for Polish
+        // "Solar system (Hard)"
+        // being 24 characters long
+        if (name.length > lineWidth) {
+            const lastSpaceIndex = name.lastIndexOf(' ');
+            if (lastSpaceIndex) {
+                name = name.slice(0, lastSpaceIndex) + name.slice(lastSpaceIndex + 1);
+            }
+        }
+
         const stageNameVarId = 47;
         return $gameVariables.setValue(stageNameVarId, name);
     }
