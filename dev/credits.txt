@@ -44,3 +44,4 @@ https://forums.rpgmakerweb.com/index.php?threads/galvs-message-sound-effects.494
 http://sumrndm.site/translation-engine/
 
 RPG Maker MV StickSpecial3 animation for the boosting animation
+RPG Maker MV fall sound effect (for the falling box in the final cutscene after getting all 3 stars)
