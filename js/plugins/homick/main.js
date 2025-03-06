@@ -34,24 +34,34 @@ class HomickRacer {
    * @param {number} level 
    * @param {number} numberOfHumanPlayers 
    * @param {number} numberOfCpuPlayers 
-   * @param {0|1|2} cpuDifficulty 
+   * @param {0|1|2|3} cpuDifficulty 
    * @returns {Race}
    */
   static startMultiplayer(window, bgmName, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
     const homicks = [];
-    
+    const acceleration = 1;
+    const hardMode = this._isHardMode(level);
+    const hardModeSpeedModifier = hardMode ? 0.25 : 0;
+
+    const cpuHardMode = cpuDifficulty === 3;
+    const playerMinSpeed = 2.5 + hardModeSpeedModifier;
+    const playerMaxSpeed = 3.25 + hardModeSpeedModifier;
+    const playerSpeed = this._getHomickSpeedForLevel(level, playerMinSpeed, playerMaxSpeed);
+
     for (let i = 1; i <= numberOfHumanPlayers; i++) {
-      homicks.push({ acceleration: 1, maxSpeed: 3, player: () => new HumanPlayer(i) });
+      homicks.push({ acceleration, maxSpeed: playerSpeed, player: () => new HumanPlayer(i) });
     }
 
     if (numberOfCpuPlayers) {
-      const acceleration = 2;
-      const maxSpeed = 2.5 + cpuDifficulty * 0.25;
-      const preJumpDistance = 20 - cpuDifficulty * 2;
-      const varianceRange = 12 - cpuDifficulty * 2;
-      const boostPreJumpDistance = cpuDifficulty && (3 * (3 - cpuDifficulty));
-      const boostVarianceRange = cpuDifficulty && (2 * (3 - cpuDifficulty));
-      const homick = { acceleration, maxSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, preJumpDistance, varianceRange, boostPreJumpDistance, boostVarianceRange) };
+      const hardModeVarianceModifier = cpuHardMode ? 3 : 0;
+      const hardModeBoostVarianceModifier = cpuHardMode ? 1 : 0;
+      const difficultyMultiplier = Math.min(cpuDifficulty - 1, 1);
+
+      const preJumpDistance = 20 - difficultyMultiplier * 5 - hardModeVarianceModifier;
+      const varianceRange = 10 - difficultyMultiplier * 3 - hardModeVarianceModifier;
+      const boostPreJumpDistance = 8 - difficultyMultiplier * 1 - hardModeBoostVarianceModifier;
+      const boostVarianceRange = 5 - difficultyMultiplier * 2 - hardModeBoostVarianceModifier;
+      const homick = { acceleration, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, preJumpDistance, varianceRange, boostPreJumpDistance, boostVarianceRange) };
       for (let i = 0; i < numberOfCpuPlayers; i++) {
         homicks.push(homick);
       }
