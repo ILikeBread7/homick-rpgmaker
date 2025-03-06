@@ -106,7 +106,7 @@ class HomickRacer {
     const hardMode = this._isHardMode(level);
     const hardModeSpeedModifier = hardMode ? 0.25 : 0;
     const hardModeVarianceModifier = hardMode ? 3 : 0;
-    const hardModeBoostVarianceModifier = hardMode ? 2 : 0;
+    const hardModeBoostVarianceModifier = hardMode ? 1 : 0;
 
     const playerMinSpeed = 2.5 + hardModeSpeedModifier;
     const playerMaxSpeed = 3.25 + hardModeSpeedModifier;
@@ -119,7 +119,7 @@ class HomickRacer {
 
     const bossPreJumpDistance = 15 - hardModeVarianceModifier;
     const bossVarianceRange = 7 - hardModeVarianceModifier;
-    const bossBoostPreJumpDistance = 6 - hardModeBoostVarianceModifier;
+    const bossBoostPreJumpDistance = 7 - hardModeBoostVarianceModifier;
     const bossBoostVarianceRange = 3 - hardModeBoostVarianceModifier;
     const bossSpriteOffset = 4;
 
