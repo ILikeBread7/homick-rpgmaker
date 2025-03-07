@@ -41,11 +41,10 @@ class HomickRacer {
     const homicks = [];
     const acceleration = 1;
     const hardMode = this._isHardMode(level);
-    const hardModeSpeedModifier = hardMode ? 0.25 : 0;
 
     const cpuHardMode = cpuDifficulty === 3;
-    const playerMinSpeed = 2.5 + hardModeSpeedModifier;
-    const playerMaxSpeed = 3.25 + hardModeSpeedModifier;
+    const playerMinSpeed = 2.5;
+    const playerMaxSpeed = 3.25;
     const playerSpeed = this._getHomickSpeedForLevel(level, playerMinSpeed, playerMaxSpeed);
 
     for (let i = 1; i <= numberOfHumanPlayers; i++) {
@@ -54,12 +53,12 @@ class HomickRacer {
 
     if (numberOfCpuPlayers) {
       const hardModeVarianceModifier = cpuHardMode ? 3 : 0;
-      const hardModeBoostVarianceModifier = cpuHardMode ? 1 : 0;
+      const hardModeBoostVarianceModifier = cpuHardMode ? 0.5 : 0;
       const difficultyMultiplier = Math.min(cpuDifficulty - 1, 1);
 
       const preJumpDistance = 20 - difficultyMultiplier * 5 - hardModeVarianceModifier;
       const varianceRange = 10 - difficultyMultiplier * 3 - hardModeVarianceModifier;
-      const boostPreJumpDistance = 8 - difficultyMultiplier * 1 - hardModeBoostVarianceModifier;
+      const boostPreJumpDistance = 8 - difficultyMultiplier * 2 - hardModeBoostVarianceModifier;
       const boostVarianceRange = 5 - difficultyMultiplier * 2 - hardModeBoostVarianceModifier;
       const homick = { acceleration, maxSpeed: playerSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, preJumpDistance, varianceRange, boostPreJumpDistance, boostVarianceRange) };
       for (let i = 0; i < numberOfCpuPlayers; i++) {
