@@ -317,6 +317,14 @@ var ILB_HR = ILB_HR || {};
         return race ? race.playerScore : 0;
     }
 
+    ILB_HR.getEndlessBoostScore = function() {
+        return race ? race.boostScore : 0;
+    }
+
+    ILB_HR.getEndlessDistance = function() {
+        return race ? race.endlessDistance : 0;
+    }
+
     ILB_HR.getLevelBackground = function(level) {
         const totalLevels = LEVEL_BACKGROUNDS.size;
         if (level > totalLevels) {

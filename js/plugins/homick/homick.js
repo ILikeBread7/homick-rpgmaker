@@ -35,6 +35,7 @@ class Homick {
     this._jumping = false;
     this._index = index;
     this._spriteIndex = spriteIndex;
+    this._justBoosted = false;
   }
 
   /**
@@ -46,6 +47,8 @@ class Homick {
    * @param {number} distanceToFirst 
    */
   travel(time, jump, obstacles, fallenHurdles, distanceToFirst) {
+    this._justBoosted = false;
+    
     if (time <= this._obstacleHitTimeout) {
       this._obstacleHitTimeout -= time;
       return;
@@ -193,6 +196,7 @@ class Homick {
   }
 
   _addBoost() {
+    this._justBoosted = true;
     this._boostTimeout = BOOST_TIME + BOOST_DECELERATION_TIME;
     AudioManager.playSe(HomickUtils.makeSeVariedPitch(BOOST_SE));
   }
@@ -303,6 +307,10 @@ class Homick {
 
   get spriteIndex() {
     return this._spriteIndex;
+  }
+
+  get justBoosted() {
+    return this._justBoosted;
   }
 
 }

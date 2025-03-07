@@ -49,15 +49,16 @@ class Race {
     this._lastPlayedCountdownSe = Number.MAX_SAFE_INTEGER;
     this._bgmStarted = false;
 
+    if (this._isEndless) {
+      this._obstacleToDelete = 0;
+      this._boostScore = 0;
+    }
+
     // For drawing the current position
     this._homicksOrdered = [...this._homicks].reverse();
     this._finishedPositions = [];
 
     this._numberOfHumanPlayers = numberOfHumanPlayers;
-    this._obstacleToDelete = 0;
-    if (this._isEndless === 0) {
-      this._addNewEndlessObstacles();
-    }
     this._playerNames = this._players.map((player, index) => player.isHuman ? `P${(homicks[index].spriteIndex !== undefined ? homicks[index].spriteIndex : index) + 1}` : 'CPU');
     this._playerColors = this._players.map((player, index) => player.isHuman ? PLAYER_NAME_COLORS[(homicks[index].spriteIndex !== undefined ? homicks[index].spriteIndex : index)] : CPU_NAME_COLOR);
     this._tiles = ImageManager.loadPicture('tiles');
@@ -99,6 +100,10 @@ class Race {
           distanceToFirst
         );
 
+        if (this._isEndless && homick._justBoosted) {
+          this._boostScore++;
+        }
+
         if (homick.isFinished(this._totalDistance)) {
           const position = this._finishedPositions.filter(x => !!x).length + 1;
           this._finishedPositions[index] = position;
@@ -117,7 +122,7 @@ class Race {
       this._drawCountdown(this._totalTime);
     }
     if (this._isEndless) {
-      this._drawEndlessScore(Math.floor(this._homicks[0].distance));
+      this._drawEndlessScore(this.endlessDistance);
     } else {
       this._drawFinishLineOnSide();
       this._drawPositions();
@@ -495,7 +500,8 @@ class Race {
 
     this._contents.fontSize = 16;
     this._window.drawText(`Score: ${this.currentObstacleIndex}`, marginLeft, marginTop);
-    this._window.drawText(`Distance: ${Math.floor(distance / 10)}`, marginLeft, marginTop + 20);
+    this._window.drawText(`Boosts: ${this._boostScore}`, marginLeft, marginTop + 20);
+    this._window.drawText(`Distance: ${Math.floor(distance)}`, marginLeft, marginTop + 40);
     this._window.resetFontSettings();
   }
 
@@ -566,6 +572,14 @@ class Race {
     }
 
     return 0;
+  }
+
+  get boostScore() {
+    return this._boostScore || 0;
+  }
+
+  get endlessDistance() {
+    return Math.floor(this._homicks[0].distance / 10);
   }
 
   get playerFinalPosition() {

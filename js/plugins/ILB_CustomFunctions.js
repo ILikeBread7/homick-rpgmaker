@@ -165,6 +165,22 @@ var $f = $f || {};
             if (score > 0 && $gameVariables.value(highscoreVarId) === 0) {
                 $gameSwitches.setValue(newLevelBeatenSwitchId, true);
             }
+        } else if (ILB_HR.getMode() === ILB_HR.ENDLESS_MODE) {
+            const boostScore = ILB_HR.getEndlessBoostScore();
+            const endlessBoostScoreHighScoreId = 58;
+            if (boostScore > $gameVariables.value(endlessBoostScoreHighScoreId)) {
+                const boostHighscoreUpdatedSwitchId = 10;
+                $gameVariables.setValue(endlessBoostScoreHighScoreId, boostScore);
+                $gameSwitches.setValue(boostHighscoreUpdatedSwitchId, true);
+            }
+
+            const distance = ILB_HR.getEndlessDistance();
+            const endlessDistanceScoreHighScoreId = 59;
+            if (distance > $gameVariables.value(endlessDistanceScoreHighScoreId)) {
+                const distanceHighscoreUpdatedSwitchId = 11;
+                $gameVariables.setValue(endlessDistanceScoreHighScoreId, distance);
+                $gameSwitches.setValue(distanceHighscoreUpdatedSwitchId, true);
+            }
         }
 
         if (score > $gameVariables.value(highscoreVarId)) {

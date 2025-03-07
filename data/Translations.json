@@ -28,13 +28,29 @@
             "日本語": "本当にレースを\nやめますか？",
             "Polski": "Czy na pewno chcesz\nwyjść?"
         },
-        "Your score is: \\V[4]": {
-            "日本語": "得点スコアは\\V[4]点！",
-            "Polski": "Twój wynik: \\V[4]"
+        "Your score is:\n\\V[4]": {
+            "日本語": "得点スコアは\n\\V[4]点！",
+            "Polski": "Twój wynik:\n\\V[4]"
+        },
+        "Your boost score is:\n\\V[4]": {
+            "日本語": "ブーストの得点スコアは\n\\V[4]点！",
+            "Polski": "Twój wynik dopalaczy:\n\\V[4]"
+        },
+        "Your distance is:\n\\V[4]": {
+            "日本語": "最終距離は\n\\V[4]。",
+            "Polski": "Twoja odległość:\n\\V[4]"
         },
         "It's a new highscore!": {
             "日本語": "新最高得点です！",
-            "Polski": "Nowy rekord!"
+            "Polski": "To nowy rekord!"
+        },
+        "It's a new boost\nhighscore!": {
+            "日本語": "ブーストの\n新最高得点です！",
+            "Polski": "To nowy rekord\ndopalaczy!"
+        },
+        "It's a new distance\nhighscore!": {
+            "日本語": "距離の\n新最高得点です！",
+            "Polski": "To nowy rekord\nodległości!"
         },
         "Would you like to\nplay again?": {
             "日本語": "もう一度遊びますか？",
@@ -1029,6 +1045,11 @@
                     "Score: (\\d+)",
                     "",
                     "スコア: $1"
+                ],
+                [
+                    "Boosts: (\\d+)",
+                    "",
+                    "ブースト: $1"
                 ]
             ],
             "or tap": "押すか画面を",
@@ -1058,6 +1079,11 @@
                     "Score: (\\d+)",
                     "",
                     "Wynik: $1"
+                ],
+                [
+                    "Boosts: (\\d+)",
+                    "",
+                    "Dopalacze: $1"
                 ]
             ],
             "or tap": "lub dotknij",
