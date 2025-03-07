@@ -91,7 +91,7 @@ class HomickRacer {
     }
 
     if (level > NUM_OF_LEVELS) {
-      level -= NUM_OF_LEVELS - 8;
+      level -= NUM_OF_LEVELS;
     }
 
     const levelsPerStage = 4;
@@ -114,12 +114,11 @@ class HomickRacer {
     }
 
     const hardMode = this._isHardMode(level);
-    const hardModeSpeedModifier = hardMode ? 0.25 : 0;
     const hardModeVarianceModifier = hardMode ? 3 : 0;
-    const hardModeBoostVarianceModifier = hardMode ? 2 : 0;
+    const hardModeBoostVarianceModifier = hardMode ? 0.5 : 0;
 
-    const playerMinSpeed = 2.5 + hardModeSpeedModifier;
-    const playerMaxSpeed = 3.25 + hardModeSpeedModifier;
+    const playerMinSpeed = 2.5;
+    const playerMaxSpeed = 3.25;
     const playerSpeed = this._getHomickSpeedForLevel(level, playerMinSpeed, playerMaxSpeed);
     const playerAcceleration = 1;
     const mobAcceleration = 2;
@@ -181,7 +180,10 @@ class HomickRacer {
    * @returns 
    */
   static _getHomickSpeedForLevel(level, minSpeed, maxSpeed) {
-    const maxLevel = 16;
+    const maxLevel = NUM_OF_LEVELS;
+    if (level > maxLevel) {
+      level -= maxLevel;
+    }
     return minSpeed + (level / maxLevel) * (maxSpeed - minSpeed);
   }
 }
