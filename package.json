@@ -1,12 +1,12 @@
 {
-    "name": "",
+    "name": "homick-racer",
     "main": "index.html",
     "js-flags": "--expose-gc",
     "window": {
-        "title": "",
+        "title": "Homick Racer",
         "toolbar": false,
-        "width": 816,
-        "height": 624,
+        "width": 360,
+        "height": 640,
         "icon": "icon/icon.png"
     }
 }
