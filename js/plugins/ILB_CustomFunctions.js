@@ -29,6 +29,16 @@ var $f = $f || {};
 (function() {
 
     // You can add your functions here
+
+    // Make picture "Title" load the title image
+    // For the gallery
+    const _ImageManager_loadPicture = ImageManager.loadPicture;
+    ImageManager.loadPicture = function(filename, hue) {
+        if (filename === 'Title') {
+            return this.loadTitle1('Title');
+        }
+        return _ImageManager_loadPicture.call(this, filename, hue);
+    }
     
     const _LEVEL_NAMES = new Map([
         [1, 'Plains'],
@@ -262,42 +272,87 @@ var $f = $f || {};
         { name: 'All 3 stars!', storyProgress: 53, background: 'black_hole_singularity', character: 'trophy' },
     ];
 
-    $f.mapStoryTheaterOptionNames = function(page) {
+    const _GALLERY_OPTIONS = [
+        { name: 'Title screen', storyProgress: 0, background: 'Title' },
+        { name: 'Plains', storyProgress: 0, background: 'plains' },
+        { name: 'Announcer', storyProgress: 0, background: 'plains', character: 'announcer' },
+        { name: 'Desert', storyProgress: 2, background: 'desert' },
+        { name: 'Jungle', storyProgress: 3, background: 'jungle' },
+        { name: 'Tundra', storyProgress: 4, background: 'tundra' },
+        { name: 'Le Mingue', storyProgress: 4, background: 'tundra', character: 'tundra_homick' },
+        { name: 'Moon', storyProgress: 7, background: 'moon' },
+        { name: 'Mars', storyProgress: 8, background: 'mars' },
+        { name: 'Saturn', storyProgress: 9, background: 'saturn' },
+        { name: 'Asteroid belt', storyProgress: 10, background: 'asteroid_belt' },
+        { name: 'Roe Dent', storyProgress: 10, background: 'asteroid_belt', character: 'roedent' },
+        { name: 'Sun', storyProgress: 13, background: 'sun' },
+        { name: 'Alpha centauri', storyProgress: 14, background: 'alpha_centauri' },
+        { name: 'Sirius', storyProgress: 15, background: 'sirius' },
+        { name: 'Procyon', storyProgress: 16, background: 'procyon' },
+        { name: 'Ginny', storyProgress: 16, background: 'procyon', character: 'ginny' },
+        { name: 'Outskirts', storyProgress: 19, background: 'black_hole_outskirts' },
+        { name: 'Plunging region', storyProgress: 20, background: 'black_hole_plunging_region' },
+        { name: 'Event horizon', storyProgress: 21, background: 'black_hole_event_horizon' },
+        { name: 'Singularity', storyProgress: 22, background: 'black_hole_singularity' },
+        { name: 'Brad', storyProgress: 22, background: 'black_hole_singularity', character: 'brad' },
+        { name: 'Ending 1', storyProgress: 53, background: 'end_picture_1' },
+        { name: 'Ending 2', storyProgress: 53, background: 'end_picture_2' }
+    ]
+
+    function _mapOptionNames(page, options) {
         const storyProgressVarId = 50;
         const storyProgress = $gameVariables.value(storyProgressVarId);
         const optionsVarIds = [41, 42, 43, 44];
         optionsVarIds.forEach((varId, index) => {
-            $gameVariables.setValue(varId, _mapPageAndIndexToStoryTheaterOptionName(page, index, storyProgress));
+            $gameVariables.setValue(varId, _mapPageAndIndexToOptionName(page, options, index, storyProgress));
         });
 
         const nextPageStoryProgressVarId = 56;
-        const nextOption = _STORY_THEATRE_OPTIONS[(page + 1) * 4];
+        const nextOption = options[(page + 1) * 4];
         $gameVariables.setValue(nextPageStoryProgressVarId, nextOption ? nextOption.storyProgress : 0);
     }
 
-    function _mapPageAndIndexToStoryTheaterOptionName(page, index, storyProgress) {
-        const option = _STORY_THEATRE_OPTIONS[page * 4 + index];
+    function _mapPageAndIndexToOptionName(page, options, index, storyProgress) {
+        const option = options[page * 4 + index];
         return storyProgress >= option.storyProgress ? $f.getTranslation(option.name) : '???';
     }
 
-    $f.showLevelBackgroundOnStoryTheaterMenu = function(index) {
+    function _showLevelBackgroundOnOptionsMenu(index, options) {
         const storyProgressVarId = 50;
         const storyProgress = $gameVariables.value(storyProgressVarId);
-        const option = _STORY_THEATRE_OPTIONS[index];
+        const option = options[index];
 
         if (storyProgress >= option.storyProgress) {
             $gameScreen.showPicture(1, option.background, 0, 0, 0, 100, 100, 255, 0);
-            if (option.character === 'announcer') {
-                $gameScreen.showPicture(2, option.character, 0, 0, 401, 100, 100, 255, 0);
-            } else if (option.character === 'trophy') {
-                $gameScreen.showPicture(2, option.character, 0, 116, 30, 100, 100, 255, 0);
-            } else {
-                $gameScreen.showPicture(2, option.character, 0, 170, 405, 100, 100, 255, 0);
+            if (option.character) {
+                if (option.character === 'announcer') {
+                    $gameScreen.showPicture(2, option.character, 0, 0, 401, 100, 100, 255, 0);
+                } else if (option.character === 'trophy') {
+                    $gameScreen.showPicture(2, option.character, 0, 116, 30, 100, 100, 255, 0);
+                } else {
+                    $gameScreen.showPicture(2, option.character, 0, 170, 405, 100, 100, 255, 0);
+                }
             }
         } else {
             const inMenuSwitchId = 2;
             $gameSwitches.setValue(inMenuSwitchId, true);
         }
+    }
+
+    $f.mapGalleryOptionNames = function(page) {
+        return _mapOptionNames(page, _GALLERY_OPTIONS);
+    }
+
+    $f.showLevelBackgroundOnGalleryMenu = function(index) {
+        return _showLevelBackgroundOnOptionsMenu(index, _GALLERY_OPTIONS);
+    }
+
+    $f.mapStoryTheaterOptionNames = function(page) {
+        return _mapOptionNames(page, _STORY_THEATRE_OPTIONS);
+    }
+
+    $f.showLevelBackgroundOnStoryTheaterMenu = function(index) {
+        return _showLevelBackgroundOnOptionsMenu(index, _STORY_THEATRE_OPTIONS);
     }
 
     $f.getTranslation = function(cmd) {

@@ -147,8 +147,8 @@ class HomickRacer {
 
     // Not a boss level, add mobs
     if (level % 4 !== 0) {
-      const homickMobMinSpeed = 2 + hardModeSpeedModifier;
-      const homickMobMaxSpeed = 3 + hardModeSpeedModifier;
+      const homickMobMinSpeed = 2 ;
+      const homickMobMaxSpeed = 3;
       const homickMobSpeed = this._getHomickSpeedForLevel(level, homickMobMinSpeed, homickMobMaxSpeed);
       homicks.push(
         { acceleration: mobAcceleration, maxSpeed: homickMobSpeed, player: (homick, obstacles) => new SimpleAi(homick, obstacles, 20 - hardModeVarianceModifier, 10 - hardModeVarianceModifier, 8 - hardModeBoostVarianceModifier, 5 - hardModeBoostVarianceModifier) },

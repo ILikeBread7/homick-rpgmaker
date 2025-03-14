@@ -51,6 +51,7 @@
 
     const createFullscreenButton = () => {
         const button = document.createElement('button');
+        button.id = 'fullscreen_button';
         button.innerHTML = buttonText;
         button.style.cssText = buttonStyles;
         

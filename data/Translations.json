@@ -830,6 +830,10 @@
             "日本語": "ストーリー鑑賞",
             "Polski": "Teatr fabuły"
         },
+        "Gallery": {
+            "日本語": "ギャラリー",
+            "Polski": "Galeria"
+        },
         "Return to title": {
             "日本語": "タイトルに戻る",
             "Polski": "Powrót do menu głównego"
@@ -1049,6 +1053,34 @@
         "Singularity": {
             "日本語": "特異点",
             "Polski": "Osobliwość"
+        },
+        "Title screen": {
+            "日本語": "タイトル",
+            "Polski": "Ekran tytułowy"
+        },
+        "Announcer": {
+            "日本語": "解説ちゃん",
+            "Polski": "Prezenterka"
+        },
+        "Le Mingue": {
+            "日本語": "レ・ミング"
+        },
+        "Roe Dent": {
+            "日本語": "ロー・デント"
+        },
+        "Ginny": {
+            "日本語": "ギニー"
+        },
+        "Brad": {
+            "日本語": "ブラッド"
+        },
+        "Ending 1": {
+            "日本語": "終わり 1",
+            "Polski": "Koniec 1"
+        },
+        "Ending 2": {
+            "日本語": "終わり 2",
+            "Polski": "Koniec 2"
         },
         "1st": {
             "日本語": "１位",
