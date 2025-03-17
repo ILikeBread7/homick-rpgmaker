@@ -87,9 +87,11 @@ var ILB_HR = ILB_HR || {};
     let mode;
     let window;
 
-    const DEFAULT_BGM = 'Battle2';
     const STAGE_BGMS = [
-        '2049ers_2'
+        '2049ers_2',
+        'Summer_Adventure',
+        'mikansei_notooriasu_2',
+        'burai_no_tame_no_warabeuta'
     ];
     const BOSS_BGM = 'tanyao_2';
     const FINAL_BOSS_BGM = 'mirakuru_max_daakunesu_2';
@@ -97,6 +99,10 @@ var ILB_HR = ILB_HR || {};
 
     function getRandomBgImage() {
         return LEVEL_BACKGROUNDS.get(Math.floor(Math.random() * LEVEL_BACKGROUNDS.size) + 1);
+    }
+
+    function getRandomBgm() {
+        return STAGE_BGMS[Math.floor(Math.random() * STAGE_BGMS.length)];
     }
 
     // Spriteset to handle pictures in common events
@@ -301,16 +307,16 @@ var ILB_HR = ILB_HR || {};
     };
 
     ILB_HR.startEndlessMode = function() {
-        bgImageName = getRandomBgImage()
+        bgImageName = getRandomBgImage();
         mode = ENDLESS_MODE;
-        startFunction = window => HomickRacer.startEndlessMode(window, DEFAULT_BGM);
+        startFunction = window => HomickRacer.startEndlessMode(window, getRandomBgm());
         SceneManager.push(Scene_HomickRacer);
     };
 
     ILB_HR.startMultiplayer = function(level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty) {
-        bgImageName = getRandomBgImage()
+        bgImageName = getRandomBgImage();
         mode = MULTIPLAYER_MODE;
-        startFunction = window => HomickRacer.startMultiplayer(window, DEFAULT_BGM, level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty);
+        startFunction = window => HomickRacer.startMultiplayer(window, getRandomBgm(), level, numberOfHumanPlayers, numberOfCpuPlayers, cpuDifficulty);
         SceneManager.push(Scene_HomickRacer);
     }
 
