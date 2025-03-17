@@ -14,3 +14,4 @@ js/plugins/*.js
 !js/plugins/FullscreenButton.js
 !js/plugins/SelectableFullWidth.js
 js/plugins/ILB_RemoveUnusedOptions.js
+js/plugins/ILB_ChoicesNoScrolling.js
