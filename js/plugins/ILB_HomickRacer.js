@@ -88,6 +88,8 @@ var ILB_HR = ILB_HR || {};
     let window;
 
     const DEFAULT_BGM = 'Battle2';
+    const BOSS_BGM = 'tanyao_2';
+    const FINAL_BOSS_BGM = 'mirakuru_max_daakunesu_2';
     let bgImageName;
 
     function getRandomBgImage() {
@@ -256,6 +258,17 @@ var ILB_HR = ILB_HR || {};
 
     function getBgmForLevel(level) {
         const mappedLevel = mapHardModeLevel(level);
+
+        // Final boss or bonus
+        if (mappedLevel === 16) {
+            return FINAL_BOSS_BGM;
+        }
+
+        // Regular boss level
+        if (mappedLevel % 4 === 0) {
+            return BOSS_BGM;
+        }
+
         return DEFAULT_BGM;
     }
 
