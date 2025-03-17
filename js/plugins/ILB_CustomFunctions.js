@@ -39,6 +39,10 @@ var $f = $f || {};
         }
         return _ImageManager_loadPicture.call(this, filename, hue);
     }
+
+    const ENDLESS_HIGHSCORE_VAR_ID = 7;
+    const ENDLESS_BOOSTS_HIGHSCORE_VAR_ID = 58;
+    const ENDLESS_DISTANCE_HIGHSCORE_VAR_ID = 59;
     
     const _LEVEL_NAMES = new Map([
         [1, 'Plains'],
@@ -166,7 +170,7 @@ var $f = $f || {};
         const score = ILB_HR.getScore();
         const highscoreUpdatedSwitchId = 1;
         const newLevelBeatenSwitchId = 5;
-        let highscoreVarId = 7; // 7 = endless, 8 = level 1, ...
+        let highscoreVarId = ENDLESS_HIGHSCORE_VAR_ID; // endless + 1 = level 1, + 2 = level 2 ...
 
         if (ILB_HR.getMode() === ILB_HR.STORY_MODE) {
             const levelVarId = 6;
@@ -357,6 +361,18 @@ var $f = $f || {};
 
     $f.getTranslation = function(cmd) {
         return $dataTranslations.cmd[cmd][ConfigManager.getLanguage()] || cmd;
+    }
+
+    $f.getEndlessHighscore = function() {
+        return $gameVariables.value(ENDLESS_HIGHSCORE_VAR_ID);
+    }
+
+    $f.getEndlessBoostsHighscore = function() {
+        return $gameVariables.value(ENDLESS_BOOSTS_HIGHSCORE_VAR_ID);
+    }
+
+    $f.getEndlessDistanceHighscore = function() {
+        return $gameVariables.value(ENDLESS_DISTANCE_HIGHSCORE_VAR_ID);
     }
 
 })();

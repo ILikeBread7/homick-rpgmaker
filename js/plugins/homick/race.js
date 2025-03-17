@@ -52,6 +52,7 @@ class Race {
     if (this._isEndless) {
       this._obstacleToDelete = 0;
       this._boostScore = 0;
+      this._highscoresAchieved = { score: false, boosts: false, distance: false };
     }
 
     // For drawing the current position
@@ -497,12 +498,29 @@ class Race {
   _drawEndlessScore(distance) {
     const marginLeft = 220;
     const marginTop = TRACK_TILE_HEIGHT * 2;
+    const score = this.currentObstacleIndex;
+    distance = Math.floor(distance);
 
+    this._highscoresAchieved.score = this._highscoresAchieved.score || (score > $f.getEndlessHighscore());
+    this._highscoresAchieved.boosts = this._highscoresAchieved.boosts || (this._boostScore > $f.getEndlessBoostsHighscore());
+    this._highscoresAchieved.distance = this._highscoresAchieved.distance || (distance > $f.getEndlessDistanceHighscore());
+    
     this._contents.fontSize = 16;
-    this._window.drawText(`Score: ${this.currentObstacleIndex}`, marginLeft, marginTop);
+    this._adjustColorForHighscore(this._highscoresAchieved.score);
+    this._window.drawText(`Score: ${score}`, marginLeft, marginTop);
+    this._adjustColorForHighscore(this._highscoresAchieved.boosts);
     this._window.drawText(`Boosts: ${this._boostScore}`, marginLeft, marginTop + 20);
-    this._window.drawText(`Distance: ${Math.floor(distance)}`, marginLeft, marginTop + 40);
+    this._adjustColorForHighscore(this._highscoresAchieved.distance);
+    this._window.drawText(`Distance: ${distance}`, marginLeft, marginTop + 40);
     this._window.resetFontSettings();
+  }
+
+  _adjustColorForHighscore(highscoreAchieved) {
+    if (highscoreAchieved) {
+      this._changeTextColorRPGMaker(RPG_MAKER_COLOR_YELLOW);
+    } else {
+      this._changeTextColorRPGMaker(RPG_MAKER_COLOR_DEFAULT);
+    }
   }
 
   _drawPauseButton() {
