@@ -33,6 +33,10 @@ https://opengameart.org/content/8-bit-sound-effects-library
 https://dova-s.jp/bgm/play21338.html
 https://dova-s.jp/bgm/play19843.html
 https://dova-s.jp/bgm/play18228.html
+https://dova-s.jp/bgm/play16691.html
+
+蒲鉾さちこ
+https://dova-s.jp/bgm/play15951.html
 
 Fullscreen icon
 https://fonts.google.com/icons?selected=Material+Symbols+Outlined:fullscreen:FILL@0;wght@400;GRAD@0;opsz@20&icon.query=fullscreen&icon.size=20&icon.color=%23e8eaed

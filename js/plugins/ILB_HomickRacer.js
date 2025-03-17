@@ -88,6 +88,9 @@ var ILB_HR = ILB_HR || {};
     let window;
 
     const DEFAULT_BGM = 'Battle2';
+    const STAGE_BGMS = [
+        '2049ers_2'
+    ];
     const BOSS_BGM = 'tanyao_2';
     const FINAL_BOSS_BGM = 'mirakuru_max_daakunesu_2';
     let bgImageName;
@@ -269,7 +272,7 @@ var ILB_HR = ILB_HR || {};
             return BOSS_BGM;
         }
 
-        return DEFAULT_BGM;
+        return STAGE_BGMS[Math.floor(mappedLevel / 4)];
     }
 
     function getBackgroundForLevel(level) {
