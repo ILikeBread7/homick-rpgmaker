@@ -250,7 +250,7 @@ var $f = $f || {};
     }
 
     const _STORY_THEATRE_OPTIONS = [
-        { name: 'Introduction', storyProgress: 0, background: 'plains', character: 'announcer' },
+        { name: 'Introduction', storyProgress: 1, background: 'plains', character: 'announcer' },
         { name: 'Le Mingue before', storyProgress: 4, background: 'tundra', character: 'tundra_homick' },
         { name: 'Le Mingue after', storyProgress: 6, background: 'tundra', character: 'tundra_homick' },
         { name: 'Roe Dent before', storyProgress: 10, background: 'asteroid_belt', character: 'roedent' },
@@ -274,8 +274,8 @@ var $f = $f || {};
 
     const _GALLERY_OPTIONS = [
         { name: 'Title screen', storyProgress: 0, background: 'Title' },
-        { name: 'Plains', storyProgress: 0, background: 'plains' },
-        { name: 'Announcer', storyProgress: 0, background: 'plains', character: 'announcer' },
+        { name: 'Plains', storyProgress: 1, background: 'plains' },
+        { name: 'Announcer', storyProgress: 1, background: 'plains', character: 'announcer' },
         { name: 'Desert', storyProgress: 2, background: 'desert' },
         { name: 'Jungle', storyProgress: 3, background: 'jungle' },
         { name: 'Tundra', storyProgress: 4, background: 'tundra' },
