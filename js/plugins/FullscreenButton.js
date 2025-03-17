@@ -16,6 +16,10 @@
  * 
  * @help This plugin adds a button to the bottom right of the screen
  * that allows players to toggle fullscreen mode in RPG Maker MV.
+ * 
+ * Plugin Command:
+ *   FullscreenButton hide # Hides the button
+ *   FullscreenButton show # Shows the button
  */
 
 (function() {
@@ -49,9 +53,10 @@
         z-index: 1000;
     `;
 
+    let button;
+
     const createFullscreenButton = () => {
-        const button = document.createElement('button');
-        button.id = 'fullscreen_button';
+        button = document.createElement('button');
         button.innerHTML = buttonText;
         button.style.cssText = buttonStyles;
         
@@ -77,4 +82,24 @@
         _SceneManager_run.call(this, sceneClass);
         createFullscreenButton();
     };
+
+    const _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
+    Game_Interpreter.prototype.pluginCommand = function(command, args) {
+        _Game_Interpreter_pluginCommand.call(this, command, args);
+        if (command === 'FullscreenButton') {
+            if (!button) {
+                return;
+            }
+
+            switch (args[0]) {
+                case 'show':
+                    button.style.display = '';
+                break;
+                case 'hide':
+                    button.style.display = 'none';
+                break;
+            }
+        }
+    }
+
 })();
