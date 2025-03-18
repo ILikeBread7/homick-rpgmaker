@@ -1,0 +1,119 @@
+Credits
+
+
+Homick Racer, a game by I_LIKE_BREAD7
+
+Made using RPG Maker MV
+
+
+
+
+Graphics
+
+
+"64x Textures an Overlays" by FacadeGaikan
+
+"Mobile Game GUI Buttons" by SethByrd sethbyrd.com
+
+"Terrain textures pack (from Stunt Rally 2.3)" by yughues (nobiax), rubberduck and CryHam
+
+"Patterns and Cursors Pack" by Molly "Cougarmint" Willits
+
+"Simple cardboard box" by bogdanco
+
+"Confetti deco tomfoolery" from pixabay.com
+
+"The Sun" by NASA, SDO team and LFA
+
+"Black Hole in the universe" by NASA
+
+"Black Holes: Monsters in Space Artist Concept" and "Backward Black Hole Shoots Powerful Jets Artist Concept" by NASA/JPL-Caltech
+
+"Behemoth Black Hole Found in an Unlikely Place" by NASA, ESA, and D. Coe, J. Anderson, and R. van der Marel (STScI)
+
+"Space Backgrounds" and "Another Space Backgrounds" by Rawdanitsu
+
+"Fullscreen icon" from Google Fonts
+
+"Homick Racer logo" from Cool Text https://cooltext.com
+
+
+"Race Track Tile Set" by CraftPix.net 2D Game Assets, OGA-BY-3.0
+
+https://static.opengameart.org/OGA-BY-3.0.txt
+
+
+"Asteroid" by SciTechTrend.com, CC BY 2.0
+
+https://creativecommons.org/licenses/by/2.0/
+
+
+"Trophy Flat Icon.svg" from Wikimedia Commons by Videoplasty.com, CC-BY-SA 4.0
+
+"Saturn Portrait" by ESA/Hubble, CC BY-SA 4.0
+
+"Planète Mars" by Tris1606, CC BY-SA 4.0
+
+https://creativecommons.org/licenses/by-sa/4.0/deed.en
+
+
+"Full Moon as Seen From Denmark" by Peter Freiman, CC BY-SA 3.0
+
+https://creativecommons.org/licenses/by-sa/3.0/deed.en
+
+
+RPG Maker MV RTP graphics
+
+
+
+
+Music and sound
+
+
+DOVA-SYNDROME dova-s.jp
+
+"Kira Kira Cotton Candy", "2049ers", "タンヤオ", "未完成ノトーリアス", "無頼のための童唄" and "ミラクルMAX　だーくねす" by 秦暁
+
+"Summer Adventure" by MATSU
+
+"踊る、宇宙の中で(Dancing,at Universe)" by 蒲鉾さちこ
+
+
+"Voiceover Pack (40+ lines)" by Kenney.nl
+
+
+"8-Bit Sound Effects Library" by Little Robot Sound Factory www.littlerobotsoundfactory.com, CC BY 3.0
+
+https://creativecommons.org/licenses/by/3.0/
+
+
+RPG Maker MV RTP sound effects
+
+
+
+
+RPG Maker MV plugins
+
+
+"QPlus" and "QTouch" by Quxios quxios.github.io
+
+"YEP_MessageCore" by Yanfly
+
+"ALOE_ConditionalChoices" Conditional "Show Choices" by Aloe Guvner
+
+"MAC_High_Hz_Fixes" by Mac15001900
+
+"JKL_PersistentData" by Jackkel Dragon
+
+"GALV_MessageSoundEffects" by Galv
+
+"SRD_TranslationEngine" by Robert Borghese (SumRndmDde)
+
+
+And some project specific plugins made by me
+
+
+
+
+Everything else also done by me
+
