@@ -28,5 +28,6 @@ var $plugins =
 {"name":"SRD_TranslationEngine","status":true,"description":"Provides game developers with an in-game tool for building and managing translations/localizations for their game's text.","parameters":{"Source Language Name":"English","Languages":"[\"日本語\",\"Polski\"]","Default Language":"","Provide Option?":"true","Option Name":"Language","Allow Message Update?":"true"}},
 {"name":"ILB_OnBootCommonEvent","status":true,"description":"Runs a common event on game startup (before the title screen)","parameters":{"Common Event ID":"62"}},
 {"name":"ILB_DontFadeoutTitleBgm","status":true,"description":"Makes the title bgm (and sound and music effects) not disappear after starting the game","parameters":{}},
-{"name":"ILB_ChoicesNoScrolling","status":true,"description":"Disables scrolling in choices window making all available choices always visible","parameters":{}}
+{"name":"ILB_ChoicesNoScrolling","status":true,"description":"Disables scrolling in choices window making all available choices always visible","parameters":{}},
+{"name":"TitleScreenText","status":true,"description":"Adds customizable text to the title screen.","parameters":{"TextContent":"I_LIKE_BREAD7, 2025","Position":"bottom","Alignment":"left","FontSize":"16","PaddingX":"10","PaddingY":"5"}}
 ];
