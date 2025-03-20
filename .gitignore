@@ -5,7 +5,6 @@ fonts
 img/*
 !img/pictures
 movies
-icon
 js/libs
 js/*.js
 !js/plugins.js
