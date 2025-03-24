@@ -17,7 +17,7 @@ const COUNTDOWN_TIME = 1000;
 const TOTAL_COUNTDOWN_TIME = COUNTDOWN_TIME * 3;
 const COUNTDOWN_TOP = Math.floor(TRACK_TILE_HEIGHT * 4.5);
 
-const INACTIVE_TIME_TRESHOLD = 120;
+const INACTIVE_TIME_TRESHOLD = 100;
 const INACTIVE_TIME_UPDATE = 1000 / 60;
 
 const COUNTDOWN_SOUNDS = [
@@ -80,7 +80,7 @@ class Race {
    * @param {number} deltaTime 
    */
   update(deltaTime) {
-    // If the time is too long (0.12 second) that means the tab
+    // If the time is too long (0.1 second) that means the tab
     // was probably inactive and the game not updated, so we reduce the time.
     // We don't set delta time to 0 to prevent the
     // game from freezing at very low framerates.
