@@ -14,7 +14,11 @@ const POSITION_COLORS = [RPG_MAKER_COLOR_GREEN, RPG_MAKER_COLOR_YELLOW, RPG_MAKE
 const POSITIONS_MARGIN_TOP = Math.floor(TRACKS_Y + TRACK_TILE_HEIGHT * TRACK_HEIGHT);
 
 const COUNTDOWN_TIME = 1000;
+const TOTAL_COUNTDOWN_TIME = COUNTDOWN_TIME * 3;
 const COUNTDOWN_TOP = Math.floor(TRACK_TILE_HEIGHT * 4.5);
+
+const INACTIVE_TIME_TRESHOLD = 120;
+const INACTIVE_TIME_UPDATE = 1000 / 60;
 
 const COUNTDOWN_SOUNDS = [
   { name: 'go', volume: 90, pitch: 100, pan: 0},
@@ -76,17 +80,29 @@ class Race {
    * @param {number} deltaTime 
    */
   update(deltaTime) {
+    // If the time is too long (0.12 second) that means the tab
+    // was probably inactive and the game not updated, so we reduce the time.
+    // We don't set delta time to 0 to prevent the
+    // game from freezing at very low framerates.
+    if (deltaTime > INACTIVE_TIME_TRESHOLD) {
+      deltaTime = INACTIVE_TIME_UPDATE;
+    }
+
     this._totalTime += deltaTime;
-    if (this._totalTime < COUNTDOWN_TIME * 3) {
+    if (this._totalTime < TOTAL_COUNTDOWN_TIME) {
       return;
     }
-    if (this._isEndless && this._obstacles.length - this.currentObstacleIndex <= ENDLESS_OBSTACLES_BATCH / 2) {
-      this._addNewEndlessObstacles();
-      if (this.maxSpeed < 5) {
-        this.increaseMaxSpeed(0.25);
-      }
-    }
+    // Adjust the remaining time after countdown
+    deltaTime = Math.min(deltaTime, Math.max(this._totalTime - TOTAL_COUNTDOWN_TIME, 0));
+
     for (let remainingTime = deltaTime; remainingTime > 0; remainingTime -= TIME_STEP) {
+      if (this._isEndless && this._obstacles.length - this.currentObstacleIndex <= ENDLESS_OBSTACLES_BATCH / 2) {
+        this._addNewEndlessObstacles();
+        if (this.maxSpeed < 5) {
+          this.increaseMaxSpeed(0.25);
+        }
+      }
+
       const oneStepTime = Math.min(TIME_STEP, remainingTime);
       const leadingDistance = this._homicks.reduce((currentMaxDistance, current) => Math.max(current.distance, currentMaxDistance), 0);
       this._homicks.forEach((homick, index) => {

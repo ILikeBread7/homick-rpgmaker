@@ -162,6 +162,7 @@ class Homick {
     if (this._currentObstacleIndex !== -1) {
       const currentObstacle = obstacles[this._currentObstacleIndex];
       
+      // Hurdle boost
       if (
         currentObstacle.type.hurdle &&
         this._jumped &&
@@ -171,6 +172,7 @@ class Homick {
         this._addBoost();
       }
       
+      // Collided with an obstacle
       if (
         !fallenHurdles[this._currentObstacleIndex] &&
         (justLanded || !currentObstacle.type.boost) &&
