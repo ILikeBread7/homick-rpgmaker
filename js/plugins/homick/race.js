@@ -18,7 +18,7 @@ const TOTAL_COUNTDOWN_TIME = COUNTDOWN_TIME * 3;
 const COUNTDOWN_TOP = Math.floor(TRACK_TILE_HEIGHT * 4.5);
 
 const INACTIVE_TIME_TRESHOLD = 100;
-const INACTIVE_TIME_UPDATE = 1000 / 60;
+const INACTIVE_TIME_UPDATE = Math.floor(1000 / 60);
 
 const COUNTDOWN_SOUNDS = [
   { name: 'go', volume: 90, pitch: 100, pan: 0},
