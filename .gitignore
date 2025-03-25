@@ -15,3 +15,4 @@ js/plugins/*.js
 !js/plugins/TitleScreenText.js
 js/plugins/ILB_RemoveUnusedOptions.js
 js/plugins/ILB_ChoicesNoScrolling.js
+js/plugins/ILB_OnBootCommonEvent.js
